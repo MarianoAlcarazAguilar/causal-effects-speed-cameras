@@ -57,19 +57,19 @@ Para capturar la dinámica de movilidad urbana y mitigar las distorsiones causad
 
 \subsubsection{Construcción de variables para el emparejamiento (\textit{matching})}
 
-Para que estos datos temporales pudieran integrarse en el cálculo del \textit{propensity score} y asegurar que las unidades tratadas y de control fueran comparables en su dinámica de flujo previa a la intervención, se aplicó un proceso de agregación y ``compresión'' de las series históricas. A cada unidad de análisis (celda) se le asignó la información de la estación de metro más cercana, asumiendo que esta es la representación más fiel del flujo humano y la actividad comercial en esa zona específica.
+Para que estos datos temporales pudieran integrarse en el cálculo del \textit{propensity score} y asegurar que las unidades tratadas y de control fueran comparables en su dinámica de flujo previa a la intervención, se aplicó un proceso de agregación y ``compresión'' de las series históricas. A cada unidad de análisis se le asignó la información de la estación de metro más cercana, asumiendo que esta es la representación más fiel del flujo humano y la actividad comercial en esa zona específica.
 
 Las variables resultantes para el \textit{matching}, calculadas exclusivamente con datos previos al inicio del programa (22 de abril de 2019), son las siguientes:
 
 \begin{itemize}
     \item \textbf{Distancia a la estación (\textit{distance\_to\_station}):} 
-    Mide la distancia en metros desde el centroide de cada celda a la estación de metro más cercana, sirviendo como un control de proximidad a nodos de alta actividad.
+    Mide la distancia en metros desde el centro de cada círculo a la estación de metro más cercana, sirviendo como un control de proximidad a nodos de alta actividad.
 
     \item \textbf{Media de afluencia mensual (\textit{mean\_afluencia\_mensual}):} 
     Representa el nivel promedio de demanda y exposición peatonal/vehicular de la zona durante el periodo preintervención.
 
     \item \textbf{Desviación estándar de la afluencia (\textit{std\_afluencia\_mensual}):} 
-    Captura la volatilidad o variabilidad de los flujos en la zona, permitiendo emparejar celdas que no solo comparten niveles de tráfico similares, sino también patrones de estabilidad o fluctuación parecidos.
+    Captura la volatilidad o variabilidad de los flujos en la zona, permitiendo emparejar áreas que no solo comparten niveles de tráfico similares, sino también patrones de estabilidad o fluctuación parecidos.
 \end{itemize}
 
 Este tratamiento de los datos permite que el modelo de evaluación asuma que, tras el emparejamiento, las diferencias en la siniestralidad no son producto de variaciones locales en la movilidad o del impacto diferenciado de la pandemia, sino del efecto causal de los radares de velocidad.
@@ -127,11 +127,11 @@ Operativamente, la información de siniestralidad se utiliza con dos fines compl
 
 \paragraph{Emparejamiento de unidades}
 
-En la etapa de emparejamiento, se calculan medias y desviaciones estándar mensuales de accidentes por celda durante el periodo pretratamiento (2016--2019). Estas estadísticas permiten que el \textit{propensity score} agrupe celdas con perfiles de riesgo y volatilidad similares antes de la instalación de las cámaras. De esta forma, se reduce la probabilidad de comparar zonas estructuralmente muy distintas en su historial de siniestros.
+En la etapa de emparejamiento, se calculan medias y desviaciones estándar mensuales de accidentes por área durante el periodo pretratamiento (2016--2019). Estas estadísticas permiten que el \textit{propensity score} agrupe áreas con perfiles de riesgo y volatilidad similares antes de la instalación de las cámaras. De esta forma, se reduce la probabilidad de comparar zonas estructuralmente muy distintas en su historial de siniestros.
 
 \paragraph{Estimación de efectos (diferencias en diferencias)}
 
-En la etapa de estimación, se emplea un diseño de diferencia en diferencias. Para ello, los datos se agregan a nivel mensual y por celda, y se construyen dos tipos de indicadores:
+En la etapa de estimación, se emplea un diseño de diferencia en diferencias. Para ello, los datos se agregan a nivel mensual y por área, y se construyen dos tipos de indicadores:
 
 \begin{itemize}
     \item conteos absolutos de incidentes en cada categoría (FCS, PIC y MIN);

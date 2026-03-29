@@ -12,7 +12,7 @@
     \item \textbf{Incidentes fatales (FCS)}: hechos de tránsito donde se registró al menos una persona fallecida en el lugar
 \end{itemize}
 
-Adicionalmente, cada uno de estos incidentes se evalúa bajo dos métricas: en \textbf{nivles absolutos} (conteo mensual de incidentes por celda), y en \textbf{tasas de siniestralidad}. Esta última métrica se construye normalizando el número de incidentes por cada $1,000$ vehículos que circularon en la ciudad durante el mes de de observación, utilizando los datos de los radares de conteo permanente para controlar por variaciones en la exposición vehicular. 
+Adicionalmente, cada uno de estos incidentes se evalúa bajo dos métricas: en \textbf{nivles absolutos} (conteo mensual de incidentes por área), y en \textbf{tasas de siniestralidad}. Esta última métrica se construye normalizando el número de incidentes por cada $1,000$ vehículos que circularon en la ciudad durante el mes de de observación, utilizando los datos de los radares de conteo permanente para controlar por variaciones en la exposición vehicular. 
 
 \section{Estimación}
 \noindent Para poder estimar los efectos de las cámaras de velocidad sobre cada uno de los resultados definidos anteriormente, hago uso de dos modelos complementarios, uno que no incluye efectos fijos, y otro que sí lo hace. El primero está definido como sigue,
@@ -23,10 +23,10 @@ Adicionalmente, cada uno de estos incidentes se evalúa bajo dos métricas: en \
 
 Donde,
 \begin{itemize}
-    \item $y_{it}$ representa el outcome (total de accidentes o tasa) observado en la celda $i$ durante el mes $t$
-    \item $treat_i$ es una variable indicadora para las celdas que tienen un radar de velocidad. Es igual a $1$ si la celda está tratada
+    \item $y_{it}$ representa el outcome (total de accidentes o tasa) observado en la área $i$ durante el mes $t$
+    \item $treat_i$ es una variable indicadora para las áreas que tienen un radar de velocidad. Es igual a $1$ si la área está tratada
     \item $post_t$ es una varialbe indicadora igual a $1$ para los meses posteriores al inicio del programa (abril de 2019)
-    \item $treat\_post_{it}$ es el término de interacción que captura la exposición al tratamiento de las celdas. 
+    \item $treat\_post_{it}$ es el término de interacción que captura la exposición al tratamiento de las áreas. 
     \item $\beta$ es el parámetro de interés que estima el \textbf{efecto promedio del tratamiento sobre los tratados (ATT)}
 \end{itemize}
 
