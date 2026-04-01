@@ -147,11 +147,46 @@ Para garantizar la validez interna de las estimaciones y asegurar que las difere
 Un requisito central de la estrategia de identificación es la satisfacción del supuesto de \textbf{soporte común} (\textit{common support}). Este supuesto existe que, para cada valor del \textit{propensity score} observado en el grupo tratado, exista un conjunto suficiente de unidades de control con probabilidades de tratamiento similares. La ausencia de solapamiento en las distribuciones de los puntajes de propensión invalidaría la comparación, al intentar emparejar unidades estructuralmente distintas. 
 
 El cálculo del \textit{propensity score} se realizó integrando aquellas dimensiones críticas que, de acuerdo con la lógica oficial, determinan la asignación de los radares de velocidad: atributos físicos de la red vial, proxies de movilidad y exposición vehicular, así como el historial de siniestralidad previo al tratamiento.  
-\begin{figure}[htbp]
+\begin{table}[htbp]
     \centering
     \caption{Soporte del Propensity Score por Distancias}
-    \includegraphics[width=\textwidth]{Imagenes/soporte-propensity-score.png}
-\end{figure}
+    \label{tab:common-support}
+    \tiny
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{l c c l c c l c c}
+        \toprule
+        \multicolumn{3}{c}{\textbf{0 - 75 m}} & \multicolumn{3}{c}{\textbf{0 - 100 m}} & \multicolumn{3}{c}{\textbf{0 - 200 m}} \\
+        \cmidrule(lr){1-3} \cmidrule(lr){4-6} \cmidrule(lr){7-9}
+        \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} & \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} & \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} \\
+        \midrule\relax
+        {[}0.0002, 0.0205) & 92 & 56,591 & {[}0.0002, 0.0433) & 85 & 25,680 & {[}0.0002, 0.0163) & 89 & 65,147 \\
+        {[}0.0205, 0.0409) & 6 & 146 & {[}0.0433, 0.0864) & 11 & 101 & {[}0.0163, 0.0325) & 3 & 263 \\
+        {[}0.0409, 0.0612) & 2 & 44 & {[}0.0864, 0.1295) & 2 & 31 & {[}0.0487, 0.0649) & 1 & 41 \\
+        {[}0.0612, 0.0816) & 1 & 22 & {[}0.1726, 0.2158) & 1 & 13 & {[}0.0649, 0.0811) & 3 & 18 \\
+        {[}0.0816, 0.1019) & 2 & 15 & {[}0.3020, 0.3451) & 1 & 0 & {[}0.0972, 0.1134) & 1 & 5 \\
+        {[}0.1426, 0.1629) & 1 & 3 & {[}0.7331, 0.7763) & 1 & 1 & {[}0.1458, 0.1620) & 1 & 3 \\
+         &  &  &  &  &  & $> 0.3238$ & 1 & 0 \\
+        \midrule
+        \multicolumn{3}{c}{\textbf{0 - 300 m}} & \multicolumn{3}{c}{\textbf{0 - 400 m}} & \multicolumn{3}{c}{\textbf{0 - 500 m}} \\
+        \cmidrule(lr){1-3} \cmidrule(lr){4-6} \cmidrule(lr){7-9}
+        \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} & \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} & \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} \\
+        \midrule\relax
+        {[}0.0003, 0.0092) & 80 & 45,974 & {[}0.0001, 0.0035) & 69 & 76,069 & {[}0.0001, 0.0025) & 59 & 87,810 \\
+        {[}0.0092, 0.0181) & 8 & 577 & {[}0.0035, 0.0070) & 12 & 2,576 & {[}0.0025, 0.0049) & 15 & 3,699 \\
+        {[}0.0181, 0.0270) & 3 & 155 & {[}0.0070, 0.0104) & 5 & 599 & {[}0.0049, 0.0074) & 5 & 861 \\
+        {[}0.0270, 0.0359) & 1 & 62 & {[}0.0104, 0.0139) & 3 & 196 & {[}0.0074, 0.0098) & 1 & 330 \\
+        {[}0.0447, 0.0536) & 1 & 24 & {[}0.0207, 0.0242) & 1 & 32 & {[}0.0098, 0.0122) & 1 & 146 \\
+        {[}0.0536, 0.0625) & 1 & 3 & {[}0.0276, 0.0311) & 1 & 11 & {[}0.0147, 0.0171) & 1 & 41 \\
+        {[}0.1069, 0.1158) & 1 & 5 & {[}0.0311, 0.0345) & 1 & 11 & {[}0.0220, 0.0244) & 1 & 10 \\
+        {[}0.1247, 0.1335) & 1 & 0 &  &  &  & {[}0.0317, 0.0341) & 1 & 3 \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \scriptsize \textit{Nota:} Se muestran las distribuciones de unidades tratadas y de control en el rango común del Propensity Score.
+    \end{minipage}
+\end{table}
 
 Con el objetivo de robustecer el emparejamiento, se evaluó la densidad de controles disponibles para cada rango del propensity score. \footnote{Para el cálculo de los rangos evaluados se consideró el rango de valores de los propensity scores de las unidades de control, partiendo dicho rango en 20 bins del mismo tamaño, y contando cuántas unidades tenían un propensity score en dicho rango} Se estableció un umbral mínimo de tres unidades de control por cada unidad tratada dentro de un mismo rango para poder proceder con el emparejamiento; en caso contrario, la unidad tratada se excluye del análisis. Tras aplicar este procedimiento de \textit{trimming}, se identificaron cuatro casos específicos donde fue necesario restringir la muestra: 
  
@@ -183,4 +218,4 @@ De manera consistente en todas las especificaciones, se observa una reducción s
     \item \textbf{Radio de 250 m:}  En esta escala se registra la mayor variabilidad residual. Debido a la extensión del área, las unidades tratadas presentan configuraciones viales más heterogéneas, lo que dificulta encontrar controles perfectos en todas las dimensiones simultáneamente. Sin embargo, aun en este caso, el procedimiento de \textit{matching} reduce drásticamente el sesgo observado en la muestra original, mejorando la comparabilidad de las distribuciones respecto al escenario sin ajuste.
 \end{itemize}
 
-En conclusión, los diagnósticos de balance confirman que la estrategia de identificación es robusta. Aunque en los radios de mayor tamaño existen variables que superan levemente la cota de $0.1$, la mejora generalizada en la similitud de las covariables permite proceder con la estimación de los efectos mediante modelos de \textit{diferencia en diferencias}, bajo el supuesto de que las diferencias observadas en la siniestralidad no son producto de disparidades estructurales preexistentes entre los grupos, sino del efecto causal de los radares de velocidad.
+En conclusión, los diagnósticos de balance confirman que la estrategia de identificación es robusta. Aunque en los radios de mayor tamaño existen variables que superan levemente la cota de $0.1$, la mejora generalizada en la similitud de las covariables permite proceder con la estimación de los efectos mediante modelos de \textit{diferencia en diferencias}, bajo el supuesto de que las diferencias observadas en la siniestralidad no son producto de disparidades estructurales preexistentes entre los grupos, sino del efecto causal de los radares de velocidad. Las pruebas visuales de tendencias paralelas para todos los radios considerados pueden consultarse en el Apéndice~\ref{chap:tendencias-paralelas}, mientras que los resultados de las regresiones de las pruebas placebo se encuentran detallados en el Apéndice~\ref{chap:pruebas-placebo}.

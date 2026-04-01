@@ -1,18 +1,20 @@
-% No borren este código. Es importante para que las referencias se vean como se debe
-
-\documentclass{article}
+% Macro. Esto es muy importante, no lo borren
 
 \makeatletter
 \renewenvironment{thebibliography}[1]
-     {\section*{\refname}%
-      \@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}%
+     {\@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}%
       \list{}%
-           {\setlength{\labelwidth}{0pt}%
-            \setlength{\labelsep}{0pt}%
-            \setlength{\leftmargin}{\parindent}%
-            \setlength{\itemindent}{-\parindent}%
-            \@openbib@code
-            \usecounter{enumiv}}%
+            {\setlength{\labelwidth}{0pt}%
+             \setlength{\labelsep}{0pt}%
+             \setlength{\leftmargin}{\parindent}%
+             \setlength{\itemindent}{-\parindent}%
+             \setlength{\itemsep}{0.8\baselineskip}%
+             \setlength{\parsep}{0pt}%
+             \setlength{\topsep}{0.3\baselineskip}%
+             \@openbib@code
+             \usecounter{enumiv}}%
+      \small
+      \linespread{1.05}\selectfont
       \sloppy
       \clubpenalty4000
       \@clubpenalty \clubpenalty
@@ -23,13 +25,127 @@
       \endlist}
 \makeatother
 
-\begin{document}
+% Lista
 
-\begin{thebibliography}{111}
-\raggedright
+% La manera recomendada para citar papers o libros en el formato de Chicago esta en el siguiente vínculo: https://www.chicagomanualofstyle.org/tools_citationguide/citation-guide-2.html
 
-\bibitem{abc} Anscombe, E. 1981/1971. ``Causality and Determination,'' in \emph{Metaphysics and the Philosophy of Mind: Collected Philosophical Papers of G.E.M.\ Anscombe}. Minneapolis: University of Minnesota Press. 133--47.
+% Es importante poner el apellido del autor seguido del año de publicación, una coma y las páginas consultadas en el texto antes de puntuar y entre paréntesis para las citas en el cuerpo de la tesis
+
+% Ejemplo:
+
+% Las \textit{causas próximas} del crecimiento son conocidas: tecnología, capital humano y físico. La pregunta es ¿por qué unos países sí tienen estas causas próximas y otros no? La respuesta son las \textit{causas fundamentales:} suerte, geografía, cultura e instituciones (Acemoglu 2009, 110).
+
+\begin{thebibliography}{}
+
+\bibitem{}
+Al-Masaeid, H. R., Mujalli, R. O., \& Al-Haj, E. H. (2020). Impact of fixed cameras on traffic crashes. \textit{Saudi Journal of Civil Engineering, 4}(10), 192–198. \url{https://doi.org/10.36348/sjce.2020.v04i10.001}
+
+\bibitem{}
+Arganis, J. (2022). \textit{Datos viales 2022}. Secretaría de Infraestructura, Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos_Viales_2022/00_Introducci%C3%B3n_DV2022.pdf}
+
+\bibitem{}
+Centro de Comando, Control, Cómputo, Comunicaciones y Contacto Ciudadano de la CDMX. (2024). \textit{Incidentes viales reportados por C5} [Dataset]. Consultado noviembre de 2025 en \url{https://datos.cdmx.gob.mx/dataset/incidentes-viales-c5}
+
+\bibitem{}
+Christie, S. M., Lyons, R. A., Dunstan, F. D., \& Jones, S. J. (2003). Are mobile speed cameras effective? A controlled before and after study. \textit{Injury Prevention, 9}(4), 302–306. \url{https://doi.org/10.1136/ip.9.4.302}
+
+\bibitem{}
+De Ceunynck, T. (2017). Installation of section control \& speed cameras. \textit{European Road Safety Decision Support System}, developed by the H2020 project SafetyCube. Recuperado el 26 de noviembre de 2025 de \url{http://www.roadsafety-dss.eu}
+
+\bibitem{}
+Dirección General de Servicios Técnicos. (2025). \textit{Datos viales}. Secretaría de Infraestructura, Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/index.php/infraestructura/direccion-general-de-servicios-tecnicos/datos-viales}
+
+\bibitem{}
+Esteva, J. (2025). \textit{Datos viales 2025}. Secretaría de Infraestructura, Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos_Viales_2025/00_DV2025_Introduccion.pdf}
+
+\bibitem{}
+Forjuoh, S. N. (2003). Traffic-related injury prevention interventions for low-income countries. \textit{Injury Control and Safety Promotion, 10}(1–2), 109–118. \url{https://doi.org/10.1076/icsp.10.1.109.14115}
+
+\bibitem{}
+García C, A. (2018). \textit{Guía para el control de la velocidad}. Secretaría de Salud / Secretariado Técnico del Consejo Nacional para la Prevención de Accidentes.
+
+\bibitem{}
+Graham, D. J., Naik, C., McCoy, E. J., \& Li, H. (2019). Do speed cameras reduce road traffic collisions? \textit{PLoS ONE, 14}(9), e0221267. \url{https://doi.org/10.1371/journal.pone.0221267}
+
+\bibitem{}
+Jiménez, J. (2020). \textit{Datos viales 2020}. Secretaría de Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos-Viales-2020/00_Introducci%C3%B3n_DV2020.pdf}
+
+\bibitem{}
+Jiménez, J. (2021). \textit{Datos viales 2021}. Secretaría de Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos_Viales_2021/00_Introducci%C3%B3n_DV2021.pdf}
+
+\bibitem{}
+Job, S., Cliff, D., Fleiter, J. J., Flieger, M., \& Harman, B. (2020). \textit{Guide for determining readiness for speed cameras and other automated enforcement}. Global Road Safety Facility and the Global Road Safety Partnership.
+
+\bibitem{}
+Li, H., Graham, D. J., \& Majumdar, A. (2013). The impacts of speed cameras on road accidents: An application of propensity score matching methods. \textit{Accident Analysis \& Prevention, 60}, 148–157. \url{https://doi.org/10.1016/j.aap.2013.08.003}
+
+\bibitem{}
+Li, H., Zhang, Y., \& Ren, G. (2020). A causal analysis of time-varying speed camera safety effects based on the propensity score method. \textit{Journal of Safety Research, 75}, 119–127. \url{https://doi.org/10.1016/j.jsr.2020.08.007}
+
+\bibitem{}
+Li, H., Zhu, M., Graham, D. J., \& Zhang, Y. (2020). Are multiple speed cameras more effective than a single one? Causal analysis of the safety impacts of multiple speed cameras. \textit{Accident Analysis \& Prevention, 139}, 105488. \url{https://doi.org/10.1016/j.aap.2020.105488}
+
+\bibitem{}
+Madrigal Montes de Oca, A., \& Rodríguez, A. (2021). El efecto de las fotoinfracciones en la Ciudad de México. \textit{Revista Espacialidades UAM, 11}(1), 83–97.
+
+\bibitem{}
+Mountain, L., Hirst, W., \& Maher, M. (2005). Are speed enforcement cameras more effective than other speed management measures? \textit{Accident Analysis \& Prevention, 37}(4), 742–754. \url{https://doi.org/10.1016/j.aap.2005.03.017}
+
+\bibitem{}
+Novoa, A. M., Pérez, K., Santamariña-Rubio, E., Marí-Dell’Olmo, M., Ferrando, J., Peiró, R., Tobías, A., Zori, P., \& Borrell, C. (2010). Impact of the penalty points system on road traffic injuries in Spain: A time–series study. \textit{American Journal of Public Health, 100}(11), 2220–2227. \url{https://doi.org/10.2105/ajph.2010.192104}
+
+\bibitem{}
+Nuño, J. (2023). \textit{Datos viales 2023}. Secretaría de Infraestructura, Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos_Viales_2023/00_Introducci%C3%B3n_DV2023.pdf}
+
+\bibitem{}
+Nuño, J. (2024). \textit{Datos viales 2024}. Secretaría de Infraestructura, Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos_Viales_2024/00_Int_DV2024.pdf}
+
+\bibitem{}
+Park, R. C., \& Hong, E. J. (2020). Urban traffic accident risk prediction for knowledge-based mobile multimedia service. \textit{Personal and Ubiquitous Computing, 26}(2), 417–427. \url{https://doi.org/10.1007/s00779-020-01442-y}
+
+\bibitem{}
+Rosenbaum, P. R., \& Rubin, D. B. (1983). The central role of the propensity score in observational studies for causal effects. \textit{Biometrika, 70}(1), 41–55. \url{https://doi.org/10.1093/biomet/70.1.41}
+
+\bibitem{}
+Rubin, D. (1972). Estimating causal effects of treatments in randomized and nonrandomized studies. \textit{ETS Research Bulletin Series, 1972}(2). \url{https://doi.org/10.1002/j.2333-8504.1972.tb00631.x}
+
+\bibitem{}
+Ruiz, G. (2015). \textit{Datos viales 2015}. Secretaría de Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos-Viales-2015/Introduccion_DV_2015.pdf}
+
+\bibitem{}
+Ruiz, G. (2016). \textit{Datos viales 2016}. Secretaría de Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos-Viales-2016/Introduccion_DV_2016.pdf}
+
+\bibitem{}
+Ruiz, G. (2017). \textit{Datos viales 2017}. Secretaría de Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos-Viales-2017/Introduccion_DV_2017.pdf}
+
+\bibitem{}
+Ruiz, G. (2018). \textit{Datos viales 2018}. Secretaría de Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos-Viales-2018/Introduccion_DV_2018.pdf}
+
+\bibitem{}
+Ruiz, G. (2019). \textit{Datos viales 2019}. Secretaría de Comunicaciones y Transportes. \url{https://micrs.sct.gob.mx/images/DireccionesGrales/DGST/Datos-Viales-2019/00_INTRODUCCI%C3%93N.pdf}
+
+\bibitem{}
+Secretaría de Movilidad. (2019). \textit{El sistema Fotocívicas entra en vigor este 22 de abril}. SEMOVI. Consultado el 26 de noviembre de 2025 en \url{https://www.semovi.cdmx.gob.mx/comunicacion/nota/el-sistema-fotocivicas-entra-en-vigor-este-22-de-abril}
+
+\bibitem{}
+Secretaría de Movilidad. (2023). \textit{Vialidades primarias de la Ciudad de México} [Dataset]. Consultado noviembre de 2025 en \url{https://datos.cdmx.gob.mx/dataset/vialidades-de-la-ciudad-de-mexico}
+
+\bibitem{}
+Secretaría de Movilidad. (2025). \textit{Afluencia diaria del metro CDMX} [Dataset]. Consultado noviembre de 2025 en \url{https://datos.cdmx.gob.mx/dataset/afluencia-diaria-del-metro-cdmx}
+
+\bibitem{}
+Secretaría de Seguridad Ciudadana. (2023). \textit{Fotocívicas (Ubicación)} [Dataset]. Consultado noviembre de 2025 en \url{https://datos.cdmx.gob.mx/dataset/fotocivicas}
+
+\bibitem{}
+Secretaría de Seguridad Ciudadana. (2025). \textit{Infracciones fotocívicas}. \url{https://www.ssc.cdmx.gob.mx/storage/app/media/Transito/Actualizaciones/infracciones-fotocivicas.pdf}
+
+\bibitem{}
+Treat, J. R. (1979). \textit{Tri-level study of the causes of traffic accidents: Final report}. Institute for Research in Public Safety, Indiana University.
+
+\bibitem{}
+Valverde, C. Q., Perez-Ferrer, C., Becerril, L. C., Santiago, A. M., Lopez, H. R., Galbarro, J. P., Quistberg, D. A., Roux, A. V. D., \& Barrientos-Gutierrez, T. (2022). Evaluation of road safety policies and their enforcement in Mexico City, 2015–2019: An interrupted time-series study. \textit{Injury Prevention, 29}(1), 35–41. \url{https://doi.org/10.1136/ip-2022-044590}
+
+\bibitem{}
+Van Der Sar, M., Mulder, I., \& Choenni, S. (2011). Camera use in the public domain: Towards a Big Sister approach. \textit{Workshop on Socio-Technical Aspects in Security and Trust (STAST)}, 30–36. \url{https://doi.org/10.1109/stast.2011.6059253}
 
 \end{thebibliography}
-
-\end{document}

@@ -42,19 +42,199 @@ La interpretación causal de esta estrategia descansa en tres elementos compleme
 \section{Resultados}
 \noindent Tras la estimación de los modelos de diferencia en diferencias sobre la muestra emparejada, los resultados principales indican que \textbf{no existe evidencia estadística suficiente para afirmar que las cámaras de velocidad del programa de Fotocívicas generaron una reducción localizada de la siniestralidad} en su entorno inmediato.  
 
-\begin{figure}[htbp]
-    \centering
-    \caption{Resultados sobre total de incidentes}
-    \includegraphics[width=\textwidth]{Imagenes/circular-grid-effects-total-incidents.png}
-\end{figure}
+Como se observa en la tabla \ref{tab:results-main-general}, el coeficiente de interacción $treat\_post$ que captura el efecto promedio del tratamiento sobre los tratados (ATT), no alcanza niveles de significancia estadísticos ($p > 0.05$) en ninguna de las especificaciones analizadas. 
 
-\begin{figure}[htbp]
-    \centering
-    \caption{Resultados sobre total de incidentes}
-    \includegraphics[width=\textwidth]{Imagenes/circular-grid-effects-tasa-incidentes.png}
-\end{figure}
+Las tablas \ref{tab:results-main-general}, \ref{tab:results-main-min}, \ref{tab:results-main-pic} y \ref{tab:results-main-fcs} permiten comparar simultáneamente los coeficientes estimados para cada radio en cada uno de los niveles de severidad de los incidentes, distinguiendo entre modelos sin efectos fijos y con efectos fijos, y entre resultados en niveles y en tasas.
 
-Como se observa en las figuras 4.1 y 4.2, el coeficiente de interacción $treat\_post$ que captura el efecto promedio del tratamiento sobre los tratados (ATT), no alcanza niveles de significancia estadísticos ($p > 0.05$) en ninguna de las especificaciones analizadas. 
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados sobre hechos de tránsito generales}
+    \label{tab:results-main-general}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
+        Intersección & $1.198^{***}$ & $1.444^{***}$ & $2.393^{***}$ & $3.177^{***}$ & $4.321^{***}$ & $5.578^{***}$ \\
+         & $(0.030)$ & $(0.031)$ & $(0.045)$ & $(0.050)$ & $(0.062)$ & $(0.076)$ \\
+        Tratamiento & $0.073^{*}$ & $0.074$ & $0.068$ & $-0.021$ & $-0.032$ & $0.066$ \\
+         & $(0.043)$ & $(0.045)$ & $(0.064)$ & $(0.071)$ & $(0.087)$ & $(0.109)$ \\
+        Tiempo & $-0.240^{***}$ & $-0.282^{***}$ & $-0.430^{***}$ & $-0.502^{***}$ & $-0.710^{***}$ & $-0.926^{***}$ \\
+         & $(0.039)$ & $(0.041)$ & $(0.059)$ & $(0.066)$ & $(0.084)$ & $(0.100)$ \\
+        Tratamiento x Tiempo & $0.012$ & $0.031$ & $0.040$ & $0.057$ & $0.097$ & $0.162$ \\
+         & $(0.057)$ & $(0.061)$ & $(0.085)$ & $(0.096)$ & $(0.118)$ & $(0.144)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $0.012$ & $0.031$ & $0.040$ & $0.057$ & $0.097$ & $0.162$ \\
+         & $(0.057)$ & $(0.061)$ & $(0.085)$ & $(0.096)$ & $(0.118)$ & $(0.144)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
+        Intersección & $7.51 \times {10^{-5}}^{***}$ & $9.03 \times {10^{-5}}^{***}$ & $1.50 \times {10^{-4}}^{***}$ & $1.99 \times {10^{-4}}^{***}$ & $2.71 \times {10^{-4}}^{***}$ & $3.49 \times {10^{-4}}^{***}$ \\
+         & $(1.85 \times 10^{-6})$ & $(1.91 \times 10^{-6})$ & $(2.81 \times 10^{-6})$ & $(3.14 \times 10^{-6})$ & $(3.90 \times 10^{-6})$ & $(4.74 \times 10^{-6})$ \\
+        Tratamiento & $4.44 \times {10^{-6}}^{*}$ & $4.69 \times {10^{-6}}^{*}$ & $4.23 \times 10^{-6}$ & $-1.37 \times 10^{-6}$ & $-2.13 \times 10^{-6}$ & $4.12 \times 10^{-6}$ \\
+         & $(2.67 \times 10^{-6})$ & $(2.83 \times 10^{-6})$ & $(4.00 \times 10^{-6})$ & $(4.46 \times 10^{-6})$ & $(5.46 \times 10^{-6})$ & $(6.78 \times 10^{-6})$ \\
+        Tiempo & $-8.07 \times {10^{-6}}^{***}$ & $-8.95 \times {10^{-6}}^{***}$ & $-1.34 \times {10^{-5}}^{***}$ & $-1.29 \times {10^{-5}}^{***}$ & $-1.91 \times {10^{-5}}^{***}$ & $-2.48 \times {10^{-5}}^{***}$ \\
+         & $(2.58 \times 10^{-6})$ & $(2.73 \times 10^{-6})$ & $(3.85 \times 10^{-6})$ & $(4.33 \times 10^{-6})$ & $(5.46 \times 10^{-6})$ & $(6.46 \times 10^{-6})$ \\
+        Tratamiento x Tiempo & $1.33 \times 10^{-6}$ & $2.23 \times 10^{-6}$ & $3.35 \times 10^{-6}$ & $3.78 \times 10^{-6}$ & $6.44 \times 10^{-6}$ & $1.05 \times 10^{-5}$ \\
+         & $(3.71 \times 10^{-6})$ & $(3.98 \times 10^{-6})$ & $(5.53 \times 10^{-6})$ & $(6.23 \times 10^{-6})$ & $(7.65 \times 10^{-6})$ & $(9.35 \times 10^{-6})$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $1.33 \times 10^{-6}$ & $2.23 \times 10^{-6}$ & $3.35 \times 10^{-6}$ & $3.78 \times 10^{-6}$ & $6.44 \times 10^{-6}$ & $1.05 \times 10^{-5}$ \\
+         & $(3.71 \times 10^{-6})$ & $(3.98 \times 10^{-6})$ & $(5.53 \times 10^{-6})$ & $(6.23 \times 10^{-6})$ & $(7.65 \times 10^{-6})$ & $(9.35 \times 10^{-6})$ \\
+
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados sobre hechos de tránsito sin lesionados (MIN)}
+    \label{tab:results-main-min}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
+        Intersección & ${0.719}^{***}$ & ${0.823}^{***}$ & ${1.422}^{***}$ & ${1.894}^{***}$ & ${2.668}^{***}$ & ${3.428}^{***}$ \\
+         & $(0.021)$ & $(0.021)$ & $(0.031)$ & $(0.035)$ & $(0.045)$ & $(0.055)$ \\
+        Tratamiento & $0.025$ & ${0.076}^{**}$ & $0.015$ & $-0.030$ & $-0.086$ & $0.004$ \\
+         & $(0.030)$ & $(0.032)$ & $(0.044)$ & $(0.051)$ & $(0.063)$ & $(0.078)$ \\
+        Tiempo & ${-0.257}^{***}$ & ${-0.273}^{***}$ & ${-0.490}^{***}$ & ${-0.598}^{***}$ & ${-0.878}^{***}$ & ${-1.106}^{***}$ \\
+         & $(0.026)$ & $(0.027)$ & $(0.039)$ & $(0.045)$ & $(0.056)$ & $(0.068)$ \\
+        Tratamiento x Tiempo & $-0.004$ & $-0.031$ & $0.021$ & $0.022$ & $0.089$ & $0.081$ \\
+         & $(0.038)$ & $(0.040)$ & $(0.055)$ & $(0.064)$ & $(0.079)$ & $(0.097)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $-0.004$ & $-0.031$ & $0.021$ & $0.022$ & $0.089$ & $0.081$ \\
+         & $(0.038)$ & $(0.040)$ & $(0.055)$ & $(0.064)$ & $(0.079)$ & $(0.097)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
+        Intersección & ${4.50 \times 10^{-5}}^{***}$ & ${5.15 \times 10^{-5}}^{***}$ & ${8.90 \times 10^{-5}}^{***}$ & ${1.19 \times 10^{-4}}^{***}$ & ${1.67 \times 10^{-4}}^{***}$ & ${2.15 \times 10^{-4}}^{***}$ \\
+         & $(1.31 \times 10^{-6})$ & $(1.33 \times 10^{-6})$ & $(1.95 \times 10^{-6})$ & $(2.22 \times 10^{-6})$ & $(2.79 \times 10^{-6})$ & $(3.41 \times 10^{-6})$ \\
+        Tratamiento & $1.47 \times 10^{-6}$ & ${4.70 \times 10^{-6}}^{**}$ & $9.86 \times 10^{-7}$ & $-1.88 \times 10^{-6}$ & $-5.48 \times 10^{-6}$ & $1.46 \times 10^{-7}$ \\
+         & $(1.89 \times 10^{-6})$ & $(1.99 \times 10^{-6})$ & $(2.77 \times 10^{-6})$ & $(3.16 \times 10^{-6})$ & $(3.90 \times 10^{-6})$ & $(4.84 \times 10^{-6})$ \\
+        Tiempo & ${-1.29 \times 10^{-5}}^{***}$ & ${-1.36 \times 10^{-5}}^{***}$ & ${-2.50 \times 10^{-5}}^{***}$ & ${-2.94 \times 10^{-5}}^{***}$ & ${-4.35 \times 10^{-5}}^{***}$ & ${-5.42 \times 10^{-5}}^{***}$ \\
+         & $(1.71 \times 10^{-6})$ & $(1.76 \times 10^{-6})$ & $(2.48 \times 10^{-6})$ & $(2.88 \times 10^{-6})$ & $(3.63 \times 10^{-6})$ & $(4.39 \times 10^{-6})$ \\
+        Tratamiento x Tiempo & $-2.02 \times 10^{-7}$ & $-1.60 \times 10^{-6}$ & $1.68 \times 10^{-6}$ & $1.40 \times 10^{-6}$ & $5.34 \times 10^{-6}$ & $5.26 \times 10^{-6}$ \\
+         & $(2.45 \times 10^{-6})$ & $(2.60 \times 10^{-6})$ & $(3.55 \times 10^{-6})$ & $(4.12 \times 10^{-6})$ & $(5.09 \times 10^{-6})$ & $(6.25 \times 10^{-6})$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $-2.02 \times 10^{-7}$ & $-1.60 \times 10^{-6}$ & $1.68 \times 10^{-6}$ & $1.40 \times 10^{-6}$ & $5.34 \times 10^{-6}$ & $5.26 \times 10^{-6}$ \\
+         & $(2.45 \times 10^{-6})$ & $(2.60 \times 10^{-6})$ & $(3.55 \times 10^{-6})$ & $(4.12 \times 10^{-6})$ & $(5.09 \times 10^{-6})$ & $(6.25 \times 10^{-6})$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados sobre hechos de tránsito con lesionados (PIC)}
+    \label{tab:results-main-pic}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
+        Intersección & ${0.470}^{***}$ & ${0.613}^{***}$ & ${0.956}^{***}$ & ${1.262}^{***}$ & ${1.631}^{***}$ & ${2.124}^{***}$ \\
+         & $(0.015)$ & $(0.016)$ & $(0.022)$ & $(0.025)$ & $(0.030)$ & $(0.036)$ \\
+        Tratamiento & ${0.047}^{**}$ & $-0.003$ & $0.050$ & $0.008$ & $0.049$ & $0.052$ \\
+         & $(0.021)$ & $(0.023)$ & $(0.031)$ & $(0.035)$ & $(0.042)$ & $(0.051)$ \\
+        Tiempo & $0.019$ & $-0.005$ & ${0.067}^{**}$ & ${0.103}^{***}$ & ${0.171}^{***}$ & ${0.183}^{***}$ \\
+         & $(0.022)$ & $(0.024)$ & $(0.032)$ & $(0.036)$ & $(0.044)$ & $(0.051)$ \\
+        Tratamiento x Tiempo & $0.018$ & ${0.059}^{*}$ & $0.017$ & $0.034$ & $0.015$ & $0.088$ \\
+         & $(0.031)$ & $(0.034)$ & $(0.046)$ & $(0.052)$ & $(0.063)$ & $(0.076)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $0.018$ & $0.059$ & $0.017$ & $0.034$ & $0.015$ & $0.088$ \\
+         & $(0.031)$ & $(0.034)$ & $(0.046)$ & $(0.052)$ & $(0.063)$ & $(0.076)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
+        Intersección & ${2.95 \times 10^{-5}}^{***}$ & ${3.83 \times 10^{-5}}^{***}$ & ${5.99 \times 10^{-5}}^{***}$ & ${7.91 \times 10^{-5}}^{***}$ & ${1.02 \times 10^{-4}}^{***}$ & ${1.33 \times 10^{-4}}^{***}$ \\
+         & $(9.35 \times 10^{-7})$ & $(1.02 \times 10^{-6})$ & $(1.38 \times 10^{-6})$ & $(1.55 \times 10^{-6})$ & $(1.86 \times 10^{-6})$ & $(2.22 \times 10^{-6})$ \\
+        Tratamiento & ${2.93 \times 10^{-6}}^{**}$ & $-7.27 \times 10^{-8}$ & $3.09 \times 10^{-6}$ & $4.29 \times 10^{-7}$ & $3.06 \times 10^{-6}$ & $3.35 \times 10^{-6}$ \\
+         & $(1.34 \times 10^{-6})$ & $(1.46 \times 10^{-6})$ & $(1.97 \times 10^{-6})$ & $(2.19 \times 10^{-6})$ & $(2.61 \times 10^{-6})$ & $(3.19 \times 10^{-6})$ \\
+        Tiempo & ${4.99 \times 10^{-6}}^{***}$ & ${4.81 \times 10^{-6}}^{***}$ & ${1.20 \times 10^{-5}}^{***}$ & ${1.68 \times 10^{-5}}^{***}$ & ${2.43 \times 10^{-5}}^{***}$ & ${2.95 \times 10^{-5}}^{***}$ \\
+         & $(1.46 \times 10^{-6})$ & $(1.61 \times 10^{-6})$ & $(2.17 \times 10^{-6})$ & $(2.41 \times 10^{-6})$ & $(2.95 \times 10^{-6})$ & $(3.41 \times 10^{-6})$ \\
+        Tratamiento x Tiempo & $1.62 \times 10^{-6}$ & $3.66 \times 10^{-6}$ & $1.51 \times 10^{-6}$ & $2.36 \times 10^{-6}$ & $1.55 \times 10^{-6}$ & $5.68 \times 10^{-6}$ \\
+         & $(2.10 \times 10^{-6})$ & $(2.31 \times 10^{-6})$ & $(3.11 \times 10^{-6})$ & $(3.48 \times 10^{-6})$ & $(4.19 \times 10^{-6})$ & $(5.06 \times 10^{-6})$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $1.62 \times 10^{-6}$ & $3.66 \times 10^{-6}$ & $1.51 \times 10^{-6}$ & $2.36 \times 10^{-6}$ & $1.55 \times 10^{-6}$ & $5.68 \times 10^{-6}$ \\
+         & $(2.10 \times 10^{-6})$ & $(2.31 \times 10^{-6})$ & $(3.11 \times 10^{-6})$ & $(3.48 \times 10^{-6})$ & $(4.19 \times 10^{-6})$ & $(5.06 \times 10^{-6})$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados sobre hechos de tránsito con personas fallecidas (FCS)}
+    \label{tab:results-main-fcs}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
+        Intersección & ${0.009}^{***}$ & ${0.008}^{***}$ & ${0.015}^{***}$ & ${0.020}^{***}$ & ${0.022}^{***}$ & ${0.026}^{***}$ \\
+         & $(0.002)$ & $(0.002)$ & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ \\
+        Tratamiento & $8.36 \times 10^{-4}$ & $9.42 \times 10^{-4}$ & $0.002$ & $0.001$ & $0.005$ & ${0.010}^{**}$ \\
+         & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.004)$ \\
+        Tiempo & $-0.002$ & ${-0.004}^{*}$ & ${-0.007}^{***}$ & ${-0.006}^{**}$ & $-0.002$ & $-0.004$ \\
+         & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.004)$ \\
+        Tratamiento x Tiempo & $-0.002$ & $0.002$ & $0.002$ & $3.95 \times 10^{-5}$ & $-0.007$ & $-0.007$ \\
+         & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.005)$ & $(0.005)$ & $(0.006)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $-0.002$ & $0.002$ & $0.002$ & $3.95 \times 10^{-5}$ & $-0.007$ & $-0.007$ \\
+         & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.005)$ & $(0.005)$ & $(0.006)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
+        Intersección & ${5.62 \times 10^{-7}}^{***}$ & ${5.35 \times 10^{-7}}^{***}$ & ${9.54 \times 10^{-7}}^{***}$ & ${1.30 \times 10^{-6}}^{***}$ & ${1.40 \times 10^{-6}}^{***}$ & ${1.59 \times 10^{-6}}^{***}$ \\
+         & $(9.90 \times 10^{-8})$ & $(9.75 \times 10^{-8})$ & $(1.28 \times 10^{-7})$ & $(1.51 \times 10^{-7})$ & $(1.62 \times 10^{-7})$ & $(1.78 \times 10^{-7})$ \\
+        Tratamiento & $4.78 \times 10^{-8}$ & $5.54 \times 10^{-8}$ & $1.51 \times 10^{-7}$ & $7.85 \times 10^{-8}$ & $2.86 \times 10^{-7}$ & ${6.19 \times 10^{-7}}^{**}$ \\
+         & $(1.43 \times 10^{-7})$ & $(1.41 \times 10^{-7})$ & $(1.88 \times 10^{-7})$ & $(2.17 \times 10^{-7})$ & $(2.39 \times 10^{-7})$ & $(2.74 \times 10^{-7})$ \\
+        Tiempo & $-1.01 \times 10^{-7}$ & $-1.65 \times 10^{-7}$ & ${-3.72 \times 10^{-7}}^{**}$ & $-2.77 \times 10^{-7}$ & $9.20 \times 10^{-9}$ & $-6.96 \times 10^{-8}$ \\
+         & $(1.39 \times 10^{-7})$ & $(1.34 \times 10^{-7})$ & $(1.67 \times 10^{-7})$ & $(2.11 \times 10^{-7})$ & $(2.43 \times 10^{-7})$ & $(2.62 \times 10^{-7})$ \\
+        Tratamiento x Tiempo & $-8.88 \times 10^{-8}$ & $1.70 \times 10^{-7}$ & $1.71 \times 10^{-7}$ & $2.27 \times 10^{-8}$ & $-4.58 \times 10^{-7}$ & $-4.45 \times 10^{-7}$ \\
+         & $(1.97 \times 10^{-7})$ & $(2.03 \times 10^{-7})$ & $(2.57 \times 10^{-7})$ & $(3.05 \times 10^{-7})$ & $(3.43 \times 10^{-7})$ & $(3.92 \times 10^{-7})$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $-8.88 \times 10^{-8}$ & $1.70 \times 10^{-7}$ & $1.71 \times 10^{-7}$ & $2.27 \times 10^{-8}$ & $-4.58 \times 10^{-7}$ & $-4.45 \times 10^{-7}$ \\
+         & $(1.97 \times 10^{-7})$ & $(2.03 \times 10^{-7})$ & $(2.57 \times 10^{-7})$ & $(3.05 \times 10^{-7})$ & $(3.43 \times 10^{-7})$ & $(3.92 \times 10^{-7})$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
 
 En el caso de los \textbf{hechos de tránsito generales}, los coeficientes estimados son consistentemente positivos -- lo que podría sugerir un ligero incremento relativo de incidentes en zonas tratadas --, sin embargo, carecen siempre de robustez estadística. 
 
