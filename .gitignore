@@ -2,6 +2,7 @@
 *
 !.gitignore
 !/README.md
+!/ANALYSIS-RESTART.md
 
 !/causal-effects-speed-cameras/
 !/causal-effects-speed-cameras/**/
