@@ -1,0 +1,247 @@
+\documentclass[11pt, oneside]{book}
+\usepackage[paperwidth=17cm, paperheight=22.5cm, bottom=2.5cm, right=2.5cm]{geometry}
+
+% El borde inferior puede parecerles muy amplio a la vista. Les recomiendo hacer una prueba de impresión antes para ajustarlo
+
+\usepackage{amssymb,amsmath,amsthm} % Símbolos matemáticos
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc} % Acentos y otros símbolos 
+\usepackage{enumerate}
+\usepackage[hidelinks]{hyperref} % Hipervínculos en el índice
+\usepackage{xurl} % Mejores saltos de línea en URLs largas
+\usepackage{graphicx}
+%\usepackage{subfig} % Subfiguras
+\graphicspath{{Imagenes/}} % En qué carpeta están las imágenes
+
+% Para eliminar guiones y justificar texto
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+\linespread{1.25} % Asemeja el interlineado 1.5 de Word
+
+\let\oldfootnote\footnote % Deja espacio entre el número del pie de página y el inicio del texto
+\renewcommand\footnote[1]{%
+\oldfootnote{\hspace{0.05mm}#1}}
+
+\renewcommand{\thefootnote} {\textcolor{Black}{\arabic{footnote}}} % Súperindice a color negro
+
+\setlength{\footnotesep}{0.75\baselineskip} % Espaciado entre notas al pie
+
+\usepackage{fnpos} % Footnotes al final de pág.
+
+\usepackage[justification=centering, font=bf, labelsep=period, skip=5pt]{caption} % Centrar captions de tablas y ponerlas en negritas
+
+\newcommand{\imagesource}[1]{{\footnotesize Fuente: #1}}
+
+\usepackage{tabularx} % Big tables
+\usepackage{booktabs} % Tablas con mejor formato
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{longtable}
+
+\usepackage{float} % Float tables
+
+\usepackage[dvipsnames]{xcolor} % Color
+
+\usepackage{pgfplots} % Gráficas
+\pgfplotsset{compat=newest}
+\pgfplotsset{width=7.5cm}
+\pgfkeys{/pgf/number format/1000 sep={}}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	PORTADA
+%----------------------------------------------------------------------------------------
+
+\title{El efecto causal de las cámaras de velocidad en el número de incidentes viales en la Ciudad de México} % Con este nombre se guardará el proyecto en writeLaTex
+
+\begin{titlepage}
+\begin{center}
+
+\textsc{\Large Instituto Tecnológico Autónomo de México}\\[2em]
+
+%Figura
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.50]{itam_logo.png}
+\end{center}
+\end{figure}
+
+% Pueden modificar el tamaño del logo cambiando la escala
+
+\textbf{\LARGE El efecto causal de las cámaras de velocidad en el número de incidentes viales en la Ciudad de México}\\[2em]
+
+\textsc{\large Tesis}\\[1em]
+
+\textsc{\large que para obtener el título de}\\[1em]
+
+\textsc{\LARGE Licenciado en Ciencia de Datos}\\[1em]
+
+\textsc{\large Presenta}\\[1em]
+
+\textsc{\LARGE Mariano Alcaraz Aguilar}\\[4em]
+
+\textsc{\large ASESOR: DR. ALBERTO SIMPSER MONDLAK}\\[.8em]
+
+
+% Asegúrense de escribir el nombre completo de su asesor
+
+\end{center}
+
+\vspace*{\fill}
+\textsc{Ciudad de México \hspace*{\fill} 2026}
+
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	DECLARACIÓN
+%----------------------------------------------------------------------------------------
+
+\thispagestyle{empty}
+
+\vspace*{\fill}
+\begingroup
+
+\noindent
+«Con fundamento en los artículos 21 y 27 de la Ley Federal del Derecho de Autor y como titular de los derechos moral y patrimonial de la obra titulada ``\textbf{El efecto causal de las cámaras de velocidad en el número de incidentes viales en la Ciudad de México}'', otorgo de manera gratuita y permanente al Instituto Tecnológico Autónomo de México y a la Biblioteca Raúl Bailléres Jr., la autorización para que fijen la obra en cualquier medio, incluido el electrónico, y la divulguen entre sus usuarios, profesores, estudiantes o terceras personas, sin que pueda percibir por tal divulgación una contraprestación.»
+
+% Asegúrense de cambiar el título de su tesis en el párrafo anterior
+
+\centering 
+
+\vspace{5em}
+
+\rule[1em]{20em}{0.5pt} % Línea para la fecha
+
+\textsc{Fecha}
+ 
+\vspace{8em}
+
+\rule[1em]{20em}{0.5pt} % Línea para la firma
+
+\textsc{Mariano Alcaraz Aguilar}
+
+\endgroup
+\vspace*{\fill}
+
+%----------------------------------------------------------------------------------------
+%	DEDICATORIA
+%----------------------------------------------------------------------------------------
+
+\pagestyle{plain}
+\frontmatter
+
+\chapter*{}
+\begin{flushright}
+\textit{A mi mamá, mi ejemplo y soporte permanente}
+\end{flushright}
+
+%----------------------------------------------------------------------------------------
+%	AGRADECIMIENTOS
+%----------------------------------------------------------------------------------------
+
+\chapter*{Agradecimientos}
+
+\noindent Dos años de mi vida me tomó escribir esta tesis, dos años de siempre estar casi lista. A mi mamá, a mis abuelos y a mis amigos, gracias por no dejarme solo esos años de desidia.
+
+% Esta sección es lo único que la gente lee. True story :)
+
+%----------------------------------------------------------------------------------------
+%	RESUMEN
+%----------------------------------------------------------------------------------------
+
+\chapter*{Resumen}
+
+\noindent Esta tesis analiza el efecto causal de las cámaras de velocidad sobre los incidentes viales en la Ciudad de México a partir de la transición de Fotomultas a Fotoc\'ivicas en abril de 2019. El objetivo es evaluar si este cambio redujo los accidentes, en particular aquellos con víctimas mortales. Para ello, se estudia la Ciudad de México en una ventana de tres años antes y tres años después de la implementación del programa, utilizando datos de incidentes del C5, información sobre la ubicación de las cámaras de velocidad de la Secretaría de Seguridad Ciudadana y proxies de movilidad, como los conteos de radares permanentes y la afluencia en el Metro. La estrategia empírica se basa en un modelo de diferencias en diferencias, complementado con propensity score matching para construir un grupo de control comparable a las unidades tratadas. El análisis se realiza en áreas circulares de distintos radios, desde 37.5 hasta 250 metros, en línea con la literatura que sugiere que los efectos de este tipo de intervenciones son altamente locales. Los resultados no muestran evidencia de un efecto causal de las cámaras de velocidad ni sobre el número ni sobre las tasas de incidentes viales en ninguno de los radios analizados. Aunque la variable de tiempo resulta significativa de forma sistemática, lo que sugiere una disminución generalizada de accidentes tras la implementación del programa, esta reducción no puede atribuirse a la presencia de los radares. La tesis aporta una definición espacial más congruente con la literatura, un contrafactual más sólido y controles de exposición asociados a cambios de movilidad antes y después de la pandemia. En términos de política pública, los hallazgos sugieren que este tipo de medidas, al menos en su implementación observada, debe complementarse con estrategias de educación vial y cambios en la infraestructura urbana que promuevan una movilidad más segura.
+\pagestyle{plain}
+
+\noindent 
+
+%----------------------------------------------------------------------------------------
+%	Summary
+%----------------------------------------------------------------------------------------
+
+\chapter*{Summary}
+
+\noindent This thesis analyzes the causal effect of speed cameras on traffic incidents in Mexico City following the transition from \textit{Fotomultas} to \textit{Fotoc\'ivicas} in April 2019. The main objective is to evaluate whether this change reduced crashes, particularly those involving fatalities. To do so, the study examines Mexico City over a three-year window before and a three-year window after the program's implementation, using traffic incident data from the C5, information on the location of speed cameras from the Secretariat of Citizen Security (SSC), and mobility proxies such as counts from permanent traffic counters and Metro ridership data. The empirical strategy is based on a difference-in-differences model, complemented by propensity score matching to construct a control group comparable to the treated units. The analysis is conducted within circular areas of different radii, ranging from 37.5 to 250 meters, in line with the literature suggesting that the effects of this type of intervention are highly localized. The results show no evidence of a causal effect of speed cameras on either the number or the rates of traffic incidents at any of the radii analyzed. Although the time variable is systematically significant, suggesting a general decline in crashes after the program's implementation, this reduction cannot be attributed to the presence of the cameras. This thesis contributes a spatial definition more consistent with the literature, a stronger counterfactual, and exposure controls associated with changes in mobility before and after the pandemic. In terms of public policy, the findings suggest that this type of measure, at least as implemented in practice, should be complemented with road safety education strategies and changes in urban infrastructure that promote safer mobility.
+
+\pagestyle{plain}
+
+\noindent 
+
+%----------------------------------------------------------------------------------------
+%	TABLA DE CONTENIDOS
+%---------------------------------------------------------------------------------------
+
+\tableofcontents
+
+%----------------------------------------------------------------------------------------
+%	ÍNDICE DE CUADROS Y FIGURAS
+%---------------------------------------------------------------------------------------
+
+\listoftables
+
+\listoffigures
+
+%----------------------------------------------------------------------------------------
+%	TESIS
+%----------------------------------------------------------------------------------------
+
+\mainmatter % Empieza la numeración de las páginas
+
+\pagestyle{plain}
+
+% Incluye los capítulos en el fólder de capítulos
+
+\include{Chapters/0.Intro}
+
+\include{Chapters/1.Rev}
+
+\include{Chapters/2.Emp}
+
+\include{Chapters/3.Data}
+
+\include{Chapters/4.Results}
+
+\include{Chapters/5.Conc}
+
+
+%----------------------------------------------------------------------------------------
+%	APÉNDICES
+%----------------------------------------------------------------------------------------
+
+\begin{appendix}
+
+\include{Apendices/ApTendenciasParalelas}
+
+\end{appendix}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAFÍA
+%----------------------------------------------------------------------------------------
+
+
+\chapter*{Referencias}
+\addcontentsline{toc}{chapter}{Referencias}
+
+\input{Referencias/hack}
+
+\newpage
+\thispagestyle{empty}
+\begin{table}[p]
+\centering
+\small
+\label{ed}
+\begin{tabular}{c}
+\textit{El efecto causal de las cámaras de velocidad}\\ \textit{en el número de incidentes viales}\\ \textit{en la Ciudad de México}\\ escrito por Mariano Alcaraz Aguilar,\\ se terminó de imprimir en mayo de 2026\\ Ciudad de México.
+\end{tabular}
+\end{table}
+
+% Si lo prefieren, avisen a su taller que esta página ya la incluyeron ustedes para que no les impriman las que ellos usan. Lo recomiendo ampliamente
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

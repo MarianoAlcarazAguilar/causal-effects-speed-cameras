@@ -1,0 +1,256 @@
+\chapter{Estimación y Resultados}
+
+\noindent Una vez consolidada la muestra emparejada mediante el \textit{propensity score matching}, se procede con la fase de estimación, para cuantificar el impacto que tuvieron los radares de velocidad. El objetivo último es identificar si la implementación del progarama de Fotoc\'ivicas generó un cambio significativo en la siniestralidad vial en las áreas tratadas.
+
+\section{Definición de variables de resultados}
+\noindent Para capturar el impacto real, el análisis se realiza sobre cuatro dimensiones de severidad, tratadas cada una como variables dependientes:
+
+\begin{itemize}
+    \item \textbf{Hechos de tránsito generales}: el agregado total de incidentes registrados
+    \item \textbf{Incidentes menores (MIN)}: hechos de tránsito que no resultaron con personas lesionadas ni fallecimientos
+    \item \textbf{Incidentes con lesionados (PIC)}: eventos que involucraron lesiones personales 
+    \item \textbf{Incidentes fatales (FCS)}: hechos de tránsito donde se registró al menos una persona fallecida en el lugar
+\end{itemize}
+
+Adicionalmente, cada uno de estos incidentes se evalúa bajo dos métricas: en \textbf{nivles absolutos} (conteo mensual de incidentes por área), y en \textbf{tasas de siniestralidad}. Esta última métrica se construye normalizando el número de incidentes por cada $1,000$ vehículos que circularon en la ciudad durante el mes de de observación, utilizando los datos de los radares de conteo permanente para controlar por variaciones en la exposición vehicular. 
+
+\section{Estimación}
+\noindent Para poder estimar los efectos de las cámaras de velocidad sobre cada uno de los resultados definidos anteriormente, hago uso de dos modelos complementarios, uno que no incluye efectos fijos, y otro que sí lo hace. El primero está definido como sigue,
+
+\[
+    y_{it} = \alpha + \beta \cdot treat_i + \gamma \cdot post_t + \delta \cdot treat\_post_{it} + \epsilon_{it}
+\]
+
+Donde,
+\begin{itemize}
+    \item $y_{it}$ representa el outcome (total de accidentes o tasa) observado en la área $i$ durante el mes $t$
+    \item $treat_i$ es una variable indicadora para las áreas que tienen un radar de velocidad. Es igual a $1$ si la área está tratada
+    \item $post_t$ es una varialbe indicadora igual a $1$ para los meses posteriores al inicio del programa (abril de 2019)
+    \item $treat\_post_{it}$ es el término de interacción que captura la exposición al tratamiento de las áreas. 
+    \item $\beta$ es el parámetro de interés que estima el \textbf{efecto promedio del tratamiento sobre los tratados (ATT)}
+\end{itemize}
+
+\noindent Por otro lado, el modelo en el cual se incluyen efectos fijos queda definido de la siguiente forma,
+
+\[
+    y_{it} = \gamma_i + \lambda_t + \delta \cdot treat\_post_{it} + \epsilon_{it}
+\]
+En esta especificación, $\gamma_i$ corresponde a los efectos fijos por cada área, y captura todas las características invariantes en el tiempo, mientras que $\lambda_t$ son los efectos fijos por mes, y absorbe los cambios comunes en toda la ciudad en un mes determinado. El coeficiente $\delta$ es la estimación del impacto causal aislando todos los factores anteriores. 
+
+La interpretación causal de esta estrategia descansa en tres elementos complementarios. Primero, que una vez condicionado el análisis a las unidades emparejadas por el \textit{propensity score} y a sus características geográficas, viales y de movilidad, la ubicación de los radares de velocidad pueda considerarse quasi aleatoria respecto a los resultados de siniestralidad. Segundo, que exista soporte común suficiente para construir contrafactuales razonables, condición que se satisface mediante el recorte de la muestra y las pruebas de balance presentadas anteriormente. Tercero, dado que el efecto se estima mediante diferencia en diferencias sobre la muestra emparejada, se requiere que en ausencia del programa las áreas tratadas y sus controles hubieran seguido trayectorias paralelas. Como se discute en el capítulo anterior, tanto la inspección visual de las series pretratamiento como las pruebas placebo resultan, en general, consistentes con este supuesto. 
+
+\section{Resultados}
+\noindent Tras la estimación de los modelos de diferencia en diferencias sobre la muestra emparejada, los resultados principales indican que \textbf{no existe evidencia estadística suficiente para afirmar que las cámaras de velocidad del programa de Fotoc\'ivicas generaron una reducción localizada de la siniestralidad} en su entorno inmediato.  
+
+Como se observa en la tabla \ref{tab:results-main-general}, el coeficiente de interacción $treat\_post$ que captura el efecto promedio del tratamiento sobre los tratados (ATT), no alcanza niveles de significancia estadísticos ($p > 0.05$) en ninguna de las especificaciones analizadas. 
+
+Las tablas \ref{tab:results-main-general}, \ref{tab:results-main-min}, \ref{tab:results-main-pic} y \ref{tab:results-main-fcs} permiten comparar simultáneamente los coeficientes estimados para cada radio en cada uno de los niveles de severidad de los incidentes, distinguiendo entre modelos sin efectos fijos y con efectos fijos, y entre resultados en niveles y en tasas.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados sobre hechos de tránsito generales}
+    \label{tab:results-main-general}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
+        Intersección & $1.198^{***}$ & $1.444^{***}$ & $2.393^{***}$ & $3.177^{***}$ & $4.321^{***}$ & $5.578^{***}$ \\
+         & $(0.030)$ & $(0.031)$ & $(0.045)$ & $(0.050)$ & $(0.062)$ & $(0.076)$ \\
+        Tratamiento & $0.073^{*}$ & $0.074$ & $0.068$ & $-0.021$ & $-0.032$ & $0.066$ \\
+         & $(0.043)$ & $(0.045)$ & $(0.064)$ & $(0.071)$ & $(0.087)$ & $(0.109)$ \\
+        Tiempo & $-0.240^{***}$ & $-0.282^{***}$ & $-0.430^{***}$ & $-0.502^{***}$ & $-0.710^{***}$ & $-0.926^{***}$ \\
+         & $(0.039)$ & $(0.041)$ & $(0.059)$ & $(0.066)$ & $(0.084)$ & $(0.100)$ \\
+        Tratamiento x Tiempo & $0.012$ & $0.031$ & $0.040$ & $0.057$ & $0.097$ & $0.162$ \\
+         & $(0.057)$ & $(0.061)$ & $(0.085)$ & $(0.096)$ & $(0.118)$ & $(0.144)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $0.012$ & $0.031$ & $0.040$ & $0.057$ & $0.097$ & $0.162$ \\
+         & $(0.057)$ & $(0.061)$ & $(0.085)$ & $(0.096)$ & $(0.118)$ & $(0.144)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
+        Intersección & $7.51 \times {10^{-5}}^{***}$ & $9.03 \times {10^{-5}}^{***}$ & $1.50 \times {10^{-4}}^{***}$ & $1.99 \times {10^{-4}}^{***}$ & $2.71 \times {10^{-4}}^{***}$ & $3.49 \times {10^{-4}}^{***}$ \\
+         & $(1.85 \times 10^{-6})$ & $(1.91 \times 10^{-6})$ & $(2.81 \times 10^{-6})$ & $(3.14 \times 10^{-6})$ & $(3.90 \times 10^{-6})$ & $(4.74 \times 10^{-6})$ \\
+        Tratamiento & $4.44 \times {10^{-6}}^{*}$ & $4.69 \times {10^{-6}}^{*}$ & $4.23 \times 10^{-6}$ & $-1.37 \times 10^{-6}$ & $-2.13 \times 10^{-6}$ & $4.12 \times 10^{-6}$ \\
+         & $(2.67 \times 10^{-6})$ & $(2.83 \times 10^{-6})$ & $(4.00 \times 10^{-6})$ & $(4.46 \times 10^{-6})$ & $(5.46 \times 10^{-6})$ & $(6.78 \times 10^{-6})$ \\
+        Tiempo & $-8.07 \times {10^{-6}}^{***}$ & $-8.95 \times {10^{-6}}^{***}$ & $-1.34 \times {10^{-5}}^{***}$ & $-1.29 \times {10^{-5}}^{***}$ & $-1.91 \times {10^{-5}}^{***}$ & $-2.48 \times {10^{-5}}^{***}$ \\
+         & $(2.58 \times 10^{-6})$ & $(2.73 \times 10^{-6})$ & $(3.85 \times 10^{-6})$ & $(4.33 \times 10^{-6})$ & $(5.46 \times 10^{-6})$ & $(6.46 \times 10^{-6})$ \\
+        Tratamiento x Tiempo & $1.33 \times 10^{-6}$ & $2.23 \times 10^{-6}$ & $3.35 \times 10^{-6}$ & $3.78 \times 10^{-6}$ & $6.44 \times 10^{-6}$ & $1.05 \times 10^{-5}$ \\
+         & $(3.71 \times 10^{-6})$ & $(3.98 \times 10^{-6})$ & $(5.53 \times 10^{-6})$ & $(6.23 \times 10^{-6})$ & $(7.65 \times 10^{-6})$ & $(9.35 \times 10^{-6})$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $1.33 \times 10^{-6}$ & $2.23 \times 10^{-6}$ & $3.35 \times 10^{-6}$ & $3.78 \times 10^{-6}$ & $6.44 \times 10^{-6}$ & $1.05 \times 10^{-5}$ \\
+         & $(3.71 \times 10^{-6})$ & $(3.98 \times 10^{-6})$ & $(5.53 \times 10^{-6})$ & $(6.23 \times 10^{-6})$ & $(7.65 \times 10^{-6})$ & $(9.35 \times 10^{-6})$ \\
+
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados sobre hechos de tránsito sin lesionados (MIN)}
+    \label{tab:results-main-min}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
+        Intersección & ${0.719}^{***}$ & ${0.823}^{***}$ & ${1.422}^{***}$ & ${1.894}^{***}$ & ${2.668}^{***}$ & ${3.428}^{***}$ \\
+         & $(0.021)$ & $(0.021)$ & $(0.031)$ & $(0.035)$ & $(0.045)$ & $(0.055)$ \\
+        Tratamiento & $0.025$ & ${0.076}^{**}$ & $0.015$ & $-0.030$ & $-0.086$ & $0.004$ \\
+         & $(0.030)$ & $(0.032)$ & $(0.044)$ & $(0.051)$ & $(0.063)$ & $(0.078)$ \\
+        Tiempo & ${-0.257}^{***}$ & ${-0.273}^{***}$ & ${-0.490}^{***}$ & ${-0.598}^{***}$ & ${-0.878}^{***}$ & ${-1.106}^{***}$ \\
+         & $(0.026)$ & $(0.027)$ & $(0.039)$ & $(0.045)$ & $(0.056)$ & $(0.068)$ \\
+        Tratamiento x Tiempo & $-0.004$ & $-0.031$ & $0.021$ & $0.022$ & $0.089$ & $0.081$ \\
+         & $(0.038)$ & $(0.040)$ & $(0.055)$ & $(0.064)$ & $(0.079)$ & $(0.097)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $-0.004$ & $-0.031$ & $0.021$ & $0.022$ & $0.089$ & $0.081$ \\
+         & $(0.038)$ & $(0.040)$ & $(0.055)$ & $(0.064)$ & $(0.079)$ & $(0.097)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
+        Intersección & ${4.50 \times 10^{-5}}^{***}$ & ${5.15 \times 10^{-5}}^{***}$ & ${8.90 \times 10^{-5}}^{***}$ & ${1.19 \times 10^{-4}}^{***}$ & ${1.67 \times 10^{-4}}^{***}$ & ${2.15 \times 10^{-4}}^{***}$ \\
+         & $(1.31 \times 10^{-6})$ & $(1.33 \times 10^{-6})$ & $(1.95 \times 10^{-6})$ & $(2.22 \times 10^{-6})$ & $(2.79 \times 10^{-6})$ & $(3.41 \times 10^{-6})$ \\
+        Tratamiento & $1.47 \times 10^{-6}$ & ${4.70 \times 10^{-6}}^{**}$ & $9.86 \times 10^{-7}$ & $-1.88 \times 10^{-6}$ & $-5.48 \times 10^{-6}$ & $1.46 \times 10^{-7}$ \\
+         & $(1.89 \times 10^{-6})$ & $(1.99 \times 10^{-6})$ & $(2.77 \times 10^{-6})$ & $(3.16 \times 10^{-6})$ & $(3.90 \times 10^{-6})$ & $(4.84 \times 10^{-6})$ \\
+        Tiempo & ${-1.29 \times 10^{-5}}^{***}$ & ${-1.36 \times 10^{-5}}^{***}$ & ${-2.50 \times 10^{-5}}^{***}$ & ${-2.94 \times 10^{-5}}^{***}$ & ${-4.35 \times 10^{-5}}^{***}$ & ${-5.42 \times 10^{-5}}^{***}$ \\
+         & $(1.71 \times 10^{-6})$ & $(1.76 \times 10^{-6})$ & $(2.48 \times 10^{-6})$ & $(2.88 \times 10^{-6})$ & $(3.63 \times 10^{-6})$ & $(4.39 \times 10^{-6})$ \\
+        Tratamiento x Tiempo & $-2.02 \times 10^{-7}$ & $-1.60 \times 10^{-6}$ & $1.68 \times 10^{-6}$ & $1.40 \times 10^{-6}$ & $5.34 \times 10^{-6}$ & $5.26 \times 10^{-6}$ \\
+         & $(2.45 \times 10^{-6})$ & $(2.60 \times 10^{-6})$ & $(3.55 \times 10^{-6})$ & $(4.12 \times 10^{-6})$ & $(5.09 \times 10^{-6})$ & $(6.25 \times 10^{-6})$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $-2.02 \times 10^{-7}$ & $-1.60 \times 10^{-6}$ & $1.68 \times 10^{-6}$ & $1.40 \times 10^{-6}$ & $5.34 \times 10^{-6}$ & $5.26 \times 10^{-6}$ \\
+         & $(2.45 \times 10^{-6})$ & $(2.60 \times 10^{-6})$ & $(3.55 \times 10^{-6})$ & $(4.12 \times 10^{-6})$ & $(5.09 \times 10^{-6})$ & $(6.25 \times 10^{-6})$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados sobre hechos de tránsito con lesionados (PIC)}
+    \label{tab:results-main-pic}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
+        Intersección & ${0.470}^{***}$ & ${0.613}^{***}$ & ${0.956}^{***}$ & ${1.262}^{***}$ & ${1.631}^{***}$ & ${2.124}^{***}$ \\
+         & $(0.015)$ & $(0.016)$ & $(0.022)$ & $(0.025)$ & $(0.030)$ & $(0.036)$ \\
+        Tratamiento & ${0.047}^{**}$ & $-0.003$ & $0.050$ & $0.008$ & $0.049$ & $0.052$ \\
+         & $(0.021)$ & $(0.023)$ & $(0.031)$ & $(0.035)$ & $(0.042)$ & $(0.051)$ \\
+        Tiempo & $0.019$ & $-0.005$ & ${0.067}^{**}$ & ${0.103}^{***}$ & ${0.171}^{***}$ & ${0.183}^{***}$ \\
+         & $(0.022)$ & $(0.024)$ & $(0.032)$ & $(0.036)$ & $(0.044)$ & $(0.051)$ \\
+        Tratamiento x Tiempo & $0.018$ & ${0.059}^{*}$ & $0.017$ & $0.034$ & $0.015$ & $0.088$ \\
+         & $(0.031)$ & $(0.034)$ & $(0.046)$ & $(0.052)$ & $(0.063)$ & $(0.076)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $0.018$ & $0.059$ & $0.017$ & $0.034$ & $0.015$ & $0.088$ \\
+         & $(0.031)$ & $(0.034)$ & $(0.046)$ & $(0.052)$ & $(0.063)$ & $(0.076)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
+        Intersección & ${2.95 \times 10^{-5}}^{***}$ & ${3.83 \times 10^{-5}}^{***}$ & ${5.99 \times 10^{-5}}^{***}$ & ${7.91 \times 10^{-5}}^{***}$ & ${1.02 \times 10^{-4}}^{***}$ & ${1.33 \times 10^{-4}}^{***}$ \\
+         & $(9.35 \times 10^{-7})$ & $(1.02 \times 10^{-6})$ & $(1.38 \times 10^{-6})$ & $(1.55 \times 10^{-6})$ & $(1.86 \times 10^{-6})$ & $(2.22 \times 10^{-6})$ \\
+        Tratamiento & ${2.93 \times 10^{-6}}^{**}$ & $-7.27 \times 10^{-8}$ & $3.09 \times 10^{-6}$ & $4.29 \times 10^{-7}$ & $3.06 \times 10^{-6}$ & $3.35 \times 10^{-6}$ \\
+         & $(1.34 \times 10^{-6})$ & $(1.46 \times 10^{-6})$ & $(1.97 \times 10^{-6})$ & $(2.19 \times 10^{-6})$ & $(2.61 \times 10^{-6})$ & $(3.19 \times 10^{-6})$ \\
+        Tiempo & ${4.99 \times 10^{-6}}^{***}$ & ${4.81 \times 10^{-6}}^{***}$ & ${1.20 \times 10^{-5}}^{***}$ & ${1.68 \times 10^{-5}}^{***}$ & ${2.43 \times 10^{-5}}^{***}$ & ${2.95 \times 10^{-5}}^{***}$ \\
+         & $(1.46 \times 10^{-6})$ & $(1.61 \times 10^{-6})$ & $(2.17 \times 10^{-6})$ & $(2.41 \times 10^{-6})$ & $(2.95 \times 10^{-6})$ & $(3.41 \times 10^{-6})$ \\
+        Tratamiento x Tiempo & $1.62 \times 10^{-6}$ & $3.66 \times 10^{-6}$ & $1.51 \times 10^{-6}$ & $2.36 \times 10^{-6}$ & $1.55 \times 10^{-6}$ & $5.68 \times 10^{-6}$ \\
+         & $(2.10 \times 10^{-6})$ & $(2.31 \times 10^{-6})$ & $(3.11 \times 10^{-6})$ & $(3.48 \times 10^{-6})$ & $(4.19 \times 10^{-6})$ & $(5.06 \times 10^{-6})$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $1.62 \times 10^{-6}$ & $3.66 \times 10^{-6}$ & $1.51 \times 10^{-6}$ & $2.36 \times 10^{-6}$ & $1.55 \times 10^{-6}$ & $5.68 \times 10^{-6}$ \\
+         & $(2.10 \times 10^{-6})$ & $(2.31 \times 10^{-6})$ & $(3.11 \times 10^{-6})$ & $(3.48 \times 10^{-6})$ & $(4.19 \times 10^{-6})$ & $(5.06 \times 10^{-6})$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados sobre hechos de tránsito con personas fallecidas (FCS)}
+    \label{tab:results-main-fcs}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
+        Intersección & ${0.009}^{***}$ & ${0.008}^{***}$ & ${0.015}^{***}$ & ${0.020}^{***}$ & ${0.022}^{***}$ & ${0.026}^{***}$ \\
+         & $(0.002)$ & $(0.002)$ & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ \\
+        Tratamiento & $8.36 \times 10^{-4}$ & $9.42 \times 10^{-4}$ & $0.002$ & $0.001$ & $0.005$ & ${0.010}^{**}$ \\
+         & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.004)$ \\
+        Tiempo & $-0.002$ & ${-0.004}^{*}$ & ${-0.007}^{***}$ & ${-0.006}^{**}$ & $-0.002$ & $-0.004$ \\
+         & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.004)$ \\
+        Tratamiento x Tiempo & $-0.002$ & $0.002$ & $0.002$ & $3.95 \times 10^{-5}$ & $-0.007$ & $-0.007$ \\
+         & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.005)$ & $(0.005)$ & $(0.006)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $-0.002$ & $0.002$ & $0.002$ & $3.95 \times 10^{-5}$ & $-0.007$ & $-0.007$ \\
+         & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.005)$ & $(0.005)$ & $(0.006)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
+        Intersección & ${5.62 \times 10^{-7}}^{***}$ & ${5.35 \times 10^{-7}}^{***}$ & ${9.54 \times 10^{-7}}^{***}$ & ${1.30 \times 10^{-6}}^{***}$ & ${1.40 \times 10^{-6}}^{***}$ & ${1.59 \times 10^{-6}}^{***}$ \\
+         & $(9.90 \times 10^{-8})$ & $(9.75 \times 10^{-8})$ & $(1.28 \times 10^{-7})$ & $(1.51 \times 10^{-7})$ & $(1.62 \times 10^{-7})$ & $(1.78 \times 10^{-7})$ \\
+        Tratamiento & $4.78 \times 10^{-8}$ & $5.54 \times 10^{-8}$ & $1.51 \times 10^{-7}$ & $7.85 \times 10^{-8}$ & $2.86 \times 10^{-7}$ & ${6.19 \times 10^{-7}}^{**}$ \\
+         & $(1.43 \times 10^{-7})$ & $(1.41 \times 10^{-7})$ & $(1.88 \times 10^{-7})$ & $(2.17 \times 10^{-7})$ & $(2.39 \times 10^{-7})$ & $(2.74 \times 10^{-7})$ \\
+        Tiempo & $-1.01 \times 10^{-7}$ & $-1.65 \times 10^{-7}$ & ${-3.72 \times 10^{-7}}^{**}$ & $-2.77 \times 10^{-7}$ & $9.20 \times 10^{-9}$ & $-6.96 \times 10^{-8}$ \\
+         & $(1.39 \times 10^{-7})$ & $(1.34 \times 10^{-7})$ & $(1.67 \times 10^{-7})$ & $(2.11 \times 10^{-7})$ & $(2.43 \times 10^{-7})$ & $(2.62 \times 10^{-7})$ \\
+        Tratamiento x Tiempo & $-8.88 \times 10^{-8}$ & $1.70 \times 10^{-7}$ & $1.71 \times 10^{-7}$ & $2.27 \times 10^{-8}$ & $-4.58 \times 10^{-7}$ & $-4.45 \times 10^{-7}$ \\
+         & $(1.97 \times 10^{-7})$ & $(2.03 \times 10^{-7})$ & $(2.57 \times 10^{-7})$ & $(3.05 \times 10^{-7})$ & $(3.43 \times 10^{-7})$ & $(3.92 \times 10^{-7})$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
+        Tratamiento x Tiempo & $-8.88 \times 10^{-8}$ & $1.70 \times 10^{-7}$ & $1.71 \times 10^{-7}$ & $2.27 \times 10^{-8}$ & $-4.58 \times 10^{-7}$ & $-4.45 \times 10^{-7}$ \\
+         & $(1.97 \times 10^{-7})$ & $(2.03 \times 10^{-7})$ & $(2.57 \times 10^{-7})$ & $(3.05 \times 10^{-7})$ & $(3.43 \times 10^{-7})$ & $(3.92 \times 10^{-7})$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+
+En el caso de los \textbf{hechos de tránsito generales}, los coeficientes estimados son consistentemente positivos -- lo que podría sugerir un ligero incremento relativo de incidentes en zonas tratadas --, sin embargo, carecen siempre de robustez estadística. 
+
+Respecto a los incidentes fatales (FCS), la literatura sugiere que este es el rubro donde los radares suelen ser más efectivos. No obstante, en este análisis no se ha identificado dicho efecto, pues de nuevo, no se encuentra significancia en los resultados que puedan respaldarlo, incluso existe inconsistencia en los signos de los coeficientes, pues varían entre positivo y negativo, sin seguir alguna tendencia clara persistente con el aumento del radio de las áreas. 
+
+Un resultado que vale la pena destacar es que en todas las regresiones realizadas la variable del \textbf{tiempo} ($post_t$) \textbf{es siempre negativa y estadísticamente significativa.} Este hallazgo indica que, tras la implementación de las Fotoc\'ivicas en abril de 2019, hubo una \textbf{reducción generalizada de la siniestralidad} en todas las áreas analizadas (tanto tratadas como de control). Dado que el grupo de control fue construido mediante \textit{propensity score matching}, este descenso sugiere dos hipótesis fundamentales:
+
+\begin{enumerate}
+    \item \textbf{Efecto generalizado}: dada la naturaleza pública de la ubicación de los radares y la transición hacia un modelo cívico-educativo, podría haber generado un cambio de comportamiento que va más allá de la ubicación puntual de los radares. Si los conductores estaban conscientes de que la ciudad cuenta con dichos sistemas, pueden haber cambiado su conducta no solo en las zonas con radares, sino también en zonas similares. 
+    \item \textbf{Migración de incidentes}: la ausencia de un efecto localizado, sumado a la caída general en celdas comparables, puede sugerir que los incidentes migraron a otro tipo de zonas que son estructuralmente distintas a aquellas propensas a tener un radar de velocidad.
+\end{enumerate}
+
+Recordemos que el Gobierno de la Ciudad de México buscaba que las Fotoc\'ivicas generaran un cambio de conducta y no fueran un programa recaudatorio, razón por la cual hicieron pública la ubicación de todos los radares. Sin embargo, esta apertura es precisamente lo que puede haber diluido el efecto localizado: al saber dónde están las cámaras, es más fácil para los conductores evadir esas zonas o ajustar su velocidad solo en ese punto. Esta transparencia, sumada a que muchas sanciones todavía son económicas y no cívicas, podría estar fomentando una evasión sistemática que impide detectar un impacto puntual y directo en las celdas donde están los radares.
+
+Los hallazgos de esta investigación presentan contrastes significativos con las evaluaciones oficiales y la literatura previa sobre el programa de Fotoc\'ivicas (SEMOVI, 2020; Madrigal y Rodríguez, 2021; Quintero et al., 2023). Mientras que la SEMOVI y Quintero et al. reportan reducciones porcentuales de hasta dos dígitos en la siniestralidad, los coeficientes de la variable de tiempo en este estudio sugieren que dicho descenso (situado entre el 15\% y 20\%) es de naturaleza sistémica y no localizada. Dado que Quintero et al. emplean una unidad de análisis a nivel municipal, es altamente probable que sus resultados capturen el efecto generalizado observado en toda la ciudad, independientemente de la presencia de radares en zonas específicas.
+
+Por otro lado, a diferencia de Madrigal y Rodríguez (2021) --quien reconoce limitaciones en la construcción de su contrafactual--, esta tesis emplea el Propensity Score Matching (PSM) para garantizar que las unidades de control sean estadísticamente comparables, mitigando así el sesgo de selección, y derivado de ello, se observa que la significancia del impacto de los radares no existe. Si bien resulta complejo determinar si la reducción generalizada en los incidentes es atribuible exclusivamente al cambio de esquema sancionatorio o a factores exógenos no observados, la evidencia obtenida solo permite concluir que no existe un efecto causal localizado derivado de la ubicación física de las cámaras.
+
+Leídos en conjunto, estos resultados permiten distinguir entre una caída agregada de la siniestralidad en la ciudad y un efecto causal atribuible a la presencia inmediata de una cámara. Esa distinción ayuda a entender parte de la evidencia previa para la CDMX: los estudios con unidades espaciales amplias pueden estar capturando cambios sistémicos del programa o del contexto urbano, mientras que una evaluación local con un contrafactual más estricto exige evidencia más puntual alrededor de los radares.

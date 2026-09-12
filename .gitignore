@@ -1,0 +1,30 @@
+# Ignore everything except thesis sources and analysis scripts.
+*
+!.gitignore
+
+!/causal-effects-speed-cameras/
+!/causal-effects-speed-cameras/**/
+!/causal-effects-speed-cameras/**/*.tex
+!/causal-effects-speed-cameras/**/*.bib
+!/causal-effects-speed-cameras/**/*.sty
+!/causal-effects-speed-cameras/**/*.cls
+!/causal-effects-speed-cameras/**/*.bst
+!/causal-effects-speed-cameras/**/*.py
+
+!/scripts/
+!/scripts/**/
+!/scripts/**/*.py
+!/scripts/**/*.ipynb
+!/scripts/**/*.R
+!/scripts/**/*.r
+!/scripts/**/*.Rmd
+!/scripts/**/*.do
+!/scripts/**/*.sh
+
+# Generated files, notebook checkpoints, and local environments.
+**/.ipynb_checkpoints/
+**/__pycache__/
+**/.venv/
+**/venv/
+**/node_modules/
+/.git-backups/

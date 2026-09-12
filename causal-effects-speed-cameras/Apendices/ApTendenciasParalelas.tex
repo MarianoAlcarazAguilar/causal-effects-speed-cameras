@@ -1,0 +1,201 @@
+\chapter{Tendencias paralelas}
+\label{chap:tendencias-paralelas}
+
+\noindent Este apéndice presenta las pruebas visuales de tendencias paralelas para los distintos radios analizados. En cada figura se compara la evolución pretratamiento de los accidentes promedio entre unidades tratadas y de control.
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Prueba visual de tendencias paralelas para radio de 37.5 metros}
+    \includegraphics[width=0.9\textwidth]{mean_accidents_trends/trend_mean_accidents_37.png}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Prueba visual de tendencias paralelas para radio de 50 metros}
+    \includegraphics[width=0.9\textwidth]{mean_accidents_trends/trend_mean_accidents_50.png}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Prueba visual de tendencias paralelas para radio de 100 metros}
+    \includegraphics[width=0.9\textwidth]{mean_accidents_trends/trend_mean_accidents_100.png}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Prueba visual de tendencias paralelas para radio de 150 metros}
+    \includegraphics[width=0.9\textwidth]{mean_accidents_trends/trend_mean_accidents_150.png}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Prueba visual de tendencias paralelas para radio de 200 metros}
+    \includegraphics[width=0.9\textwidth]{mean_accidents_trends/trend_mean_accidents_200.png}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Prueba visual de tendencias paralelas para radio de 250 metros}
+    \includegraphics[width=0.9\textwidth]{mean_accidents_trends/trend_mean_accidents_250.png}
+\end{figure}
+
+\clearpage
+\section{Pruebas placebo}
+\label{sec:pruebas-placebo}
+\noindent Esta sección presenta los resultados de los modelos de diferencias en diferencias utilizando fechas de inicio ficticias (0.5, 1.0 y 1.5 años antes de la implementación real del programa de Fotoc\'ivicas). La ausencia de significancia estadística en estos coeficientes de interacción apoya la validez del supuesto de tendencias paralelas.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados de pruebas placebo sobre hechos de tránsito generales}
+    \label{tab:placebo-general}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 37.5 m & 50 m & 100 m & 150 m & 200 m & 250 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Niveles absolutos}} \\
+        $T - 0.5$ años & $-0.009$ & $-0.067$ & $-0.030$ & $0.077$ & $-0.023$ & $0.227$ \\
+         & $(0.113)$ & $(0.123)$ & $(0.173)$ & $(0.185)$ & $(0.231)$ & $(0.290)$ \\
+        $T - 1.0$ años & $0.002$ & $-0.056$ & $0.048$ & $0.136$ & $0.013$ & $0.236$ \\
+         & $(0.091)$ & $(0.097)$ & $(0.135)$ & $(0.149)$ & $(0.184)$ & $(0.232)$ \\
+        $T - 1.5$ años & $0.026$ & $-0.130$ & $-0.009$ & $0.081$ & $-0.051$ & $-0.051$ \\
+         & $(0.085)$ & $(0.091)$ & $(0.128)$ & $(0.143)$ & $(0.175)$ & $(0.217)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Tasas por 1,000 vehículos}} \\
+        $T - 0.5$ años & $-1.00\times 10^{-6}$ & $-4.20\times 10^{-6}$ & $-1.40\times 10^{-6}$ & $4.80\times 10^{-6}$ & $-1.00\times 10^{-6}$ & $1.44\times 10^{-5}$ \\
+         & $(7.10\times 10^{-6)}$ & $(7.70\times 10^{-6)}$ & $(1.08\times 10^{-5)}$ & $(1.16\times 10^{-5)}$ & $(1.44\times 10^{-5)}$ & $(1.81\times 10^{-5)}$ \\
+        $T - 1.0$ años & $-1.00\times 10^{-7}$ & $-3.50\times 10^{-6}$ & $3.20\times 10^{-6}$ & $8.50\times 10^{-6}$ & $1.40\times 10^{-6}$ & $1.49\times 10^{-5}$ \\
+         & $(5.70\times 10^{-6)}$ & $(6.10\times 10^{-6)}$ & $(8.40\times 10^{-6)}$ & $(9.30\times 10^{-6)}$ & $(1.15\times 10^{-5)}$ & $(1.45\times 10^{-5)}$ \\
+        $T - 1.5$ años & $1.30\times 10^{-6}$ & $-8.20\times 10^{-6}$ & $-5.00\times 10^{-7}$ & $5.00\times 10^{-6}$ & $-3.10\times 10^{-6}$ & $-3.10\times 10^{-6}$ \\
+         & $(5.30\times 10^{-6)}$ & $(5.70\times 10^{-6)}$ & $(8.00\times 10^{-6)}$ & $(8.90\times 10^{-6)}$ & $(1.09\times 10^{-5)}$ & $(1.36\times 10^{-5)}$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente de la interacción (Tratamiento x Tiempo ficticio) aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\clearpage
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados de pruebas placebo sobre hechos de tránsito sin lesionados (MIN)}
+    \label{tab:placebo-min}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 37.5 m & 50 m & 100 m & 150 m & 200 m & 250 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Niveles absolutos}} \\
+        $T - 0.5$ años & $-0.015$ & $-0.070$ & $0.035$ & $0.080$ & $0.014$ & $0.060$ \\
+         & $(0.076)$ & $(0.082)$ & $(0.116)$ & $(0.130)$ & $(0.160)$ & $(0.201)$ \\
+        $T - 1.0$ años & $-0.021$ & $-0.068$ & $0.043$ & $0.104$ & $0.033$ & $0.096$ \\
+         & $(0.063)$ & $(0.067)$ & $(0.092)$ & $(0.105)$ & $(0.128)$ & $(0.162)$ \\
+        $T - 1.5$ años & $-0.008$ & $-0.123^{*}$ & $0.009$ & $0.035$ & $-0.047$ & $-0.138$ \\
+         & $(0.060)$ & $(0.064)$ & $(0.088)$ & $(0.101)$ & $(0.125)$ & $(0.155)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Tasas por 1,000 vehículos}} \\
+        $T - 0.5$ años & $-1.30\times 10^{-6}$ & $-4.60\times 10^{-6}$ & $2.30\times 10^{-6}$ & $5.10\times 10^{-6}$ & $1.50\times 10^{-6}$ & $3.90\times 10^{-6}$ \\
+         & $(4.70\times 10^{-6)}$ & $(5.20\times 10^{-6)}$ & $(7.20\times 10^{-6)}$ & $(8.10\times 10^{-6)}$ & $(1.00\times 10^{-5)}$ & $(1.26\times 10^{-5)}$ \\
+        $T - 1.0$ años & $-1.50\times 10^{-6}$ & $-4.40\times 10^{-6}$ & $2.70\times 10^{-6}$ & $6.50\times 10^{-6}$ & $2.30\times 10^{-6}$ & $6.00\times 10^{-6}$ \\
+         & $(3.90\times 10^{-6)}$ & $(4.20\times 10^{-6)}$ & $(5.70\times 10^{-6)}$ & $(6.50\times 10^{-6)}$ & $(8.00\times 10^{-6)}$ & $(1.01\times 10^{-5)}$ \\
+        $T - 1.5$ años & $-7.00\times 10^{-7}$ & $-7.90\times {10^{-6}}^{**}$ & $5.00\times 10^{-7}$ & $2.20\times 10^{-6}$ & $-2.80\times 10^{-6}$ & $-8.50\times 10^{-6}$ \\
+         & $(3.80\times 10^{-6)}$ & $(4.00\times 10^{-6)}$ & $(5.50\times 10^{-6)}$ & $(6.30\times 10^{-6)}$ & $(7.80\times 10^{-6)}$ & $(9.70\times 10^{-6)}$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente de la interacción (Tratamiento x Tiempo ficticio) aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\clearpage
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados de pruebas placebo sobre hechos de tránsito con lesionados (PIC)}
+    \label{tab:placebo-pic}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 37.5 m & 50 m & 100 m & 150 m & 200 m & 250 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Niveles absolutos}} \\
+        $T - 0.5$ años & $0.014$ & $0.008$ & $-0.075$ & $-0.005$ & $-0.037$ & $0.158$ \\
+         & $(0.062)$ & $(0.068)$ & $(0.089)$ & $(0.097)$ & $(0.119)$ & $(0.146)$ \\
+        $T - 1.0$ años & $0.029$ & $0.016$ & $0.004$ & $0.030$ & $-0.022$ & $0.143$ \\
+         & $(0.048)$ & $(0.052)$ & $(0.069)$ & $(0.076)$ & $(0.092)$ & $(0.113)$ \\
+        $T - 1.5$ años & $0.035$ & $-0.007$ & $-0.016$ & $0.047$ & $-0.008$ & $0.094$ \\
+         & $(0.043)$ & $(0.047)$ & $(0.063)$ & $(0.070)$ & $(0.083)$ & $(0.102)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Tasas por 1,000 vehículos}} \\
+        $T - 0.5$ años & $7.00\times 10^{-7}$ & $8.00\times 10^{-7}$ & $-4.40\times 10^{-6}$ & $-5.00\times 10^{-7}$ & $-2.50\times 10^{-6}$ & $9.90\times 10^{-6}$ \\
+         & $(3.90\times 10^{-6)}$ & $(4.20\times 10^{-6)}$ & $(5.60\times 10^{-6)}$ & $(6.10\times 10^{-6)}$ & $(7.40\times 10^{-6)}$ & $(9.10\times 10^{-6)}$ \\
+        $T - 1.0$ años & $1.80\times 10^{-6}$ & $1.10\times 10^{-6}$ & $4.00\times 10^{-7}$ & $1.80\times 10^{-6}$ & $-1.10\times 10^{-6}$ & $9.10\times 10^{-6}$ \\
+         & $(3.00\times 10^{-6)}$ & $(3.20\times 10^{-6)}$ & $(4.30\times 10^{-6)}$ & $(4.80\times 10^{-6)}$ & $(5.70\times 10^{-6)}$ & $(7.10\times 10^{-6)}$ \\
+        $T - 1.5$ años & $2.20\times 10^{-6}$ & $-3.00\times 10^{-7}$ & $-9.00\times 10^{-7}$ & $2.80\times 10^{-6}$ & $-5.00\times 10^{-7}$ & $5.80\times 10^{-6}$ \\
+         & $(2.70\times 10^{-6)}$ & $(2.90\times 10^{-6)}$ & $(3.90\times 10^{-6)}$ & $(4.40\times 10^{-6)}$ & $(5.20\times 10^{-6)}$ & $(6.40\times 10^{-6)}$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente de la interacción (Tratamiento x Tiempo ficticio) aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
+
+\clearpage
+
+\begin{table}[htbp]
+    \centering
+    \caption{Resultados de pruebas placebo sobre hechos de tránsito con personas fallecidas (FCS)}
+    \label{tab:placebo-fcs}
+    \footnotesize
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & 37.5 m & 50 m & 100 m & 150 m & 200 m & 250 m \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel A. Niveles absolutos}} \\
+        $T - 0.5$ años & $-0.007$ & $-0.005$ & $0.010$ & $0.002$ & $0.001$ & $0.010$ \\
+         & $(0.007)$ & $(0.007)$ & $(0.008)$ & $(0.009)$ & $(0.010)$ & $(0.013)$ \\
+        $T - 1.0$ años & $-0.006$ & $-0.004$ & $0.000$ & $0.002$ & $0.002$ & $-0.003$ \\
+         & $(0.005)$ & $(0.005)$ & $(0.006)$ & $(0.007)$ & $(0.008)$ & $(0.009)$ \\
+        $T - 1.5$ años & $-0.002$ & $-0.001$ & $-0.002$ & $-0.000$ & $0.004$ & $-0.006$ \\
+         & $(0.005)$ & $(0.004)$ & $(0.006)$ & $(0.007)$ & $(0.008)$ & $(0.009)$ \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Panel B. Tasas por 1,000 vehículos}} \\
+        $T - 0.5$ años & $-5.00\times 10^{-7}$ & $-3.00\times 10^{-7}$ & $6.00\times 10^{-7}$ & $2.00\times 10^{-7}$ & $0.000$ & $6.00\times 10^{-7}$ \\
+         & $(4.00\times 10^{-7)}$ & $(4.00\times 10^{-7)}$ & $(5.00\times 10^{-7)}$ & $(6.00\times 10^{-7)}$ & $(0.000)$ & $(8.00\times 10^{-7)}$ \\
+        $T - 1.0$ años & $-4.00\times 10^{-7}$ & $-2.00\times 10^{-7}$ & $0.000$ & $2.00\times 10^{-7}$ & $1.00\times 10^{-7}$ & $-2.00\times 10^{-7}$ \\
+         & $(3.00\times 10^{-7)}$ & $(3.00\times 10^{-7)}$ & $(0.000)$ & $(4.00\times 10^{-7)}$ & $(5.00\times 10^{-7)}$ & $(6.00\times 10^{-7)}$ \\
+        $T - 1.5$ años & $-1.00\times 10^{-7}$ & $0.000$ & $-1.00\times 10^{-7}$ & $0.000$ & $2.00\times 10^{-7}$ & $-4.00\times 10^{-7}$ \\
+         & $(3.00\times 10^{-7)}$ & $(0.000)$ & $(4.00\times 10^{-7)}$ & $(0.000)$ & $(5.00\times 10^{-7)}$ & $(5.00\times 10^{-7)}$ \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+
+    \vspace{0.4em}
+    \begin{minipage}{0.93\textwidth}
+        \tiny \textit{Nota:} Cada coeficiente de la interacción (Tratamiento x Tiempo ficticio) aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \end{minipage}
+\end{table}
