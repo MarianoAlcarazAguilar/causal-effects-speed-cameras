@@ -1,4 +1,4 @@
-# Ignore everything except thesis sources and analysis scripts.
+# Ignore everything except thesis sources, analysis scripts, and selected inputs.
 *
 !.gitignore
 
@@ -20,6 +20,19 @@
 !/scripts/**/*.Rmd
 !/scripts/**/*.do
 !/scripts/**/*.sh
+
+# Clean inputs for rebuilding the analysis without repeating data cleaning.
+!/data/
+!/data/classified-incidents.parquet
+!/data/vialidades.json
+!/data/metro-station-coordinates.parquet
+!/data/afluencia-metro-semanal.parquet
+!/data/volumen-total-mensual.parquet
+!/data/fotocivicas-ubicacion-puntos/
+!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.dbf
+!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.prj
+!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.shp
+!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.shx
 
 # Generated files, notebook checkpoints, and local environments.
 **/.ipynb_checkpoints/
