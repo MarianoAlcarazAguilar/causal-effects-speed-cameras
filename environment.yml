@@ -1,0 +1,25 @@
+# Entorno para reconstruir el análisis empírico.
+#
+#   conda env create -f environment.yml
+#   conda activate tesis-cameras
+#
+# Las versiones son las resueltas el 2026-09-11, fijadas a minor para que una
+# reejecución no cambie resultados por una actualización silenciosa de geopandas
+# o pandas. El análisis de densidad de negocios de la CDMX no depende de este
+# entorno y se deja intacto.
+name: tesis-cameras
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.12
+  - pandas=3.0
+  - pyarrow=25.0
+  - geopandas=1.1
+  - shapely=2.1
+  - pyproj=3.8
+  - matplotlib=3.11
+  - statsmodels=0.15
+  - scikit-learn=1.9
+  - jupyterlab

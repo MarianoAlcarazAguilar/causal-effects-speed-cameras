@@ -44,6 +44,28 @@ The volume-generation notebook divides volume by 1,000. Verify the saved data
 and resulting rate units before rescaling coefficients; do not assume that the
 old rates are incorrectly scaled.
 
+### Validation status
+
+`scripts/validate_inputs.py` inspects the six inputs without modifying them and
+writes `reports/input-validation.md`. Run it inside the pinned environment:
+
+```
+conda env create -f environment.yml
+conda activate tesis-cameras
+python scripts/validate_inputs.py --out reports/input-validation.md
+```
+
+All six load, declare EPSG:4326 where geographic, and cover both sides of the
+April 22, 2019 transition. Seven items are reported for decision, none of them
+resolved yet: four duplicated incident folios, five incidents with a zero
+coordinate (all on 2018-12-31), three cameras sharing an exact coordinate,
+sixty-four fully duplicated road segments, twenty roads without `NOMENCLAT`,
+and two ridership rows without `std_diaria`.
+
+Monthly traffic volume has a median near 15,500, consistent with thousands of
+vehicles rather than vehicles. This is a magnitude check, not a confirmation:
+the source still has to be checked before rescaling any coefficient.
+
 ## Preserve the business-density analysis
 
 Reference notebook: `scripts/writing/mexico-city-business-density.ipynb`.

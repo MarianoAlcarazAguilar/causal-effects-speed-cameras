@@ -2,6 +2,7 @@
 *
 !.gitignore
 !/README.md
+!/environment.yml
 
 !/causal-effects-speed-cameras/
 !/causal-effects-speed-cameras/**/
@@ -21,6 +22,10 @@
 !/scripts/**/*.Rmd
 !/scripts/**/*.do
 !/scripts/**/*.sh
+
+# Reportes de validación y diagnóstico, en texto plano.
+!/reports/
+!/reports/*.md
 
 # Clean inputs for rebuilding the analysis without repeating data cleaning.
 !/data/
