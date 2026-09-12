@@ -1,6 +1,7 @@
 # Ignore everything except thesis sources, analysis scripts, and selected inputs.
 *
 !.gitignore
+!/README.md
 
 !/causal-effects-speed-cameras/
 !/causal-effects-speed-cameras/**/
