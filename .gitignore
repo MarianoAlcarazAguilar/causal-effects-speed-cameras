@@ -2,6 +2,7 @@
 *
 !.gitignore
 !/README.md
+!/nbsetup.py
 
 !/causal-effects-speed-cameras/
 !/causal-effects-speed-cameras/**/
@@ -26,14 +27,21 @@
 !/data/
 !/data/classified-incidents.parquet
 !/data/vialidades.json
-!/data/metro-station-coordinates.parquet
-!/data/afluencia-metro-semanal.parquet
+!/data/afluencia-metro-diaria.parquet
 !/data/volumen-total-mensual.parquet
 !/data/fotocivicas-ubicacion-puntos/
 !/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.dbf
 !/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.prj
 !/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.shp
 !/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.shx
+
+# Metro: estaciones y líneas del STC, cada shapefile con sus archivos hermanos.
+# Sin el .prj se pierde el CRS, y las dos capas vienen en sistemas distintos.
+!/data/stcmetro_shp/
+!/data/stcmetro_shp/estaciones/
+!/data/stcmetro_shp/estaciones/*
+!/data/stcmetro_shp/lineas/
+!/data/stcmetro_shp/lineas/*
 
 # Generated files, notebook checkpoints, and local environments.
 **/.ipynb_checkpoints/
