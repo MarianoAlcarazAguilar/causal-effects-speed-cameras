@@ -162,8 +162,16 @@ class Datos:
     def camaras(self) -> gpd.GeoDataFrame:
         """Ubicación de las cámaras de Fotocívicas: los centros del tratamiento.
 
-        No se deduplican. Tres comparten coordenada exacta, pero agrupar o no
-        cámaras cercanas es una decisión de diseño del muestreo, no de limpieza.
+        Se entregan las 113 sin deduplicar. Tres pares comparten coordenada
+        exacta y generarían círculos idénticos, pero descartar uno de cada par
+        aquí sería arbitrario: dos de esos pares son ubicaciones distintas a las
+        que la fuente asignó la misma coordenada (dos puntos de la Autopista
+        Urbana Norte; Eje 5 Sur contra Universidad, que están a kilómetros), y el
+        tercero son dos cámaras reales en la misma esquina en sentidos opuestos.
+
+        El traslape entre círculos, incluido el caso extremo de los que se
+        superponen al 100%, se resuelve al construir las unidades de análisis y
+        no aquí: es una regla de diseño del muestreo, no de limpieza.
         """
         return gpd.read_file(self.data_dir / "fotocivicas-ubicacion-puntos").to_crs(
             self.crs
