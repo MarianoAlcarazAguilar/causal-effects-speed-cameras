@@ -17,6 +17,7 @@
 !/scripts/**/
 !/scripts/**/*.py
 !/scripts/**/*.ipynb
+!/scripts/**/*.md
 !/scripts/**/*.R
 !/scripts/**/*.r
 !/scripts/**/*.Rmd
