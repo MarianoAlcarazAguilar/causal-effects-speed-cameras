@@ -52,6 +52,49 @@
   eso solo refleja que los círculos y los meses difieren entre sí, no calidad del
   modelo. Los indicadores de efectos fijos van hasta abajo de la tabla.
 
+- [ ] **1b. Tres variables de resultado, no una.** Como estaba pensado
+      originalmente y como probablemente son los cuadros 4.1-4.3 que Alberto
+      revisó:
+
+Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
+      `-min`, `-pic` y `-fcs`.
+
+  | Tabla | Variable de resultado | Definición (capítulo 3) | En el panel a 300 m |
+  | --- | --- | --- | --- |
+  | general | MIN + PIC + FCS | todos | 77,102 |
+  | min | MIN | sin lesionados ni fallecidos, daños materiales | ~42,500 |
+  | pic | PIC | alarma clasificada como Urgencias Médicas | ~34,200 |
+  | fcs | FCS | se registró un cadáver en el lugar | 411 |
+
+  Se cambia `NIVELES` en la celda del panel: `None`, `("MIN",)`, `("PIC",)`,
+  `("FCS",)`.
+
+  **Ojo con las tasas.** El capítulo 3 dice que los incidentes se analizan "tanto
+  en números absolutos como en tasas por cada 1,000 vehículos". Quitar las tasas
+  no elimina una tabla: le quita la mitad a las cuatro. Sigue siendo defendible
+  —el denominador son casetas en la periferia— pero es un cambio visible y tiene
+  que ir en la nota para Alberto.
+
+  **La de FCS necesita una nota de potencia, y no es opcional.** Con 411 eventos
+  en 13,392 observaciones y 80% de potencia, solo detectaría reducciones
+  superiores al **47%** de la media del control; el intervalo del efecto estimado
+  va de **-22% a +44%**. Sin esa frase el cuadro se lee como "no hubo efecto sobre
+  las muertes", que es lo contrario de lo que permite concluir. Redacción:
+
+  > La especificación sobre incidentes fatales tiene 411 eventos en 13,392
+  > observaciones. Con 80% de potencia solo permitiría detectar reducciones
+  > superiores al 47% de la media del grupo de control, y el intervalo de
+  > confianza abarca desde -22% hasta +44%. No es informativa y se reporta
+  > únicamente por completitud.
+
+  Nota técnica: 40 de los 431 FCS caen en área compartida y llevan peso
+  fraccionario, así que Poisson tampoco es una salida directa para este cuadro.
+
+  **Estructura de la presentación**, para que no se vuelvan 45 columnas: un
+  cuadro por variable de resultado con los cinco radios como columnas, en la
+  especificación (3); más un cuadro aparte a 300 m con las tres columnas de
+  progresión, que es donde va lo que pidió Alberto sobre `tratado` y la suma.
+
 - [ ] **2. Los cinco radios con trimming laxo** (96 / 98 / 99 / 97 / 98 pares).
       Mismo script, cambiando `tratadas_validas`. Va al apéndice.
 
@@ -114,8 +157,10 @@ Una segunda, más chica, sobre qué covariables excluir del DiD:
 > ¿`pct_lesionados` y `hubo_fcs` también, por venir de los mismos incidentes
 > previos, o solo las dos primeras?
 
-Mientras no responda, el plan asume que salen solo `nivel_incidentes` y
-`tendencia`, y entran 8 covariables.
+Mientras no responda, el plan aplica el criterio estricto —nada derivado del
+outcome— y saca las cuatro: entran **8 covariables**, las 7 estructurales más
+`afluencia_nivel`. La versión con 10, que solo saca `nivel_incidentes` y
+`tendencia`, queda como sensibilidad de una línea en el notebook.
 
 ---
 
