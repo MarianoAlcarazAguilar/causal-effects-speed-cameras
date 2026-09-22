@@ -16,6 +16,15 @@
       del error estándar; el umbral no carga el resultado
 - [x] **Robustez reparto cercano**: idéntica al reparto por pesos, exactamente.
       Ver la nota al final
+- [x] **Las 60 estimaciones**: 5 radios × 4 niveles × 3 especificaciones, en el
+      notebook y en `pipeline/estimacion.py`, verificadas una contra otra
+- [x] **Bootstrap del proceso completo**, 500 repeticiones. Los dos intervalos
+      cruzan cero: a 300 m [-6.2%, +1.7%], y PIC a 100 m [-4.2%, +13.9%]. El
+      único resultado significativo de las 60 **no sobrevive**: el estimado
+      original queda en el percentil 84 de su propia distribución bootstrap y la
+      repetición típica da la mitad del efecto. A 300 m el error estándar del
+      bootstrap es 0.69x el analítico, o sea que la fórmula era conservadora —la
+      dirección que predicen Abadie e Imbens
 - [x] Caracterización de las 6 unidades que el trimming descarta: ~13.5
       incidentes/mes contra 6.22 las que se quedan
 
@@ -102,11 +111,10 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       Es el cuarto punto de la lista de Alberto. No va como principal: son 568
       parámetros contra 165 clusters.
 
-- [ ] **4. Bootstrap del proceso completo, solo a 300 m.**
-      500 repeticiones. Remuestrear unidades, reajustar la logística, rehacer el
-      emparejamiento, reestimar. Las covariables están precalculadas, así que no
-      hay que rehacer los cruces espaciales: son segundos por repetición.
-      Reporta una sola cosa, el intervalo de confianza del coeficiente principal.
+- [x] **4. Bootstrap del proceso completo.** Hecho en `bootstrap.ipynb`, 500
+      repeticiones, sobre 300 m con todos los incidentes y sobre 100 m con PIC.
+      Pendiente menor: subirlo a 2,000 repeticiones para estabilizar los
+      percentiles, y decidir si se corre en más combinaciones.
 
 ---
 
@@ -127,7 +135,11 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
 
 - [ ] **7. La inferencia, un párrafo.** Los errores estándar del DiD después de
       matching no son válidos, y el sesgo puede ir en cualquier dirección. Por eso
-      la discusión se apoya en la magnitud. Reportar el intervalo del bootstrap.
+      la discusión se apoya en la magnitud. Los números ya están: intervalo de
+      [-6.2%, +1.7%] a 300 m, y el aumento aparente de lesionados a 100 m no
+      sobrevive. Declarar también que el bootstrap no es formalmente válido para
+      vecino más cercano (Abadie e Imbens, 2008) y que la intersección de los
+      cinco radios no se remuestrea.
 
 - [ ] **8. La discusión.** Magnitud en incidentes por círculo al mes y en
       porcentaje de la media del grupo de control; comparación contra los niveles
