@@ -32,7 +32,7 @@
 
 ## Falta correr — cuatro cosas
 
-- [ ] **1. La especificación principal, en los cinco radios.** Tres columnas,
+- [x] **1. La especificación principal, en los cinco radios.** Tres columnas,
       en progresión:
 
   ```
@@ -61,7 +61,7 @@
   eso solo refleja que los círculos y los meses difieren entre sí, no calidad del
   modelo. Los indicadores de efectos fijos van hasta abajo de la tabla.
 
-- [ ] **1b. Tres variables de resultado, no una.** Como estaba pensado
+- [x] **1b. Cuatro variables de resultado, no una.** Como estaba pensado
       originalmente y como probablemente son los cuadros 4.1-4.3 que Alberto
       revisó:
 
@@ -104,10 +104,10 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   especificación (3); más un cuadro aparte a 300 m con las tres columnas de
   progresión, que es donde va lo que pidió Alberto sobre `tratado` y la suma.
 
-- [ ] **2. Los cinco radios con trimming laxo** (96 / 98 / 99 / 97 / 98 pares).
+- [x] **2. Los cinco radios con trimming laxo** (96 / 98 / 99 / 97 / 98 pares).
       Mismo script, cambiando `tratadas_validas`. Va al apéndice.
 
-- [ ] **3. Una columna con las covariables × dummies de tiempo**, solo a 300 m.
+- [x] **3. Una columna con las covariables × dummies de tiempo**, solo a 300 m.
       Es el cuarto punto de la lista de Alberto. No va como principal: son 568
       parámetros contra 165 clusters.
 
@@ -205,6 +205,32 @@ error estándar sí se mueve (0.18544 → 0.18664).
 Hay que corregir la línea de `unit-design.ipynb` que dice *"si los resultados
 aguantan, el reparto no estaba cargando nada"*. No es que aguanten: no pueden
 cambiar. Es una afirmación más fuerte y hay que escribirla así.
+
+---
+
+## Nota: tres especificaciones que no pueden mover el coeficiente
+
+En un panel balanceado con tratamiento simultáneo, todos los regresores se
+factorizan en una parte de unidad por una parte de tiempo, y el regresor del
+tratamiento solo distingue pre de post. Eso vuelve al coeficiente **invariante por
+construcción** frente a tres elecciones:
+
+| Cambio | Por qué no puede moverlo |
+| --- | --- |
+| Agregar efectos fijos de unidad y tiempo, (1) → (2) | El regresor residualizado vale ±0.25 por cuadrante y es ortogonal a las dummies |
+| Reparto cercano en vez de pesos 1/k | Conserva el total del grupo tratado en cada periodo |
+| Covariables × dummies de tiempo en vez de × post, (3) → (4) | Las interacciones extra varían *dentro* del pre y del post, que es ortogonal a un regresor que solo distingue pre de post |
+
+Verificado en los datos: idénticos a cuatro decimales o más en todos los casos.
+
+**Cómo redactarlo:** no como "el resultado es robusto a…", porque no hubo prueba
+—el número no podía cambiar—. Sí como "es invariante por construcción, porque…".
+Presentarlo como robustez es un error que un examinador que conozca el diseño va a
+notar.
+
+Lo que sí es una prueba de robustez con contenido: el trimming laxo, X = 50%, y
+agregar las covariables de la (2) a la (3), que es la única que mueve el
+coeficiente (−0.148 → −0.106).
 
 ---
 
