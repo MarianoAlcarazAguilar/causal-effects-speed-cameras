@@ -138,7 +138,7 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   | Evaluación del balance | Las tablas de SMD nuevas, con las mismas 12 covariables en todos los radios. \|SMD\| medio después entre 0.045 y 0.065 |
 
   Y agregar lo que el capítulo viejo no tenía: el control pool sobre la red vial
-  con separación de 600 m, el modelo sin penalización sobre covariables estandarizadas y con tolerancia estricta (con la de sklearn, el error del solver en el logit supera el ancho del caliper y cambia hasta 18 de 99 pares), el
+  con separación de 600 m, el modelo por máxima verosimilitud con el método de Newton, sin penalización y sobre covariables estandarizadas —Newton es el estándar para la logística, el que usan por defecto R y Stata; el default de sklearn cambia hasta 18 de 99 pares—, el
   desempate por Mahalanobis, y la separación entre controles emparejados.
 
   Lo que hay que poder explicar del modelo viejo, ordenado por peso:

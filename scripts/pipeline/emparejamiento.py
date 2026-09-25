@@ -15,17 +15,18 @@ Propensity score y emparejamiento.
 
 Las decisiones, justificadas en `scripts/resume-911/propensity-score.ipynb`:
 
-- **Logit sin penalización, sobre covariables estandarizadas y con tolerancia
-  estricta.** El propensity score no busca predecir fuera de muestra sino
-  balancear covariables en esta muestra, así que regularizar deja desbalance a
-  propósito. Con las variables en su escala original el solver no converge y da
-  un score con correlación 0.38 contra el correcto, sin advertir nada.
-  Estandarizadas sí converge, pero con la tolerancia por defecto (`1e-4`) el
-  error en el logit llega a 0.54 —casi tres veces el ancho del caliper— y cambia
-  hasta 18 de 99 pares: la tolerancia del solver decidía quién se emparejaba con
-  quién.
-  Con `tol=1e-10` el error queda en 0.01 y los pares coinciden, en los cinco
-  radios, con los de un método de Newton.
+- **Logit por máxima verosimilitud con el método de Newton, sin penalización y
+  sobre covariables estandarizadas.** El propensity score no busca predecir
+  fuera de muestra sino balancear covariables en esta muestra, así que
+  regularizar deja desbalance a propósito. Newton (`newton-cholesky`) es el
+  método estándar para la regresión logística —el que usan por defecto `glm` en
+  R y `logit` en Stata— y converge en 7 iteraciones. El solver por defecto de
+  sklearn no sirve aquí: sin estandarizar no converge y da un score con
+  correlación 0.38 contra el correcto; estandarizado converge, pero su
+  tolerancia deja un error en el logit de hasta 0.54 —casi tres veces el ancho
+  del caliper— y cambia hasta 18 de 99 pares. Con la tolerancia apretada a
+  `1e-10` reproduce los pares de Newton en la muestra original, pero en el
+  bootstrap diverge en un remuestreo con cuasi-separación, donde Newton no.
 - **Vecino más cercano 1:1 sin reemplazo**, con caliper de 0.2 desviaciones
   estándar del logit del score.
 - **Desempate por distancia de Mahalanobis** entre los controles dentro del
@@ -150,11 +151,9 @@ class Emparejamiento:
 
     @cached_property
     def modelo(self) -> LogisticRegression:
-        # tolerancia estricta: con la de sklearn el error en el logit supera el
-        # ancho del caliper y es el solver, no los datos, el que decide los pares
-        return LogisticRegression(C=np.inf, tol=1e-10, max_iter=100_000).fit(
-            self.Z, self.features.matriz.tratado
-        )
+        return LogisticRegression(
+            max_iter=5000, C=np.inf, solver="newton-cholesky"
+        ).fit(self.Z, self.features.matriz.tratado)
 
     @cached_property
     def datos_ps(self) -> pd.DataFrame:
