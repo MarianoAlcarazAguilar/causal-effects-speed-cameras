@@ -118,7 +118,56 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
 
 ---
 
-## Falta escribir — cuatro cosas
+## Falta escribir
+
+- [ ] **10. Reescribir el capítulo 3. Va primero.** Alberto lo dio casi por bueno,
+      pero describe unidades, covariables, modelo y trimming que ya no existen, e
+      incluso menciona un radio de 50 m que ya no se analiza. Es el cambio más
+      grande que va a encontrar, y sin él los resultados del capítulo 4 no tienen
+      de dónde salir. Por secciones de `Chapters/3.Data.tex`:
+
+  | Sección | Qué cambia |
+  | --- | --- |
+  | Tratamiento | Las 113 cámaras se agrupan en **99 unidades**: dos se fusionan si sus círculos comparten más de 60% del área a 300 m. Los grupos se fijan una vez y se reusan en los cinco radios. Sale de `unit-design.ipynb` |
+  | Atributos físicos de la red vial | Los máximos y binarias (`max_carriles`, `both_directions`, `via_acc_cont`, `max_nivel`) pasan a proporciones ponderadas por metros de vía; `via_primaria` sale porque es 1 menos `% acceso controlado`. Sale de `feature-design.ipynb` |
+  | Proxies de movilidad | La afluencia se mide con las estaciones **dentro** del círculo, no la más cercana, y sin dividir entre el volumen de las casetas. Salen `std_afluencia_mensual` y `distance_to_station` |
+  | Construcción de variables para el matching | Las 12 covariables con sus ventanas de tres años contadas desde el 22 de abril |
+  | Estaciones de conteo permanente | El volumen de las casetas ya no se usa, ni como tasa ni como control: los efectos fijos de tiempo absorben el choque de movilidad. Hay que decir por qué |
+  | Uso de la siniestralidad | Las 8 variables de media y desviación estándar pasan a 4, con la tendencia como variable explícita. Quitar la mención de tasas por cada 1,000 vehículos |
+  | Soporte común y recorte | Los umbrales de score por radio se reemplazan por el caliper de 0.2 sd del logit más la intersección de los cinco radios: **93 de 99**. Las 6 que se caen son 2.2 veces más peligrosas |
+  | Evaluación del balance | Las tablas de SMD nuevas, con las mismas 12 covariables en todos los radios. \|SMD\| medio después entre 0.045 y 0.065 |
+
+  Y agregar lo que el capítulo viejo no tenía: el control pool sobre la red vial
+  con separación de 600 m, el modelo sin penalización sobre covariables estandarizadas y con tolerancia estricta (con la de sklearn, el error del solver en el logit supera el ancho del caliper y cambia hasta 18 de 99 pares), el
+  desempate por Mahalanobis, y la separación entre controles emparejados.
+
+  Lo que hay que poder explicar del modelo viejo, ordenado por peso:
+
+  1. **Los radios no eran comparables.** El grid se reconstruía en cada radio y el
+     recorte usaba un umbral de score distinto por radio, así que cada columna
+     estimaba el efecto sobre unidades distintas. Es el punto 1 de Alberto.
+  2. **Ninguna covariable medía la tendencia previa.** El balance se revisaba sobre
+     las 18, pero ninguna decía si la zona venía subiendo o bajando, que es la
+     dimensión de la que depende el supuesto de tendencias paralelas. Con las
+     definiciones viejas, el SMD de la tendencia queda en 0.216.
+  3. **Pares de peor calidad:** sin caliper, y con la distancia en escala 0–1, que
+     no discrimina cuando casi todos los scores están pegados a cero.
+  4. **`LogisticRegression()` por default** penaliza y no converge sobre variables
+     sin estandarizar; el score que produce correlaciona 0.38 con el correcto. Pesa
+     poco: si el balance salía bien, los pares servían igual.
+
+  **Lo que NO era un problema, y no hay que presentarlo como tal:** elegir un
+  subconjunto de covariables por radio según el SMD. El SMD se calculaba sobre las
+  18 variables, incluidas las que se quitaban del score (`calculate_smd` en
+  `scripts/ps_matching.py`), así que la tabla no salía bien por construcción.
+  Elegir la especificación del score por el balance que produce, revisado sobre
+  todas las variables, es práctica estándar. En la versión nueva la lista es fija
+  por otras razones —redundancia y ruido medidos—, no porque la anterior estuviera
+  mal.
+
+  **Pendiente de verificar antes de escribirlo:** la comparación de las 18
+  covariables originales contra las 12 no está en el repo. Se corrió en un
+  scratchpad y se perdió. Si se va a citar, hay que volver a correrla y guardarla.
 
 - [ ] **5. Las tablas como las pidió Alberto.** Número de observaciones y R² por
       columna; orden tratamiento → interacción → efectos fijos al final; la suma
@@ -144,6 +193,21 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
 - [ ] **8. La discusión.** Magnitud en incidentes por círculo al mes y en
       porcentaje de la media del grupo de control; comparación contra los niveles
       pre y post del control; comparación contra los estudios mexicanos ya citados.
+
+  **Una frase obligatoria sobre las tendencias previas.** En las figuras 3 y 3b, la
+  pendiente previa de los controles es un poco mayor que la de las tratadas en
+  los cinco radios (entre 0.4% y 1.6% de la media del control por año). Es chica,
+  pero del mismo signo en todas las columnas y del mismo orden que el efecto
+  estimado, y apunta en la dirección de una reducción aparente: si hubiera seguido
+  después de 2019, por sí sola daría un DiD negativo. Refuerza el nulo en vez de
+  contradecirlo. Redacción sugerida:
+
+  > Las pendientes previas muestran una diferencia pequeña y del mismo signo en
+  > los cinco radios: los controles venían creciendo ligeramente más rápido que
+  > las unidades tratadas. Su magnitud es comparable a la de los efectos
+  > estimados y su dirección es la de una reducción aparente, por lo que las
+  > pequeñas reducciones puntuales a 250 y 300 metros no pueden distinguirse de
+  > la continuación de esa diferencia previa.
 
 - [ ] **9. Media cuartilla para Alberto** con lo que cambió además de lo que pidió:
       unidades fusionadas por traslape con grupos fijos a 300 m (que es su punto 1),
@@ -181,7 +245,7 @@ outcome— y saca las cuatro: entran **8 covariables**, las 7 estructurales más
 | | Por qué |
 | --- | --- |
 | Sant'Anna y Zhao (3b) | *"Tú decide si quieres hacer 3b"*. Necesita R y es un estimador distinto |
-| Event study (4) | *"y/o 4"*, explícitamente opcional |
+| Event study (4) | *"y/o 4"*, explícitamente opcional. Se reconsideró al ver la diferencia de pendientes previas —es la herramienta que diría si es distinguible de cero— y se dejó fuera por alcance: basta con declararla |
 | Regresiones en tasas | El denominador son casetas de peaje en la periferia: no mide exposición del círculo. Los efectos fijos de tiempo ya absorben el choque de movilidad. En su lugar, el efecto en % de la media del control |
 | Robustez con las unidades de borde, un solo nivel vial, y otras semillas | Las dos robusteces que tocaban el diseño de unidades ya están cerradas |
 
