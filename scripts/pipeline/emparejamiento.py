@@ -15,11 +15,17 @@ Propensity score y emparejamiento.
 
 Las decisiones, justificadas en `scripts/resume-911/propensity-score.ipynb`:
 
-- **Logit sin penalización y con solver `newton-cholesky`.** El propensity score
-  no busca predecir fuera de muestra sino balancear covariables en esta muestra,
-  así que regularizar deja desbalance a propósito. Y con las variables en su
-  escala original el solver por defecto no converge: da un score con correlación
-  0.38 contra el correcto, sin advertir nada.
+- **Logit sin penalización, sobre covariables estandarizadas y con tolerancia
+  estricta.** El propensity score no busca predecir fuera de muestra sino
+  balancear covariables en esta muestra, así que regularizar deja desbalance a
+  propósito. Con las variables en su escala original el solver no converge y da
+  un score con correlación 0.38 contra el correcto, sin advertir nada.
+  Estandarizadas sí converge, pero con la tolerancia por defecto (`1e-4`) el
+  error en el logit llega a 0.54 —casi tres veces el ancho del caliper— y cambia
+  hasta 18 de 99 pares: la tolerancia del solver decidía quién se emparejaba con
+  quién.
+  Con `tol=1e-10` el error queda en 0.01 y los pares coinciden, en los cinco
+  radios, con los de un método de Newton.
 - **Vecino más cercano 1:1 sin reemplazo**, con caliper de 0.2 desviaciones
   estándar del logit del score.
 - **Desempate por distancia de Mahalanobis** entre los controles dentro del
@@ -144,9 +150,11 @@ class Emparejamiento:
 
     @cached_property
     def modelo(self) -> LogisticRegression:
-        return LogisticRegression(
-            max_iter=5000, C=np.inf, solver="newton-cholesky"
-        ).fit(self.Z, self.features.matriz.tratado)
+        # tolerancia estricta: con la de sklearn el error en el logit supera el
+        # ancho del caliper y es el solver, no los datos, el que decide los pares
+        return LogisticRegression(C=np.inf, tol=1e-10, max_iter=100_000).fit(
+            self.Z, self.features.matriz.tratado
+        )
 
     @cached_property
     def datos_ps(self) -> pd.DataFrame:
