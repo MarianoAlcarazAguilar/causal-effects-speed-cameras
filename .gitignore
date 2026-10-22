@@ -30,6 +30,8 @@
 !/data/vialidades.json
 !/data/afluencia-metro-diaria.parquet
 !/data/volumen-total-mensual.parquet
+# Resultado del bootstrap: 75 minutos de cómputo que no hace falta repetir.
+!/data/bootstrap-coeficientes.parquet
 !/data/fotocivicas-ubicacion-puntos/
 !/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.dbf
 !/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.prj
