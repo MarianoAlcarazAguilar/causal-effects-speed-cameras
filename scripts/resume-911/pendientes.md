@@ -302,13 +302,15 @@ coeficiente (−0.148 → −0.106).
 
 | Especificación | Pares | Coef | EE | p | % del control |
 | --- | --- | --- | --- | --- | --- |
-| Sin matching, 99 tratadas | 99 vs 631 | −0.525 | 0.150 | 0.001 | −8.3% |
-| Sin matching, 93 tratadas | 93 vs 631 | −0.388 | 0.137 | 0.005 | −6.1% |
+| Sin matching, 99 tratadas | 99 vs 631 | −0.525 | 0.166 | 0.002 | −13.7% |
+| Sin matching, 93 tratadas | 93 vs 631 | −0.388 | 0.154 | 0.012 | −10.1% |
 | Con matching, libre | 98 | −0.229 | 0.208 | 0.270 | −3.6% |
 | **Con matching, muestra común** | **93** | **−0.148** | **0.198** | 0.457 | **−2.5%** |
 
-Todas con efectos fijos de unidad y tiempo, clusterizadas por componente. Sin
-las 8 covariables todavía: eso es el pendiente 1.
+Todas con efectos fijos de unidad y tiempo, clusterizadas por componente y sin
+covariables. El porcentaje es respecto a la media previa del grupo de control de
+cada renglón: los controles sin emparejar arrancan en 3.842 y los emparejados en
+6.019, porque el emparejamiento elige controles tan peligrosos como las tratadas.
 
 Las cuatro medias de la especificación principal: control 6.019 → 5.366,
 tratadas 6.222 → 5.421.

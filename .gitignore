@@ -3,6 +3,14 @@
 !.gitignore
 !/README.md
 !/nbsetup.py
+!/notas/
+!/notas/Errores Cometidos.md
+!/figures/
+!/figures/efecto-por-radio.svg
+!/figures/efecto-por-radio-*.svg
+!/figures/brecha-posterior.svg
+!/figures/brecha-posterior-*.svg
+!/figures/componente-tratado-100-200-300.svg
 
 !/causal-effects-speed-cameras/
 !/causal-effects-speed-cameras/**/
@@ -30,6 +38,8 @@
 !/data/vialidades.json
 !/data/afluencia-metro-diaria.parquet
 !/data/volumen-total-mensual.parquet
+# Resultado del bootstrap: 75 minutos de cómputo que no hace falta repetir.
+!/data/bootstrap-coeficientes.parquet
 !/data/fotocivicas-ubicacion-puntos/
 !/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.dbf
 !/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.prj
