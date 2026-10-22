@@ -3,6 +3,14 @@
 !.gitignore
 !/README.md
 !/nbsetup.py
+!/notas/
+!/notas/Errores Cometidos.md
+!/figures/
+!/figures/efecto-por-radio.svg
+!/figures/efecto-por-radio-*.svg
+!/figures/brecha-posterior.svg
+!/figures/brecha-posterior-*.svg
+!/figures/componente-tratado-100-200-300.svg
 
 !/causal-effects-speed-cameras/
 !/causal-effects-speed-cameras/**/
