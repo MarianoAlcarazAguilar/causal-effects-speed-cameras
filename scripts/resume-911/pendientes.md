@@ -84,17 +84,17 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   —el denominador son casetas en la periferia— pero es un cambio visible y tiene
   que ir en la nota para Alberto.
 
-  **La de FCS necesita una nota de potencia, y no es opcional.** Con 411 eventos
-  en 13,392 observaciones y 80% de potencia, solo detectaría reducciones
-  superiores al **47%** de la media del control; el intervalo del efecto estimado
-  va de **-22% a +44%**. Sin esa frase el cuadro se lee como "no hubo efecto sobre
-  las muertes", que es lo contrario de lo que permite concluir. Redacción:
+  **La de FCS necesita una nota sobre el ancho del intervalo, y no es opcional.**
+  Con 411 eventos en 13,392 observaciones, el intervalo bootstrap a 300 m va de
+  **-17% a +37%** de la media del control. Sin esa frase el cuadro se lee como
+  "no hubo efecto sobre las muertes", que es lo contrario de lo que permite
+  concluir. No se reporta el efecto mínimo detectable: el intervalo dice lo mismo.
+  Redacción:
 
   > La especificación sobre incidentes fatales tiene 411 eventos en 13,392
-  > observaciones. Con 80% de potencia solo permitiría detectar reducciones
-  > superiores al 47% de la media del grupo de control, y el intervalo de
-  > confianza abarca desde -22% hasta +44%. No es informativa y se reporta
-  > únicamente por completitud.
+  > observaciones. El intervalo de confianza abarca desde una reducción de 17%
+  > hasta un aumento de 37% de la media del grupo de control: solo un efecto muy
+  > grande podría distinguirse de cero. Se reporta únicamente por completitud.
 
   Nota técnica: 40 de los 431 FCS caen en área compartida y llevan peso
   fraccionario, así que Poisson tampoco es una salida directa para este cuadro.
