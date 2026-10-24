@@ -1,12 +1,12 @@
 # Recap de los errores y las decisiones que se tomaron
 
-Transcripción de las 17 páginas manuscritas en `notas/Errores Cometidos-1.jpg` a `Errores Cometidos-17.jpg`. Se conserva la voz y la secuencia de los apuntes. Las correcciones posteriores en azul se incorporan donde sustituyen texto tachado. Las figuras y tablas se enlazan a su foto original; sus números y rótulos principales también se transcriben.
+Transcripción de las 17 páginas manuscritas en `notas/fotos/Errores Cometidos-1.jpg` a `Errores Cometidos-17.jpg`. Se conserva la voz y la secuencia de los apuntes. Las correcciones posteriores en azul se incorporan donde sustituyen texto tachado. Las figuras y tablas se enlazan a su foto original; sus números y rótulos principales también se transcriben.
 
 También voy a dejar los gaps teóricos que tengo que volver a revisar detenidamente.
 
 ## Página 1 — Trimming y lo que el análisis estima
 
-[Ver foto 1](<Errores Cometidos-1.jpg>)
+[Ver foto 1](<fotos/Errores Cometidos-1.jpg>)
 
 ATT ≠ ATE ⇒ Transparentarlo. No estaba comparando lo mismo entre todas las distancias y por lo tanto, los resultados no son comparables entre sí.
 
@@ -24,7 +24,7 @@ Es así que llegamos a la cota del 60%: si dos cámaras comparten más del 60% d
 
 ## Página 2 — Unidades tratadas y controles
 
-[Ver foto 2](<Errores Cometidos-2.jpg>)
+[Ver foto 2](<fotos/Errores Cometidos-2.jpg>)
 
 | umbral_X | distancia_max_m | unidades | camaras_fusionadas | grupo_mayor | dist_max_al_centro_m | fuera_a_100m |
 |---:|---:|---:|---:|---:|---:|---:|
@@ -38,11 +38,11 @@ Un número que vale la pena tener presente es que del total de los incidentes, 5
 
 Considerando todo lo anterior, las 113 cámaras se convierten en 99 unidades tratadas. Esta lista de centros fijos son el universo de posibles unidades que se van a utilizar para todos los radios, haciendo comparables los resultados entre sí, **reforzado por cómo hacemos el trimming tras el matching** [añadido en azul].
 
-[Figura: las 12 unidades fusionadas con X = 60% a 100 m, en la foto 2](<Errores Cometidos-2.jpg>).
+[Figura: las 12 unidades fusionadas con X = 60% a 100 m, en la foto 2](<fotos/Errores Cometidos-2.jpg>).
 
 Así se ven las 12 unidades fusionadas a 100 m. Esa es la que está casi al borde, pero el resto quedan definidas razonablemente bien. Si hubiéramos tomado overlap al 50%, la unidad “tratada” ya no tendría cámaras.
 
-[Figura: las mismas unidades con X = 50% a 100 m, en la foto 2](<Errores Cometidos-2.jpg>).
+[Figura: las mismas unidades con X = 50% a 100 m, en la foto 2](<fotos/Errores Cometidos-2.jpg>).
 
 Hay más pruebas de robustez en el notebook de unit-design y hay que mostrar cómo se ven las unidades donde aún hay mucho overlap. Con esto se soluciona por completo lo que decía Alberto. ツ
 
@@ -52,13 +52,13 @@ Hay otro tema, y es que la construcción de controles también tiene que cambiar
 
 ## Página 3 — Construcción de controles y variables originales
 
-[Ver foto 3](<Errores Cometidos-3.jpg>)
+[Ver foto 3](<fotos/Errores Cometidos-3.jpg>)
 
 **Ahora.** Al igual que con las unidades tratadas, el pool de posibles controles se define una única vez en toda la ciudad, asignando puntos aleatorios sobre toda la infraestructura vial y formando inicialmente áreas de radio 300 m. Posteriormente se excluye toda área con overlap con un área de 300 m sobre los radares de velocidad. Para este punto aún no se ha verificado si hay o no overlap entre posibles unidades de control, eso se hará hasta el matching.
 
 En total quedamos con 14,656 posibles controles. Si aplicáramos la regla de no overlap entre controles desde este punto, nos quedaríamos con 631 unidades a 300 m. Este número también es importante porque es el que se usará posteriormente como prueba naive del modelo sin matching.
 
-[Figura: pool de control (verde, n = 14,656) y áreas tratadas (rojo) a 300 m, en la foto 3](<Errores Cometidos-3.jpg>).
+[Figura: pool de control (verde, n = 14,656) y áreas tratadas (rojo) a 300 m, en la foto 3](<fotos/Errores Cometidos-3.jpg>).
 
 Una vez que tenemos definido finalmente cuáles son los pools de tratadas y de control, ahora sí es momento de hacer matching, pero primero hay que calcular los features que vamos a utilizar para poder hacerlo.
 
@@ -75,7 +75,7 @@ Una vez que tenemos definido finalmente cuáles son los pools de tratadas y de c
 
 ## Página 4 — Metro, siniestralidad y rediseño
 
-[Ver foto 4](<Errores Cometidos-4.jpg>)
+[Ver foto 4](<fotos/Errores Cometidos-4.jpg>)
 
 - Metro:
   - Mean afluencia mensual → media mensual de la estación de metro más cercana a cada área.
@@ -113,7 +113,7 @@ Estructurales:
 
 ## Página 5 — Variables finales y matching
 
-[Ver foto 5](<Errores Cometidos-5.jpg>)
+[Ver foto 5](<fotos/Errores Cometidos-5.jpg>)
 
 Metro:
 
@@ -146,7 +146,7 @@ Y la parte más importante para asegurarnos de que seguimos comparando las misma
 
 ## Página 6 — Muestra común y diagnósticos
 
-[Ver foto 6](<Errores Cometidos-6.jpg>)
+[Ver foto 6](<fotos/Errores Cometidos-6.jpg>)
 
 ...unidades tratadas que sí encontraron pareja en todos los radios.
 
@@ -154,17 +154,17 @@ Y la parte más importante para asegurarnos de que seguimos comparando las misma
 
 ❗¿Cómo son las unidades que estamos excluyendo?
 
-Así queda el análisis de SMD para todos los radios: [love plots de 100, 150, 200, 250 y 300 m en la foto 6](<Errores Cometidos-6.jpg>).
+Así queda el análisis de SMD para todos los radios: [love plots de 100, 150, 200, 250 y 300 m en la foto 6](<fotos/Errores Cometidos-6.jpg>).
 
-Así se ve el common support: [histogramas antes (14,755 unidades) y después (93 pares) para cada radio en la foto 6](<Errores Cometidos-6.jpg>).
+Así se ve el common support: [histogramas antes (14,755 unidades) y después (93 pares) para cada radio en la foto 6](<fotos/Errores Cometidos-6.jpg>).
 
-Y así se ven las tendencias paralelas: [cinco series de tratadas y controles, una por radio, en la foto 6](<Errores Cometidos-6.jpg>).
+Y así se ven las tendencias paralelas: [cinco series de tratadas y controles, una por radio, en la foto 6](<fotos/Errores Cometidos-6.jpg>).
 
-Ya por último y solo como referencia, así quedó el mapa de la CDMX con sus unidades de tratamiento y de control a 300 m: [mapa en la foto 6](<Errores Cometidos-6.jpg>).
+Ya por último y solo como referencia, así quedó el mapa de la CDMX con sus unidades de tratamiento y de control a 300 m: [mapa en la foto 6](<fotos/Errores Cometidos-6.jpg>).
 
 ## Página 7 — Qué quiere decir DiD
 
-[Ver foto 7](<Errores Cometidos-7.jpg>)
+[Ver foto 7](<fotos/Errores Cometidos-7.jpg>)
 
 Antes de pasar a explicar los cambios que hice en el modelado, quiero hacer una pausa para poder internalizar lo que el modelo me quiere decir.
 
@@ -195,7 +195,7 @@ Al final se hace bootstrap para poder mitigar un poco el problema que tienen los
 
 ## Página 8 — De lo más básico al DiD
 
-[Ver foto 8](<Errores Cometidos-8.jpg>)
+[Ver foto 8](<fotos/Errores Cometidos-8.jpg>)
 
 Bueno después de tanto desmadre, ahora sí podemos interpretar los resultados y ver qué nos dicen del programa. Vamos a empezar desde lo más básico y vamos a ir construyendo hasta terminar con la especificación principal.
 
@@ -229,7 +229,7 @@ Increíble, gracias a los radares de velocidad aumentamos los incidentes mensual
 
 ## Página 9 — DiD sin emparejar y muestra común
 
-[Ver foto 9](<Errores Cometidos-9.jpg>)
+[Ver foto 9](<fotos/Errores Cometidos-9.jpg>)
 
 Si comparar controles y tratadas de esta forma nos lleva a resultados tan absurdos, es necesario encontrar una manera de compararlos entre sí, pero entendiendo las diferencias que existen entre ellos.
 
@@ -266,7 +266,7 @@ El punto de referencia para los controles sigue siendo la misma media de 3.8416,
 
 ## Página 10 — Emparejamiento y covariables × post
 
-[Ver foto 10](<Errores Cometidos-10.jpg>)
+[Ver foto 10](<fotos/Errores Cometidos-10.jpg>)
 
 ...equivale a una disminución de 10.11%. Notamos que el efecto disminuyó, y esto era de esperarse, porque las unidades que excluimos eran las más peligrosas de la ciudad, y para las cuales no encontramos un control similar. Esto también nos obliga a dejar claro que el análisis, por lo tanto, no podrá decir nada respecto a este tipo de unidades.
 
@@ -310,7 +310,7 @@ afluencia_nivel_post        -0.0444       0.122   -0.365     0.715    -0.283    
 
 ## Página 11 — Resumen de los pasos e incertidumbre
 
-[Ver foto 11](<Errores Cometidos-11.jpg>)
+[Ver foto 11](<fotos/Errores Cometidos-11.jpg>)
 
 Efectivamente, las covariables absorben parte del efecto observado. [Anotación en azul: “realmente estamos mostrando que es sensible moderadamente al ajuste”.] Las cámaras parecen haber reducido los incidentes en 0.1063 accidentes mensuales, equivalente a una reducción del 1.76% de la media de los controles.
 
@@ -348,7 +348,7 @@ Nuevamente vemos que el coeficiente no cambia, pero sí lo hace su error estánd
 
 ## Página 12 — Clustering por componente y proceso de bootstrap
 
-[Ver foto 12](<Errores Cometidos-12.jpg>)
+[Ver foto 12](<fotos/Errores Cometidos-12.jpg>)
 
 Y finalmente, llegamos al modelo que utilizamos, clusterizando no por unidad, sino por componente traslapada, reconociendo así el hecho de que hay unidades que comparten área y, por lo tanto, incidentes entre ellas. En total son 72 componentes tratadas y 93 unidades de control (por construcción no hay traslape entre controles).
 
@@ -382,7 +382,7 @@ En cada radio se hace un muestreo aleatorio del número de componentes con reemp
 
 ## Página 13 — Bootstrap y resumen de incertidumbre
 
-[Ver foto 13](<Errores Cometidos-13.jpg>)
+[Ver foto 13](<fotos/Errores Cometidos-13.jpg>)
 
 5. De las unidades tratadas que hayan sobrevivido al matching, se filtran solo aquellas que estén dentro de las 93 del análisis original. No se hizo antes del matching porque en el original las 99 entran al matching a tomar su mejor control.
 
@@ -422,7 +422,7 @@ Y con esto entonces ahora sí podemos analizar los resultados en todos los radio
 
 ## Página 14 — Interpretación de los resultados
 
-[Ver foto 14](<Errores Cometidos-14.jpg>)
+[Ver foto 14](<fotos/Errores Cometidos-14.jpg>)
 
 Antes de entrar en el análisis específico por nivel de incidentes, merece la pena hacer un resumen de los efectos que estamos estimando: es el Average Treatment on the Treated pues estamos analizando el efecto en la muestra resultante tras hacer trimming, recordemos que tuvimos que excluir aquellas unidades para las que no encontramos un control comparable y que luego nos aseguramos de que las unidades resultantes encontraran match en todos los radios, así que el modelo no podrá decirnos nada de ellas, que justamente eran las más peligrosas en toda la ciudad. Si bien esto último nos obligó a descartar más unidades, es valioso en cuanto nos permite comparar los resultados entre radios pues las unidades tratadas (los centros tratados) se mantuvieron constantes en todos los casos (las 93 sobrevivientes).
 
@@ -434,17 +434,17 @@ Algo que tampoco podemos olvidar es que estamos clusterizando por componente tra
 
 En la figura muestro una componente de 5 tratadas a 300 m para ilustrar cómo cambia con los radios. En estas 5 unidades tratadas, las componentes pasan de 5 → 4 → 1 conforme incrementamos el radio, esto a su vez se refleja en el número total de componentes, que pasan de 93 → 86 → 72 respectivamente. Recordemos que por construcción, no hay traslape entre controles, así que los 93 controles siempre son 93 componentes.
 
-[Figura: «Las mismas cinco unidades tratadas en tres radios», 100 m = 5 componentes; 200 m = 4 componentes; 300 m = 1 componente. Círculos: unidades tratadas; líneas ocres: traslape directo. En la foto 14](<Errores Cometidos-14.jpg>).
+[Figura: «Las mismas cinco unidades tratadas en tres radios», 100 m = 5 componentes; 200 m = 4 componentes; 300 m = 1 componente. Círculos: unidades tratadas; líneas ocres: traslape directo. En la foto 14](<fotos/Errores Cometidos-14.jpg>).
 
 ## Página 15 — Incidentes en general
 
-[Ver foto 15](<Errores Cometidos-15.jpg>)
+[Ver foto 15](<fotos/Errores Cometidos-15.jpg>)
 
 También es importante tener presente que los efectos que estamos midiendo se entienden como número de incidentes al mes en un área determinada, y que cuando hacemos comparaciones porcentuales es tomando como referencia la media de incidentes mensuales del grupo de control antes del tratamiento. En cada caso se especifica tanto la media como su desviación estándar.
 
 ### Incidentes en general
 
-[Figura: «Tratado × Post por radio | todos los incidentes», con (1) Sin EF ni covariables y (3) EF + covariables × post; dos escalas: incidentes mensuales por unidad y % de la media del control antes. En la foto 15](<Errores Cometidos-15.jpg>).
+[Figura: «Tratado × Post por radio | todos los incidentes», con (1) Sin EF ni covariables y (3) EF + covariables × post; dos escalas: incidentes mensuales por unidad y % de la media del control antes. En la foto 15](<fotos/Errores Cometidos-15.jpg>).
 
 | Radio | Media (DE) del control antes | (1) Coef. | (1) % | (3) Coef. | (3) % |
 |---:|---:|---:|---:|---:|---:|
@@ -464,11 +464,11 @@ Recordemos que es importante prestar atención al tamaño de los coeficientes so
 
 ## Página 16 — Brecha posterior e incidentes menores
 
-[Ver foto 16](<Errores Cometidos-16.jpg>)
+[Ver foto 16](<fotos/Errores Cometidos-16.jpg>)
 
 ...independientemente del radio que evaluemos, ninguna reducción puntual supera el 2.61%, que es la de 250 m.
 
-[Figura: «Brecha posterior: Tratado + Tratado × Post | modelo (1)». Puntos por radio: 100 m +0.16; 150 m -0.03; 200 m -0.06; 250 m -0.08; 300 m +0.05. Todos los intervalos cruzan cero. En la foto 16](<Errores Cometidos-16.jpg>).
+[Figura: «Brecha posterior: Tratado + Tratado × Post | modelo (1)». Puntos por radio: 100 m +0.16; 150 m -0.03; 200 m -0.06; 250 m -0.08; 300 m +0.05. Todos los intervalos cruzan cero. En la foto 16](<fotos/Errores Cometidos-16.jpg>).
 
 Y en cuanto a la brecha que quedó tras el tratamiento podemos notar lo siguiente: para el caso específico de 300 m, los controles tenían una media de incidentes mensual de 6.019 y las tratadas de 6.222, una diferencia de 0.203, mientras que después del tratamiento quedaron controles con 5.366 y tratadas con 5.421, reduciendo la brecha a 0.055, Pero ese cierre de 0.148 es exactamente el coeficiente DiD, no una evidencia adicional, y no es distinguible de cero. Tampoco se repite en los demás radios: a 100 m la brecha se abre (de +0.06 a +0.16) y entre 150 y 250 m cambia de signo, con las tratadas pasando de estar ligeramente arriba a ligeramente abajo de sus controles. Lo que sí se puede decir es que después del tratamiento la brecha entre tratadas y controles no es distinguible de cero en ningún radio.
 
@@ -485,7 +485,7 @@ A 300 m, sin embargo, el estimado final del efecto fue de -0.106 incidentes al m
 
 ### Incidentes menores
 
-[Figura: «Tratado × Post por radio | incidentes sin lesionados (MIN)», (1) Sin EF ni covariables y (3) EF + covariables × post; dos escalas: incidentes mensuales por unidad y % de la media del control antes. En la foto 16](<Errores Cometidos-16.jpg>).
+[Figura: «Tratado × Post por radio | incidentes sin lesionados (MIN)», (1) Sin EF ni covariables y (3) EF + covariables × post; dos escalas: incidentes mensuales por unidad y % de la media del control antes. En la foto 16](<fotos/Errores Cometidos-16.jpg>).
 
 | Radio | Media (DE) del control antes | (1) Coef. | (1) % | (3) Coef. | (3) % |
 |---:|---:|---:|---:|---:|---:|
@@ -503,11 +503,11 @@ También se observa que el efecto tiene su mínimo a 150 m y de ahí el efecto p
 
 ## Página 17 — Incidentes con lesionados, fatales y conclusión
 
-[Ver foto 17](<Errores Cometidos-17.jpg>)
+[Ver foto 17](<fotos/Errores Cometidos-17.jpg>)
 
 ### Incidentes con lesionados
 
-[Figura: «Tratado × Post por radio | incidentes con lesionados (PIC)», (1) Sin EF ni covariables y (3) EF + covariables × post; dos escalas: incidentes mensuales por unidad y % de la media del control antes. En la foto 17](<Errores Cometidos-17.jpg>).
+[Figura: «Tratado × Post por radio | incidentes con lesionados (PIC)», (1) Sin EF ni covariables y (3) EF + covariables × post; dos escalas: incidentes mensuales por unidad y % de la media del control antes. En la foto 17](<fotos/Errores Cometidos-17.jpg>).
 
 | Radio | Media (DE) del control antes | (1) Coef. | (1) % | (3) Coef. | (3) % |
 |---:|---:|---:|---:|---:|---:|
@@ -521,7 +521,7 @@ Aquí se ve algo interesante porque para los efectos puntuales estimados sí se 
 
 ### Incidentes con fallecidos
 
-[Figura: «Tratado × Post por radio | incidentes fatales (FCS)», (1) Sin EF ni covariables y (3) EF + covariables × post; dos escalas: incidentes mensuales por unidad y % de la media del control antes. En la foto 17](<Errores Cometidos-17.jpg>).
+[Figura: «Tratado × Post por radio | incidentes fatales (FCS)», (1) Sin EF ni covariables y (3) EF + covariables × post; dos escalas: incidentes mensuales por unidad y % de la media del control antes. En la foto 17](<fotos/Errores Cometidos-17.jpg>).
 
 | Radio | Media (DE) del control antes | (1) Coef. | (1) % | (3) Coef. | (3) % |
 |---:|---:|---:|---:|---:|---:|
