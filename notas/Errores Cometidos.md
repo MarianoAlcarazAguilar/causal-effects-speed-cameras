@@ -254,7 +254,7 @@ Ya sabíamos que hay unidades que son tan peligrosas que simplemente no son nada
 
 ### Muestra común de 93 tratadas
 
-Consideremos solo aquellas unidades que sabemos que son comparables con al menos alguna otra zona en la ciudad. Aquí se consideran solo las 93 unidades que sabemos que encuentran un match en los 5 radios, pero por ahora solo las vamos a comparar contra el resto de la ciudad. Se incluyen también efectos fijos de componente y tiempo.
+Consideremos solo aquellas unidades que sabemos que son comparables con al menos alguna otra zona en la ciudad. Aquí se consideran solo las 93 unidades que sabemos que encuentran un match en los 5 radios, pero por ahora solo las vamos a comparar contra el resto de la ciudad. Se incluyen también efectos fijos de unidad y tiempo.
 
 ```text
 (4) incidentes ~ treat:post + C(uid) + C(t)
@@ -432,7 +432,7 @@ También vale la pena mencionar que como estamos corriendo un modelo de diff-in-
 
 Algo que tampoco podemos olvidar es que estamos clusterizando por componente tratada y no por unidad. Una componente tratada incluye a todas las unidades tratadas que tengan overlap entre sí para reflejar el hecho de que comparten algunos incidentes y no subestimar el error estándar. La cantidad de clusters varía con cada radio y por construcción la cantidad de componentes tratadas es igual al total de unidades tratadas a 100 metros.
 
-En la figura muestro una componente de 5 tratadas a 300 m para ilustrar cómo cambia con los radios. En estas 5 unidades tratadas, las componentes pasan de 5 → 4 → 1 conforme incrementamos el radio, esto a su vez se refleja en el número total de componentes, que pasan de 93 → 86 → 72 respectivamente. Recordemos que por construcción, no hay traslape entre controles, así que siempre son 99 componentes.
+En la figura muestro una componente de 5 tratadas a 300 m para ilustrar cómo cambia con los radios. En estas 5 unidades tratadas, las componentes pasan de 5 → 4 → 1 conforme incrementamos el radio, esto a su vez se refleja en el número total de componentes, que pasan de 93 → 86 → 72 respectivamente. Recordemos que por construcción, no hay traslape entre controles, así que los 93 controles siempre son 93 componentes.
 
 [Figura: «Las mismas cinco unidades tratadas en tres radios», 100 m = 5 componentes; 200 m = 4 componentes; 300 m = 1 componente. Círculos: unidades tratadas; líneas ocres: traslape directo. En la foto 14](<Errores Cometidos-14.jpg>).
 
@@ -466,11 +466,11 @@ Recordemos que es importante prestar atención al tamaño de los coeficientes so
 
 [Ver foto 16](<Errores Cometidos-16.jpg>)
 
-...independientemente del radio que evaluemos, no se observa una reducción de incidentes menor a 2.61% a 250 m.
+...independientemente del radio que evaluemos, ninguna reducción puntual supera el 2.61%, que es la de 250 m.
 
 [Figura: «Brecha posterior: Tratado + Tratado × Post | modelo (1)». Puntos por radio: 100 m +0.16; 150 m -0.03; 200 m -0.06; 250 m -0.08; 300 m +0.05. Todos los intervalos cruzan cero. En la foto 16](<Errores Cometidos-16.jpg>).
 
-Y en cuanto a la brecha que quedó tras el tratamiento podemos notar lo siguiente: para el caso específico de 300 m, los controles tenían una media de incidentes mensual de 6.019 y las tratadas de 6.222, una diferencia de 0.203, mientras que después del tratamiento quedaron controles con 5.366 y tratadas con 5.421, reduciendo la brecha a 0.055, esto nos muestra que tras el tratamiento controles y tratadas quedaron más similares en nivel de incidentes. Esta historia es similar para el resto de radios.
+Y en cuanto a la brecha que quedó tras el tratamiento podemos notar lo siguiente: para el caso específico de 300 m, los controles tenían una media de incidentes mensual de 6.019 y las tratadas de 6.222, una diferencia de 0.203, mientras que después del tratamiento quedaron controles con 5.366 y tratadas con 5.421, reduciendo la brecha a 0.055, Pero ese cierre de 0.148 es exactamente el coeficiente DiD, no una evidencia adicional, y no es distinguible de cero. Tampoco se repite en los demás radios: a 100 m la brecha se abre (de +0.06 a +0.16) y entre 150 y 250 m cambia de signo, con las tratadas pasando de estar ligeramente arriba a ligeramente abajo de sus controles. Lo que sí se puede decir es que después del tratamiento la brecha entre tratadas y controles no es distinguible de cero en ningún radio.
 
 ```text
 incidentes = media controles antes + treatment + post + treat:post
@@ -531,7 +531,7 @@ Aquí se ve algo interesante porque para los efectos puntuales estimados sí se 
 | 250 m | 0.032 (0.182) | +0.0051 | +15.7% | +0.0060 | +18.6% |
 | 300 m | 0.036 (0.193) | +0.0039 | +10.9% | +0.0041 | +11.6% |
 
-Honestamente esto suena más a ruido que nada, en especial considerando que en el total de accidentes que estamos utilizando solo hay **N** accidentes fatales que representan **X%** del total.
+Honestamente esto suena más a ruido que nada, en especial considerando que en el total de accidentes que estamos utilizando solo hay 411 incidentes fatales a 300 m, el 0.53% de los 77,102 del panel.
 
 Se ve más obvio en la tabla, donde vemos que los datos son compatibles con una reducción del 17.45% hasta un incremento de 37.09% en incidentes fatales al mes.
 
@@ -544,7 +544,6 @@ Se ve más obvio en la tabla, donde vemos que los datos son compatibles con una 
 | (DE) | (0.120) | (0.134) | (0.139) | (0.182) | (0.193) |
 | % de la media del control | -7.71 | 3.42 | -17.40 | 18.61 | 11.62 |
 | IC 95% bootstrap (%) | [-42.14, 51.26] | [-33.35, 51.01] | [-42.29, 55.87] | [-19.37, 36.70] | [-17.45, 37.09] |
-| Efecto mínimo detectable, 80% (%) | 85.9 | 71.8 | 75.1 | 52.6 | 46.2 |
 | Observaciones | 13,392 | 13,392 | 13,392 | 13,392 | 13,392 |
 | R² | 0.035 | 0.032 | 0.029 | 0.029 | 0.029 |
 | Clusters | 186 | 183 | 179 | 171 | 165 |
