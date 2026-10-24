@@ -9,7 +9,7 @@
 - [x] Panel de unidad × periodo, verificado (descuadre 0)
 - [x] Emparejamiento de los cinco radios sobre la muestra común de 93
 - [x] **DiD sin matching** → apéndice de Alberto. −0.525 con 99 tratadas,
-      −0.388 con 93, contra 631 controles disjuntos (lo corrió claude, pero falta generar bien el resultado e interpretarlo)
+      −0.388 con 93, contra 631 controles disjuntos Interpretado como los pasos 3 a 5 de la escalera en `conclusiones.ipynb` §2
 - [x] **Clustering por componente traslapada**: +7% al error estándar a 300 m,
       0% a 100 m 
 - [x] **Robustez X = 50%**: −0.2532 contra −0.2293 del X = 60% libre. Un octavo
@@ -18,15 +18,26 @@
       Ver la nota al final
 - [x] **Las 60 estimaciones**: 5 radios × 4 niveles × 3 especificaciones, en el
       notebook y en `pipeline/estimacion.py`, verificadas una contra otra
-- [x] **Bootstrap del proceso completo**, 500 repeticiones. Los dos intervalos
-      cruzan cero: a 300 m [-6.2%, +1.7%], y PIC a 100 m [-4.2%, +13.9%]. El
-      único resultado significativo de las 60 **no sobrevive**: el estimado
-      original queda en el percentil 84 de su propia distribución bootstrap y la
-      repetición típica da la mitad del efecto. A 300 m el error estándar del
-      bootstrap es 0.69x el analítico, o sea que la fórmula era conservadora —la
-      dirección que predicen Abadie e Imbens
-- [x] Caracterización de las 6 unidades que el trimming descarta: ~13.5
-      incidentes/mes contra 6.22 las que se quedan
+- [x] **Bootstrap del proceso completo**, 2,000 repeticiones por radio, en los
+      cinco radios, los cuatro niveles y las especificaciones (2) y (3). En la
+      (3), a 300 m con todos los incidentes, el intervalo es [-6.0%, +2.2%]. El
+      único resultado significativo de las 60, PIC a 100 m, **no sobrevive**: su
+      intervalo es [-4.5%, +13.4%], el estimado original queda en el percentil 87
+      de su propia distribución bootstrap y la repetición típica da menos de la
+      mitad del efecto. A 300 m el error estándar del bootstrap es 0.72x el
+      analítico, o sea que la fórmula era conservadora, la dirección que predicen
+      Abadie e Imbens
+- [x] Caracterización de las 6 unidades que el trimming descarta: 13.5
+      incidentes/mes contra 6.22, las seis con al menos un fatal, más carriles,
+      más acceso controlado y el triple de afluencia de metro. Con figura, en
+      `conclusiones.ipynb` §1
+- [x] **Interpretación completa**, en `conclusiones.ipynb`: la escalera de siete
+      pasos, el efecto por nivel, la pandemia (serie mensual, casetas y efecto por
+      año) y las limitaciones. Al inicio del notebook hay una tabla con el capítulo
+      al que va cada sección
+- [x] **Event study** por años, en los cinco radios, en `conclusiones.ipynb` §6.
+      Ningún coeficiente previo se distingue de cero; la prueba conjunta da p
+      entre 0.54 y 0.99
 
 ---
 
@@ -111,10 +122,9 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       Es el cuarto punto de la lista de Alberto. No va como principal: son 568
       parámetros contra 165 clusters.
 
-- [x] **4. Bootstrap del proceso completo.** Hecho en `bootstrap.ipynb`, 500
-      repeticiones, sobre 300 m con todos los incidentes y sobre 100 m con PIC.
-      Pendiente menor: subirlo a 2,000 repeticiones para estabilizar los
-      percentiles, y decidir si se corre en más combinaciones.
+- [x] **4. Bootstrap del proceso completo.** Hecho en `bootstrap.ipynb`, 2,000
+      repeticiones en las 40 combinaciones. Los coeficientes quedan en
+      `data/bootstrap-coeficientes.parquet`.
 
 ---
 
@@ -132,9 +142,9 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   | Atributos físicos de la red vial | Los máximos y binarias (`max_carriles`, `both_directions`, `via_acc_cont`, `max_nivel`) pasan a proporciones ponderadas por metros de vía; `via_primaria` sale porque es 1 menos `% acceso controlado`. Sale de `feature-design.ipynb` |
   | Proxies de movilidad | La afluencia se mide con las estaciones **dentro** del círculo, no la más cercana, y sin dividir entre el volumen de las casetas. Salen `std_afluencia_mensual` y `distance_to_station` |
   | Construcción de variables para el matching | Las 12 covariables con sus ventanas de tres años contadas desde el 22 de abril |
-  | Estaciones de conteo permanente | El volumen de las casetas ya no se usa, ni como tasa ni como control: los efectos fijos de tiempo absorben el choque de movilidad. Hay que decir por qué |
+  | Estaciones de conteo permanente | El volumen de las casetas ya no se usa, ni como tasa ni como control: es una sola serie para toda la ciudad, y los efectos fijos de tiempo la absorben. La redacción ya está en `conclusiones.ipynb` §5 |
   | Uso de la siniestralidad | Las 8 variables de media y desviación estándar pasan a 4, con la tendencia como variable explícita. Quitar la mención de tasas por cada 1,000 vehículos |
-  | Soporte común y recorte | Los umbrales de score por radio se reemplazan por el caliper de 0.2 sd del logit más la intersección de los cinco radios: **93 de 99**. Las 6 que se caen son 2.2 veces más peligrosas |
+  | Soporte común y recorte | Los umbrales de score por radio se reemplazan por el caliper de 0.2 sd del logit más la intersección de los cinco radios: **93 de 99**. Las 6 que se caen son 2.2 veces más peligrosas. Texto y figura en `conclusiones.ipynb` §1 |
   | Evaluación del balance | Las tablas de SMD nuevas, con las mismas 12 covariables en todos los radios. \|SMD\| medio después entre 0.045 y 0.065 |
 
   Y agregar lo que el capítulo viejo no tenía: el control pool sobre la red vial
@@ -174,7 +184,10 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       `tratado + tratado:post` con su error estándar y sus estrellitas; el
       *control mean* con su desviación estándar en cada columna; puntos decimales
       y no comas; y una nota que explique modelo, muestra y unidades de forma que
-      los coeficientes se interpreten sin volver al texto.
+      los coeficientes se interpreten sin volver al texto. La nota incluye una
+      frase sobre la suma: es la brecha después del tratamiento, y como el
+      emparejamiento iguala los niveles previos, coincide aproximadamente con el
+      efecto. No se interpreta en el texto (`conclusiones.ipynb` §4).
 
 - [ ] **6. El estimando, dos párrafos.** Entran 99 unidades, se reportan 93. Las
       6 que se caen no encuentran control dentro del caliper porque no se parecen
@@ -185,7 +198,7 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
 - [ ] **7. La inferencia, un párrafo.** Los errores estándar del DiD después de
       matching no son válidos, y el sesgo puede ir en cualquier dirección. Por eso
       la discusión se apoya en la magnitud. Los números ya están: intervalo de
-      [-6.2%, +1.7%] a 300 m, y el aumento aparente de lesionados a 100 m no
+      [-6.0%, +2.2%] a 300 m, y el aumento aparente de lesionados a 100 m no
       sobrevive. Declarar también que el bootstrap no es formalmente válido para
       vecino más cercano (Abadie e Imbens, 2008) y que la intersección de los
       cinco radios no se remuestrea.
@@ -194,20 +207,24 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       porcentaje de la media del grupo de control; comparación contra los niveles
       pre y post del control; comparación contra los estudios mexicanos ya citados.
 
-  **Una frase obligatoria sobre las tendencias previas.** En las figuras 3 y 3b, la
-  pendiente previa de los controles es un poco mayor que la de las tratadas en
-  los cinco radios (entre 0.4% y 1.6% de la media del control por año). Es chica,
-  pero del mismo signo en todas las columnas y del mismo orden que el efecto
-  estimado, y apunta en la dirección de una reducción aparente: si hubiera seguido
-  después de 2019, por sí sola daría un DiD negativo. Refuerza el nulo en vez de
-  contradecirlo. Redacción sugerida:
+  Casi todo el texto está en `conclusiones.ipynb` §2, §3 y §5, en tono de
+  conclusión; hay que pasarlo a tono de resultados. El event study (§6) va aquí
+  como evidencia del supuesto de identificación.
 
-  > Las pendientes previas muestran una diferencia pequeña y del mismo signo en
-  > los cinco radios: los controles venían creciendo ligeramente más rápido que
-  > las unidades tratadas. Su magnitud es comparable a la de los efectos
-  > estimados y su dirección es la de una reducción aparente, por lo que las
-  > pequeñas reducciones puntuales a 250 y 300 metros no pueden distinguirse de
-  > la continuación de esa diferencia previa.
+  **Una frase obligatoria sobre las tendencias previas.** El event study no
+  rechaza tendencias paralelas, pero sus intervalos son de ±6% a ±8% por año: una
+  diferencia de tendencias del tamaño del efecto no se habría detectado. Por eso
+  cualquier frase que diga que el intervalo descarta reducciones del tamaño de la
+  literatura va condicionada a "bajo el supuesto de tendencias paralelas".
+
+- [ ] **8b. Capítulo 2.** En "Tendencias paralelas", una línea que remita al event
+      study del capítulo 4.
+
+- [ ] **8c. Conclusiones e introducción.** Fusionar las limitaciones y la
+      conclusión de `conclusiones.ipynb` (§7 y §8) con el borrador aparte en
+      `Chapters/5.Conc.tex`. Actualizar el resumen de resultados de la
+      introducción (`0.Intro.tex`, línea 60), que habla de una "caída agregada" y
+      no refleja la escalera.
 
 - [ ] **9. Media cuartilla para Alberto** con lo que cambió además de lo que pidió:
       unidades fusionadas por traslape con grupos fijos a 300 m (que es su punto 1),
@@ -216,27 +233,17 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
 
 ---
 
-## Pregunta pendiente para Alberto
+## Decisiones tomadas sin esperar a Alberto
 
-El correo es ambiguo sobre el bootstrap: en 3a lo recomienda pero ofrece el 3b
-como sustituto, y luego en el resumen dice "haz 3a" y deja el 3b a criterio.
-Se resuelve con una línea:
+Su respuesta tardaría alrededor de un mes, y no hay tiempo. Quedan así, y se le
+explican en la media cuartilla del punto 9:
 
-> Sobre el punto 3a: el bootstrap del proceso completo sí es factible en mi caso
-> porque las covariables están precalculadas. ¿Lo consideras imprescindible, o
-> basta con declarar la limitación si no corro el 3b?
-
-Una segunda, más chica, sobre qué covariables excluir del DiD:
-
-> Dices que van todas las del propensity score menos la dependiente
-> pre-tratamiento. `nivel_incidentes` y `tendencia` salen claramente.
-> ¿`pct_lesionados` y `hubo_fcs` también, por venir de los mismos incidentes
-> previos, o solo las dos primeras?
-
-Mientras no responda, el plan aplica el criterio estricto —nada derivado del
-outcome— y saca las cuatro: entran **8 covariables**, las 7 estructurales más
-`afluencia_nivel`. La versión con 10, que solo saca `nivel_incidentes` y
-`tendencia`, queda como sensibilidad de una línea en el notebook.
+- **Bootstrap.** Se reporta el bootstrap del proceso completo (su 3a) y se
+  declara que no es formalmente válido para vecino más cercano. No se corre
+  Sant'Anna y Zhao (3b).
+- **Covariables del DiD.** Criterio estricto: nada derivado del outcome. Salen
+  `nivel_incidentes`, `tendencia`, `pct_lesionados` y `hubo_fcs`, y entran las
+  **8 covariables**: las 7 estructurales más `afluencia_nivel`.
 
 ---
 
@@ -245,7 +252,7 @@ outcome— y saca las cuatro: entran **8 covariables**, las 7 estructurales más
 | | Por qué |
 | --- | --- |
 | Sant'Anna y Zhao (3b) | *"Tú decide si quieres hacer 3b"*. Necesita R y es un estimador distinto |
-| Event study (4) | *"y/o 4"*, explícitamente opcional. Se reconsideró al ver la diferencia de pendientes previas —es la herramienta que diría si es distinguible de cero— y se dejó fuera por alcance: basta con declararla |
+| HonestDiD (Rambachan y Roth, 2023) | El análisis de sensibilidad formal a violaciones de tendencias paralelas. Necesita R; basta con condicionar la conclusión y citarlo en limitaciones |
 | Regresiones en tasas | El denominador son casetas de peaje en la periferia: no mide exposición del círculo. Los efectos fijos de tiempo ya absorben el choque de movilidad. En su lugar, el efecto en % de la media del control |
 | Robustez con las unidades de borde, un solo nivel vial, y otras semillas | Las dos robusteces que tocaban el diseño de unidades ya están cerradas |
 
