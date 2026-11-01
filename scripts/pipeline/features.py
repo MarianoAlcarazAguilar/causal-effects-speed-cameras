@@ -270,12 +270,14 @@ class Features:
 
     @cached_property
     def crecimiento_metro(self) -> pd.Series:
-        """Crecimiento relativo de la afluencia. Solo para robustez.
+        """Crecimiento relativo de la afluencia. No se usa en la tesis.
 
         NaN donde no hay estación: ahí el crecimiento no es cero, es indefinido,
         y confundirlos le diría al propensity score que "sin estación" es lo
         mismo que "estación con afluencia estable". Solo el 14% de las unidades
-        lo tiene definido, por eso no entra en la muestra principal.
+        lo tiene definido, por eso no entra en la muestra principal. Era para una
+        robustez restringida a las unidades con estación, que quedó fuera de
+        alcance.
         """
         unidades = self.unidades
         dentro = gpd.sjoin(

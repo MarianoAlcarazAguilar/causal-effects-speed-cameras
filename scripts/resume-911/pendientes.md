@@ -12,8 +12,10 @@
       −0.388 con 93, contra 631 controles disjuntos Interpretado como los pasos 3 a 5 de la escalera en `conclusiones.ipynb` §2
 - [x] **Clustering por componente traslapada**: +7% al error estándar a 300 m,
       0% a 100 m 
-- [x] **Robustez X = 50%**: −0.2532 contra −0.2293 del X = 60% libre. Un octavo
-      del error estándar; el umbral no carga el resultado
+- [x] **Robustez X = 50%**: −0.2532 contra −0.2293 del X = 60% libre, en la
+      especificación (2). Un octavo del error estándar; el umbral no carga el
+      resultado. La versión con la (3), que es la de la tesis, está en el apéndice
+      A4 de `interpretation.ipynb`
 - [x] **Robustez reparto cercano**: idéntica al reparto por pesos, exactamente.
       Ver la nota al final
 - [x] **Las 60 estimaciones**: 5 radios × 4 niveles × 3 especificaciones, en el
@@ -41,7 +43,7 @@
 
 ---
 
-## Falta correr — cuatro cosas
+## Corridas
 
 - [x] **1. La especificación principal, en los cinco radios.** Tres columnas,
       en progresión:
@@ -64,7 +66,10 @@
   de qué dummy se omitió, así que no se reporta ni se interpreta. Queda un solo
   coeficiente que leer, la interacción, y significa lo mismo que en la (1).
 
-  Dummies de tiempo y no un simple `post`, porque la ventana incluye la pandemia.
+  Dummies de tiempo y no un simple `post`, por convención: el coeficiente es
+  idéntico con cualquiera de los dos. No es por la pandemia: su parte común la
+  quita el grupo de control, y la parte que les pegó distinto no la quita ningún
+  efecto fijo.
 
   En las tres hay que reportar N, R² y el *control mean* con su desviación
   estándar: los efectos fijos se comen la información de niveles y esa columna es
@@ -158,8 +163,7 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
      estimaba el efecto sobre unidades distintas. Es el punto 1 de Alberto.
   2. **Ninguna covariable medía la tendencia previa.** El balance se revisaba sobre
      las 18, pero ninguna decía si la zona venía subiendo o bajando, que es la
-     dimensión de la que depende el supuesto de tendencias paralelas. Con las
-     definiciones viejas, el SMD de la tendencia queda en 0.216.
+     dimensión de la que depende el supuesto de tendencias paralelas.
   3. **Pares de peor calidad:** sin caliper, y con la distancia en escala 0–1, que
      no discrimina cuando casi todos los scores están pegados a cero.
   4. **`LogisticRegression()` por default** penaliza y no converge sobre variables
@@ -175,9 +179,8 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   por otras razones —redundancia y ruido medidos—, no porque la anterior estuviera
   mal.
 
-  **Pendiente de verificar antes de escribirlo:** la comparación de las 18
-  covariables originales contra las 12 no está en el repo. Se corrió en un
-  scratchpad y se perdió. Si se va a citar, hay que volver a correrla y guardarla.
+  **No se cita** la comparación de las 18 covariables originales contra las 12:
+  se corrió en un scratchpad, no está en el repo, y se decidió no usarla.
 
 - [ ] **5. Las tablas como las pidió Alberto.** Número de observaciones y R² por
       columna; orden tratamiento → interacción → efectos fijos al final; la suma
@@ -253,8 +256,8 @@ explican en la media cuartilla del punto 9:
 | --- | --- |
 | Sant'Anna y Zhao (3b) | *"Tú decide si quieres hacer 3b"*. Necesita R y es un estimador distinto |
 | HonestDiD (Rambachan y Roth, 2023) | El análisis de sensibilidad formal a violaciones de tendencias paralelas. Necesita R; basta con condicionar la conclusión y citarlo en limitaciones |
-| Regresiones en tasas | El denominador son casetas de peaje en la periferia: no mide exposición del círculo. Los efectos fijos de tiempo ya absorben el choque de movilidad. En su lugar, el efecto en % de la media del control |
-| Robustez con las unidades de borde, un solo nivel vial, y otras semillas | Las dos robusteces que tocaban el diseño de unidades ya están cerradas |
+| Regresiones en tasas | El denominador son casetas de peaje en la periferia: no mide exposición del círculo. El choque común de movilidad ya lo absorbe el diseño, porque les pega igual a tratadas y controles. En su lugar, el efecto en % de la media del control |
+| Robustez con las unidades de borde, un solo nivel vial, otras semillas y el crecimiento de la afluencia del Metro | Las dos robusteces que tocaban el diseño de unidades —X = 50% y el reparto cercano— ya están cerradas |
 
 ---
 
@@ -273,9 +276,9 @@ panel sí cambiando. La razón es exacta:
 Comprobado: clusterizando por unidad, que separa a las unidades traslapadas, el
 error estándar sí se mueve (0.18544 → 0.18664).
 
-Hay que corregir la línea de `unit-design.ipynb` que dice *"si los resultados
-aguantan, el reparto no estaba cargando nada"*. No es que aguanten: no pueden
-cambiar. Es una afirmación más fuerte y hay que escribirla así.
+La línea de `unit-design.ipynb` que decía *"si los resultados aguantan, el
+reparto no estaba cargando nada"* ya está corregida. No es que aguanten: no
+pueden cambiar. Es una afirmación más fuerte y así hay que escribirla.
 
 ---
 
