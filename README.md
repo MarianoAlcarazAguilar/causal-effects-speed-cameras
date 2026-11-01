@@ -1,165 +1,126 @@
-# Speed Cameras Thesis: Working Context
+# Tesis: el efecto de las Fotocívicas sobre los incidentes viales
 
-Last updated: 2026-09-11.
+Efecto causal de las cámaras de velocidad de la Ciudad de México sobre los
+incidentes viales, alrededor de la transición de Fotomultas a Fotocívicas el 22
+de abril de 2019. Diferencias en diferencias sobre unidades circulares
+emparejadas por propensity score, en cinco radios de 100 a 300 metros.
 
-This repository contains Mariano's thesis on traffic incidents and speed cameras
-in Mexico City, including the transition from Fotomultas to Fotocivicas on
-April 22, 2019. The existing empirical work uses circular geographic units,
-propensity score matching (PSM), and difference-in-differences (DiD).
+Actualizado: 2026-11-01.
 
-## What we are doing now
+## Estado
 
-**Rebuild the empirical analysis from the existing cleaned inputs, without
-repeating data collection or initial cleaning. Keep the CDMX business-density
-analysis unchanged.**
+**El análisis está cerrado. Lo que falta es redactar.** La lista única de
+pendientes, en orden, está en
+[`scripts/resume-911/pendientes.md`](scripts/resume-911/pendientes.md): primero
+el capítulo 3, después el 4, una línea del 2, las conclusiones con la
+introducción, y la nota para el asesor. La revisión que motivó la reconstrucción
+está en [`revision-alberto.md`](scripts/resume-911/revision-alberto.md).
 
-This is not a restart of the whole thesis. Alberto's feedback says chapters 1
-and 2, and most of chapter 3, are largely ready. The priority is to improve the
-estimation, reporting, and discussion of results.
+El resultado principal es un nulo: ninguno de los 40 intervalos del bootstrap
+excluye el cero. A 300 m, con todos los incidentes, el intervalo va de −6.0% a
++2.2% de la media del grupo de control.
 
-The old scripts and notebooks are references, not an approved new pipeline.
-New estimates have not yet been produced under the revised design. Do not treat
-old matches, panels, or cached objects as the starting sample for the rebuild.
+## Dónde está cada cosa
 
-## Clean inputs to reuse
+**El análisis final, como código** — `scripts/pipeline/`. Cada módulo corre solo
+e imprime sus verificaciones.
 
-These six inputs are tracked in Git (roughly 18 MB combined). Paths are relative
-to the repository root.
-
-| Input | Purpose |
+| Módulo | Qué hace |
 | --- | --- |
-| `data/classified-incidents.parquet` | Filtered and classified incidents, with dates and coordinates; aggregate into the new circles. |
-| `data/fotocivicas-ubicacion-puntos/` | Camera locations. Keep the `.shp`, `.shx`, `.dbf`, and `.prj` files together. |
-| `data/vialidades.json` | Road geometries and attributes. |
-| `data/metro-station-coordinates.parquet` | Metro station coordinates, previously geocoded outside this repository. |
-| `data/afluencia-metro-semanal.parquet` | Processed Metro ridership used by the existing feature builder. |
-| `data/volumen-total-mensual.parquet` | Processed monthly traffic volume for incident rates. |
+| `limpieza.py` | `Datos`: carga y limpia las fuentes, en el CRS métrico |
+| `construir_afluencia.py` | Genera `data/afluencia-metro-diaria.parquet` desde el CSV crudo. Se corre una vez |
+| `unidades.py` | `UnidadesTratadas`: 113 cámaras → 99 unidades, círculos por radio y reparto de incidentes compartidos |
+| `controles.py` | `UnidadesControl`: el pool de controles sobre la red vial |
+| `features.py` | `Features`: las 12 covariables del propensity score |
+| `emparejamiento.py` | `Emparejamiento` y `muestra_comun`: propensity score, emparejamiento y las 93 tratadas comunes a los cinco radios |
+| `estimacion.py` | `Panel` y `tabla_resultados`: el panel y las tres especificaciones del DiD |
 
-Reusing cleaned data also means retaining its existing filtering, classification,
-and time-window decisions. First validate schema, coverage, coordinates, missing
-values, and units. This is a validation step, not a request to clean everything
-again. Changing those decisions may require the original data.
+**El raciocinio y las pruebas** — `scripts/resume-911/`, en el orden en que se
+construyó el análisis. Lo que el pipeline ejecuta, aquí se justifica.
 
-The volume-generation notebook divides volume by 1,000. Verify the saved data
-and resulting rate units before rescaling coefficients; do not assume that the
-old rates are incorrectly scaled.
+| Notebook | Qué contiene |
+| --- | --- |
+| `recap-data` | Exploración de las fuentes |
+| `unit-design` | Diseño de las unidades tratadas |
+| `control-design` | Diseño del pool de controles |
+| `feature-design` | Las 12 covariables y por qué esas |
+| `propensity-score` | Modelo, emparejamiento, balance y figuras de soporte común y tendencias previas |
+| `did-estimation` | Panel y especificaciones del DiD, con la verificación contra el pipeline |
+| `bootstrap` | Bootstrap del proceso completo. Tarda unos 75 minutos y guarda su resultado en `data/bootstrap-coeficientes.parquet` |
+| `interpretation` | La escalera de modelos, de la comparación ingenua al modelo final, y las tablas de la tesis |
+| `efecto-por-anio` | El efecto por año del periodo posterior |
+| `conclusiones` | Redacción de las conclusiones, con sus figuras. Al inicio dice a qué capítulo va cada sección |
+| `auxiliary-figures` | Figuras auxiliares |
 
-## Preserve the business-density analysis
+**Lo demás:**
 
-Reference notebook: `scripts/writing/mexico-city-business-density.ipynb`.
+| Ubicación | Qué es |
+| --- | --- |
+| `causal-effects-speed-cameras/` | Las fuentes en LaTeX (`main.tex`, `Chapters/`). Los capítulos 3 y 4 todavía describen el análisis anterior |
+| `figures/` | Las figuras de la tesis, en SVG |
+| `notas/` | Transcripción de apuntes: conclusiones y errores cometidos |
+| `nbsetup.py` | Arranque de los notebooks |
+| `scripts/*.py`, `scripts/auxiliar/`, `scripts/writing/` | La versión anterior del análisis. Quedan como referencia; el análisis actual no los usa. `google_places_aggregate.py`, `places_api.py` y `test_response_structure.py` son del análisis de densidad de negocios |
 
-Preserve its existing inputs and outputs separately:
+## Cómo correrlo
 
-- `data/raw-data/businesses-cdmx.json`: saved Google business-count responses.
-  Requerying today would not reproduce the same historical counts.
-- `data/localidadurbana/`: boundary shapefile used for geographic coverage.
-- The existing `data/classified-incidents.parquet`: this analysis uses incidents
-  to select its hexagons. Do not overwrite this snapshot with a new cleaning.
+El entorno es el de conda `tesis-cameras`. No hay un archivo de entorno fijado.
+
+Cada notebook empieza con `from nbsetup import *`, que deja el directorio de
+trabajo en la raíz del repo e importa lo de siempre. Funciona desde cualquier
+carpeta gracias a un archivo `.pth` en el entorno, que es local a esta máquina:
+en otra, hay que crearlo o agregar la raíz del repo al `PYTHONPATH`.
+
+Los módulos del pipeline corren solos, por ejemplo
+`python scripts/pipeline/estimacion.py`. Los notebooks corren de principio a fin
+con `jupyter nbconvert --execute`. El único lento es el bootstrap, y como su
+resultado está versionado, ningún otro notebook necesita volver a correrlo.
+
+## Insumos versionados
+
+Unos 20 MB en total.
+
+| Archivo | Qué es |
+| --- | --- |
+| `data/classified-incidents.parquet` | Incidentes viales del C5, clasificados en MIN, PIC y FCS |
+| `data/vialidades.json` | Red vial primaria y de acceso controlado |
+| `data/fotocivicas-ubicacion-puntos/` | Ubicación de las 113 cámaras |
+| `data/stcmetro_shp/` | Estaciones y líneas del Metro. Cada shapefile con sus archivos hermanos: sin el `.prj` se pierde el CRS |
+| `data/afluencia-metro-diaria.parquet` | Afluencia diaria del Metro, generada desde el CSV crudo, que no está versionado |
+| `data/volumen-total-mensual.parquet` | Volumen de las casetas de peaje. No entra a la estimación; solo a la figura de la pandemia |
+| `data/bootstrap-coeficientes.parquet` | Resultado del bootstrap: 80,000 coeficientes |
+
+## Preservar el análisis de densidad de negocios
+
+Notebook: `scripts/writing/mexico-city-business-density.ipynb`. No forma parte de
+la reconstrucción y se conserva tal cual, con sus propios insumos:
+
+- `data/raw-data/businesses-cdmx.json`: las respuestas de Google guardadas.
+  Volver a consultarlas hoy no reproduciría los conteos históricos.
+- `data/localidadurbana/`: el shapefile de cobertura geográfica.
+- `data/classified-incidents.parquet`: el análisis lo usa para elegir sus
+  hexágonos. No sobrescribirlo con una limpieza nueva.
 - `data/vialidades.json`.
-- `data/graphs/establecimientos-en-la-cdmx.png` and
+- `data/graphs/establecimientos-en-la-cdmx.png` y
   `data/graphs/distribucion-establecimientos-cdmx-hexagonos.png`.
 
-**The business JSON, boundary layer, and figures are currently ignored by Git.**
-A fresh clone contains the notebook but not everything required to reproduce
-this part. Keep an external backup; do not delete these local files.
+**El JSON de negocios, el shapefile de cobertura y esas figuras no están
+versionados.** Un clon trae el notebook pero no todo lo necesario para
+reproducirlo. Hay que tener un respaldo externo y no borrar esos archivos
+locales.
 
-## Advisor feedback: priorities
+## Git y respaldos
 
-The following records Alberto's requested changes, not completed work:
+El remoto es `git@github-personal:MarianoAlcarazAguilar/causal-effects-speed-cameras.git`,
+con la cuenta personal. El `.gitignore` es una lista de permitidos: un archivo
+nuevo queda fuera hasta que se agrega explícitamente.
 
-1. **Comparable samples across radii.** Use the strictest trimming for the main
-   radius comparisons. State that the estimand is an ATT for the retained treated
-   sample, not automatically all camera locations. Radius-specific trimming can
-   be a robustness exercise in an appendix.
-2. **Clear tables.** Report observations, R-squared, control means and standard
-   deviations, coefficient units, and model/sample notes. Put treatment and its
-   time interaction first and fixed-effect indicators last. Report relevant
-   coefficient sums with their uncertainty and significance. Use decimal points
-   and readable rate scales.
-3. **Adjusted PSM + DiD.** Keep matching without replacement and clustering by
-   geographic unit. Add pre-treatment propensity-score covariates interacted
-   with post-treatment or time indicators. Alberto excludes the pre-treatment
-   outcome from this added-control specification. These adjustments do not by
-   themselves establish that all matching-related uncertainty is accounted for.
-4. **Broader interpretation.** Discuss coefficient magnitudes even when they are
-   statistically insignificant, relative to control outcomes and comparable
-   Mexican studies. Include unmatched DiD as an appendix comparison.
+Quedan fuera los datos crudos, los grids, emparejamientos y paneles del análisis
+anterior, `data/pickle_objects/`, los PDF y los respaldos. Un clon no es un
+archivo completo: los datos originales y la extracción manual del volumen
+vehicular hay que respaldarlos aparte. Los archivos `.gsheet` son enlaces, no
+respaldos de sus hojas.
 
-Optional extensions: doubly robust DiD based on Sant'Anna and Zhao (2020), and
-an event study. Package/estimator choice still needs to be checked against the
-actual panel and treatment timing; it has not been implemented.
-
-## Design decisions still open
-
-- Define fixed centers and stable IDs before comparing radii. The proposal is
-  to examine overlaps at the largest radius, possibly group nearby cameras,
-  and check camera inclusion at the smallest radius. **No grouping or exclusion
-  rule has been finalized.** Excluding a camera from the sample does not remove
-  its potential influence on nearby controls.
-- Decide how to generate candidate controls. The old approach uses a grid and
-  removes camera-containing circles; the new eligibility and buffer rules are
-  still pending.
-- Fixed centers alone do not guarantee the same comparison: eligibility,
-  trimming, matching, and missing-data filters can still change included IDs
-  and weights. Explicitly check the retained sample at every radius.
-- Decide how to handle the April 22 treatment date in monthly outcomes,
-  especially the partially treated month of April 2019.
-- Ensure eligible unit-period combinations with zero incidents remain in the
-  panel, rather than disappearing during aggregation.
-- Audit coefficient labels and table exports against the fitted models. Do not
-  mix estimates, standard errors, or p-values from different specifications.
-
-## Next work sequence
-
-- [ ] Validate and freeze the six cleaned inputs, documenting units and coverage.
-- [ ] Finalize centers, camera grouping, and control eligibility rules.
-- [ ] Construct circles at all radii with stable unit IDs.
-- [ ] Rebuild incident counts, covariates, and a complete unit-time panel.
-- [ ] Define and verify the common retained sample for radius comparisons.
-- [ ] Estimate the main model and required robustness specifications.
-- [ ] Produce consistent tables and interpret magnitudes.
-- [ ] Update estimation and results sections of the thesis.
-- [ ] Decide whether to add doubly robust DiD and/or an event study.
-
-## Repository map and execution status
-
-| Location | Role |
-| --- | --- |
-| `causal-effects-speed-cameras/main.tex` | Thesis entry point. |
-| `causal-effects-speed-cameras/Chapters/` | Chapter sources. |
-| `scripts/auxiliar/` | Earlier data preparation and exploration notebooks. |
-| `scripts/grid_builder.py` | Existing geographic-unit construction code. |
-| `scripts/ps_features_builder.py` | Existing feature construction code. |
-| `scripts/ps_matching.py` | Existing matching code. |
-| `scripts/effect_estimation.py` | Existing estimation code. |
-| `scripts/writing/` | Analysis and thesis-output notebooks. |
-| `repaso-tesis/index.html` | Local interactive refresher, including module 0; not tracked. |
-
-There is not yet a verified, single-command rebuild or a pinned environment for
-the revised analysis. Some notebooks contain old relative paths and manual
-steps. Run future work with explicit project-relative paths and record the
-environment rather than assuming the historical notebooks execute unchanged.
-
-## Git and backups
-
-Remote: `git@github.com:MarianoAlcarazAguilar/causal-effects-speed-cameras.git`.
-
-Git tracks this README, selected LaTeX sources and bibliography/style files,
-analysis scripts/notebooks, and the six cleaned inputs. `.gitignore` uses an
-allowlist: new files are ignored unless explicitly allowed.
-
-Raw data, old grids/matches/panels, `data/pickle_objects/`, most figures, PDFs,
-local tutorials, and backups are intentionally excluded. The original sources
-and manual traffic-volume extraction should still be backed up externally.
-`.gsheet` files are links, not standalone backups of their spreadsheets.
-
-A clone is therefore not a complete archive, and may lack figures required to
-compile the thesis. Old Git history may still contain files excluded from the
-current tree.
-
-Do not delete local data as part of routine cleanup, overwrite the business
-snapshot, or commit credentials. A Google API key was found in the versioned
-business notebook; rotation and removal remain pending until confirmed.
-
-When resuming work, read this README first, inspect `git status`, and update the
-decisions and checklist as work is actually completed.
+**Pendiente de seguridad:** en el notebook versionado de densidad de negocios
+apareció una llave de la API de Google. Rotarla y quitarla del historial sigue
+pendiente hasta confirmarlo.
