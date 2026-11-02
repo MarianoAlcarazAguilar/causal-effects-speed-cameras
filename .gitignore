@@ -13,6 +13,9 @@
 !/figures/brecha-posterior-*.svg
 !/figures/componente-tratado-100-200-300.svg
 !/figures/conclusion-*.svg
+# Script de las figuras de la introducción: sus datos no tienen otra copia.
+!/figures/scripts/
+!/figures/scripts/intro_figures.py
 
 !/causal-effects-speed-cameras/
 !/causal-effects-speed-cameras/**/
