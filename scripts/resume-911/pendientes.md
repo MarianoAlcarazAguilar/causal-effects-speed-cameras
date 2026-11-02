@@ -198,7 +198,9 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       que las que sí entran. El estimando es el ATT sobre las unidades tratadas
       con soporte común en las cinco escalas, y excluye los cruces más peligrosos.
 
-- [ ] **7. La inferencia, un párrafo.** Los errores estándar del DiD después de
+- [ ] **7. La inferencia, un párrafo.** *El diseño (clusters por componente y
+      bootstrap del proceso completo) ya está en la 2.3; la 2.3 promete que las
+      limitaciones van en las conclusiones.* Los errores estándar del DiD después de
       matching no son válidos, y el sesgo puede ir en cualquier dirección. Por eso
       la discusión se apoya en la magnitud. Los números ya están: intervalo de
       [-6.0%, +2.2%] a 300 m, y el aumento aparente de lesionados a 100 m no
@@ -220,19 +222,92 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   cualquier frase que diga que el intervalo descarta reducciones del tamaño de la
   literatura va condicionada a "bajo el supuesto de tendencias paralelas".
 
-- [ ] **8b. Capítulo 2.** En "Tendencias paralelas", una línea que remita al event
-      study del capítulo 4.
+- [x] **8b. Capítulo 2.** En "Tendencias paralelas", una línea que remita al event
+      study del capítulo 4. Hecho, y el diseño del event study y del efecto por año
+      quedó descrito en la 2.3.
 
 - [ ] **8c. Conclusiones e introducción.** Fusionar las limitaciones y la
       conclusión de `conclusiones.ipynb` (§7 y §8) con el borrador aparte en
-      `Chapters/5.Conc.tex`. Actualizar el resumen de resultados de la
-      introducción (`0.Intro.tex`, línea 60), que habla de una "caída agregada" y
-      no refleja la escalera.
+      `Chapters/5.Conc.tex`. El resumen de resultados de la introducción ya se
+      actualizó (PR #16).
 
 - [ ] **9. Media cuartilla para Alberto** con lo que cambió además de lo que pidió:
       unidades fusionadas por traslape con grupos fijos a 300 m (que es su punto 1),
       covariables de 18 a 12 con la medición que lo respalda, y reparto de
       incidentes compartidos. Sin esto, los puntos 1–8 le llegan sin contexto.
+
+---
+
+## Anotado al revisar los capítulos 1 y 2 (2026-11-01)
+
+Lo que salió del texto, o que el texto ya promete, y tiene que aparecer en otro
+lugar. Va por destino.
+
+**Capítulo 3**
+
+- El detalle del emparejamiento que la 2.3 manda aquí: logit por Newton, sin
+  penalización y con covariables estandarizadas; vecino más cercano 1:1 sin
+  reemplazo sobre el logit, caliper de 0.2 sd, desempate por Mahalanobis y dos
+  radios de separación entre controles.
+- Soporte común: 93 de 99 y las 6 excluidas (2.2 veces más peligrosas). La 2.3.1
+  dice que aquí se explica "cuántas áreas quedan fuera y en qué se distinguen".
+- Balance: \|SMD\| medio después de 0.045 a 0.065, pero el máximo llega a 0.268
+  a 200 m y quedan de 1 a 3 covariables arriba de 0.1 por radio. No decir
+  "desbalances pequeños" sin matiz; la 2.3.4 ya justifica las covariables × post
+  con ese desbalance residual.
+- La definición exacta de `tendencia`: incidentes del año −1 menos los del año −3.
+  La 2.2.2 solo dice "la tendencia de los incidentes en los tres años previos".
+- `afluencia_nivel` vale 0 en las áreas sin estación dentro, que son la mayoría
+  (solo ~14% tiene estación, según el docstring de `crecimiento_metro`; no
+  verificado sobre las 93 parejas). La 2.1.3 la presenta como aproximación a la
+  movilidad local.
+- La sección "Tratamiento" del capítulo 3 repite lo que ya dice la 2.2.3 (113
+  cámaras → 99 unidades, umbral de 60%, centros fijos, reparto 1/k, pool de
+  14,656). Acortarla y remitir a la 2.2.3.
+- Que $Y_{it}$ no es entero por el reparto de incidentes compartidos, y por qué el
+  modelo es lineal (la 2.3.4 dice "lineal, por MCO" sin más). Que las covariables
+  del DiD se estandarizan y sus coeficientes no se reportan.
+- Por qué no se usan las casetas: la 2.1.3 ya lo dice en corto; aquí va el
+  detalle (`conclusiones.ipynb` §5).
+
+**Capítulo 4**
+
+- La escalera de alternativas (before–after, DiD contra todos, PSM): la 2.3.2
+  promete que se estiman aquí.
+- El event study y el efecto por año: la 2.2.2 y la 2.3.6 prometen los resultados
+  aquí.
+- La figura de la pandemia con las casetas: la 2.1.3 dice que las casetas "se usan
+  únicamente para describir la magnitud de la caída". Si la figura no entra, esa
+  frase sobra.
+- Reportar $\beta$ también como % de la media previa del control (lo promete la
+  2.3.4) y las tres especificaciones en progresión.
+- El radio se lee como "efecto dentro de un área", no "a una distancia" (2.2.3):
+  cuidarlo al describir el gradiente por radio.
+
+**Conclusiones**
+
+- El efecto canguro: el capítulo 2 lo desarrolla y las conclusiones nunca lo
+  retoman. Se puede retomar con el gradiente por radio.
+- Las limitaciones del bootstrap (Abadie e Imbens; las 93 fijas en cada
+  repetición), que la 2.3.5 manda aquí.
+- La tensión de las sanciones cívicas (capítulo 1): siguen la guía de no parecer
+  recaudatorias, pero pueden restar fuerza disuasiva. Conecta con por qué no hay
+  efecto.
+- Opcional: usar el emparejamiento para elegir dónde expandir el programa. Se
+  quitó de la 2.3 porque estaba condicionado a encontrar un efecto.
+
+**Bibliografía y forma**
+
+- Falta Angrist y Pischke (2009) en `Referencias/hack.tex`; se cita en la 2.2.1.
+- Comillas rectas `"x"` en el resto de la tesis: arreglo global al final.
+- La sección de aportaciones de la introducción mezcla primera persona e
+  impersonal.
+
+**Lo que se borró del capítulo 2 y no hay que reponer**: la figura
+`trend_mean_accidents_50.png` (era la imagen faltante que rompía la compilación),
+los placebos a 18/12/6 meses con 144 coeficientes, el radio de 50 m, las tasas y
+la justificación del 1:1 por "pruebas de balance" con 1:k, que no se repitió en el
+análisis nuevo.
 
 ---
 
