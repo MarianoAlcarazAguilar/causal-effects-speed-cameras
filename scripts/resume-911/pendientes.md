@@ -135,7 +135,7 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
 
 ## Falta escribir
 
-- [ ] **10. Reescribir el capítulo 3. Va primero.** Alberto lo dio casi por bueno,
+- [x] **10. Reescribir el capítulo 3. Va primero.** Hecho el 2026-11-02 (rama `capitulo-3`). Alberto lo dio casi por bueno,
       pero describe unidades, covariables, modelo y trimming que ya no existen, e
       incluso menciona un radio de 50 m que ya no se analiza. Es el cambio más
       grande que va a encontrar, y sin él los resultados del capítulo 4 no tienen
@@ -269,6 +269,24 @@ lugar. Va por destino.
   del DiD se estandarizan y sus coeficientes no se reportan.
 - Por qué no se usan las casetas: la 2.1.3 ya lo dice en corto; aquí va el
   detalle (`conclusiones.ipynb` §5).
+
+*Todo lo de arriba quedó cubierto en la reescritura del 2026-11-02. La 2.2.3 se
+dejó general y la especificación completa (60%, conteos, pool) vive en el 3.*
+
+**Anotado al reescribir el capítulo 3 (2026-11-02)**
+
+- Casetas: su fuente (Datos Viales de la SICT) va en el pie de la figura de la
+  pandemia del capítulo 4, no en el 3. Las entradas `Ruiz`, `Jiménez`, `Nuño`,
+  `Esteva` y `Arganis` de la bibliografía ya solo se citarían ahí.
+- Estilo de las figuras: hay un estilo nuevo tipo artículo (`figures/tesis.mplstyle`,
+  Latin Modern como el texto, grises, sin títulos). Ya lo usan las tres figuras
+  del capítulo 3. Si Mariano lo aprueba, rehacer con él las de la introducción,
+  el capítulo 2 y el 4.
+- La ventana de incidentes termina el 2022-04-21 a las 00:00 (`timestamp <=
+  TO_DATE` en `auxiliar/2-data-cleaning`): el último periodo no trae el día 21.
+  Un día de 2,191; no se corrigió.
+- latexdiff del visor no compila el capítulo 3 porque se reescribió entero; para
+  revisarlo, usar «Lado a lado».
 
 **Capítulo 4**
 
