@@ -1,0 +1,41 @@
+# Estilo de las figuras de la tesis: el de un artículo de economía.
+# La tipografía es la del texto (Latin Modern, 11 pt en el cuerpo), sin títulos
+# dentro de la figura (van en el \caption) y en escala de grises con un solo
+# acento. Las fuentes viven en figures/fonts y se registran en estilo_tesis.py.
+
+font.family        : serif
+font.serif         : Latin Modern Roman
+mathtext.fontset   : cm
+axes.formatter.use_mathtext : True
+font.size          : 9
+axes.labelsize     : 9
+xtick.labelsize    : 8
+ytick.labelsize    : 8
+legend.fontsize    : 8
+
+axes.spines.top    : False
+axes.spines.right  : False
+axes.linewidth     : 0.6
+axes.edgecolor     : black
+axes.labelcolor    : black
+axes.titlesize     : 9
+axes.titlelocation : left
+axes.prop_cycle    : cycler('color', ['333333', 'A6A6A6', '8C2D2D'])
+
+xtick.direction    : out
+ytick.direction    : out
+xtick.major.width  : 0.6
+ytick.major.width  : 0.6
+xtick.major.size   : 3
+ytick.major.size   : 3
+xtick.color        : black
+ytick.color        : black
+
+legend.frameon     : False
+lines.linewidth    : 1.0
+
+figure.dpi         : 150
+savefig.dpi        : 300
+savefig.bbox       : tight
+savefig.pad_inches : 0.02
+pdf.fonttype       : 42

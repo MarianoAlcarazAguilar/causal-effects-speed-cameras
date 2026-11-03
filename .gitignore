@@ -16,6 +16,14 @@
 # Script de las figuras de la introducción: sus datos no tienen otra copia.
 !/figures/scripts/
 !/figures/scripts/intro_figures.py
+# Figuras del capítulo 3 y el estilo común de las figuras de la tesis.
+!/figures/scripts/capitulo3_figures.py
+!/figures/scripts/estilo_tesis.py
+!/figures/tesis.mplstyle
+!/figures/fonts/
+!/figures/fonts/*.otf
+# Figuras del capítulo 4 (resultados), aún sin incluir en 4.Results.tex.
+!/figures/scripts/capitulo4_figures.py
 
 !/causal-effects-speed-cameras/
 !/causal-effects-speed-cameras/**/

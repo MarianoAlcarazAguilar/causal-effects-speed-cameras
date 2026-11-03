@@ -1,221 +1,263 @@
 \chapter{Datos y balance}
+\label{chap:datos}
 
-\noindent Para que el análisis del impacto del programa de fotocívicas en la seguridad vial de la Ciudad de México sea factible y estadísticamente robusto, es necesario integrar diversos conjuntos de datos abiertos, organizados en tres categorías fundamentales para la inferencia causal: \textit{treatment}, \textit{outcomes} y \textit{covariates}. El tratamiento se define a partir de la ubicación geográfica de los 113 radares de velocidad registrados por la Secretaría de Seguridad Ciudadana (SSC), lo que permite identificar de manera explícita las unidades espaciales intervenidas por la política. En cuanto a los resultados (\textit{outcomes}), estos corresponden a los incidentes viales confirmados en los registros del C5, analizados tanto en números absolutos como en tasas por cada 1{,}000 vehículos. Esta construcción posibilita una desagregación por nivel de severidad, distinguiendo entre incidentes menores (MIN), con lesiones personales (PIC) y aquellos con víctimas fatales (FCS).\\
+\noindent Este capítulo describe los datos con los que se construye el análisis y la muestra sobre la que se estima el efecto de las cámaras. La primera sección presenta las fuentes, organizadas según el papel que cumple cada variable: el tratamiento, la siniestralidad, la infraestructura vial y el Metro. Para cada fuente se describe qué contiene, cómo se limpió y qué variables se construyen a partir de cada una. La segunda sección especifica cómo se construyen las unidades tratadas y los controles, y cuántas unidades quedan en cada paso. La tercera describe el modelo del \emph{propensity score} y las reglas del emparejamiento, y evalúa el soporte común y el balance de la muestra final. La última contiene las limitaciones de los datos.
 
-Las covariables (\textit{covariates}) cumplen un papel central en el control de los factores que influyen en la asignación de las cámaras y en la garantía de comparabilidad entre unidades mediante el cálculo del \textit{propensity score}. Para ello, se consideran atributos estáticos, que describen la configuración física e invariable de la red vial (jerarquía, número de carriles, sentido y nivel de la traza), así como variables que cambian en el tiempo, empleadas como \textit{proxies} de movilidad para capturar las variaciones en la exposición vehicular asociadas a la pandemia de COVID-19. En particular, la integración de la afluencia diaria del Metro y los volúmenes de tránsito mensual reportados por la SICT contribuye a mitigar sesgos derivados de choques exógenos, y sienta las bases para la implementación de un diseño de diferencias en diferencias aplicado sobre una muestra emparejada con soporte común.
+\section{Fuentes y variables}
 
-\section{Tratamiento: Programa de Fotoc\'ivicas}
-El objetivo central de este análisis es identificar el efecto causal de las cámaras de velocidad sobre el número de incidentes viales en la Ciudad de México. Para ello, resulta indispensable contar con la ubicación geográfica precisa de los radares, ya que estos puntos determinan la delimitación de las áreas consideradas como unidades tratadas y sirven como base para la construcción de las unidades de control en el modelo de emparejamiento. A diferencia del esquema previo de fotomultas, la ubicación de estos dispositivos es de acceso público, decisión que se alinea con la naturaleza preventiva del programa de fotocívicas, vigente desde el 22 de abril de 2019. Esta transparencia busca propiciar un cambio genuino en las conductas de los conductores al incentivar el respeto a los límites de velocidad mediante la localización explícita de los equipos, privilegiando la educación vial por encima de la recaudación económica.\\
+\subsection{Tratamiento}
 
-De acuerdo con los registros de la Secretaría de Seguridad Ciudadana (SSC), el tratamiento se define a partir de un total de 113 radares de velocidad distribuidos en las principales vialidades de la ciudad. La información se obtiene del conjunto de datos \textit{``Fotoc\'ivicas (Ubicación)''}, publicado en la Plataforma de Datos Abiertos de la Ciudad de México y actualizado por última vez el 6 de julio de 2023. Este conjunto proporciona variables clave para el análisis geoespacial, entre ellas el nombre de la vialidad, el sentido de circulación sobre el cual opera la cámara y sus coordenadas exactas (latitud y longitud). A partir de estos insumos se define operativamente la variable binaria \texttt{has\_camera} a nivel de celda o área circular, lo que permite identificar la exposición espacial al tratamiento y sienta las bases para la posterior implementación del diseño de diferencia en diferencias.
+\noindent La ubicación de las cámaras proviene del conjunto de datos \emph{Fotoc\'ivicas (Ubicación)} de la Secretaría de Seguridad Ciudadana (SSC, 2023), publicado en el portal de datos abiertos de la Ciudad de México. Para cada una de las 113 cámaras del programa reporta la vialidad, el cruce en el que se encuentra, el sentido de circulación que vigila y sus coordenadas. A diferencia del esquema de fotomultas, la ubicación de las cámaras de fotocívicas es pública, lo que permite identificar con precisión las zonas tratadas.\\
 
-% aquí está pendiente además mostrar cómo se ve un ejemplo concreto de una unidad tratada y la construcción de sus controles aledaños para que la gente pueda entender a qué es a lo que me estoy refiriendo. También falta detallar que has camera es una variable binaria con valores 0 y 1, para cuando no tienen cámara de velocidad y cuando sí la tienen respectivamete. 
+Las 113 cámaras se conservan sin limpieza. Tres pares de cámaras comparten exactamente la misma coordenada.\footnote{Son los registros 7 y 8, ambos descritos en el cruce de Insurgentes y Eje 1 Norte, en Buenavista; 5 y 25, descritos en Universidad y Miguel Ángel de Quevedo y en Eje 5 Sur y Anillo Periférico Oriente, y 52 y 53, descritos sobre la Autopista Urbana Norte a la altura de Constituyentes y de Ejército Nacional. En los dos últimos pares, la coordenada coincide con el cruce de la primera cámara: está a 40 metros de la estación Miguel Ángel de Quevedo del Metro y a 200 metros del cruce de Constituyentes con el Periférico. Los cruces descritos para las cámaras 25 y 53 están a 13 y 4 kilómetros de la coordenada, respectivamente.} En el primer par se trata de dos cámaras en el mismo cruce, una para cada sentido. En los otros dos, el cruce que describe la fuente para una de las cámaras está a varios kilómetros de la coordenada registrada, es decir, la fuente le asignó la coordenada de la otra cámara. Como no hay forma de conocer su ubicación exacta, cada par se trata como cualquier otro par de cámaras cercanas: se agrupan en una sola unidad tratada (sección~\ref{sec:unidades}).\\
 
-\section{Covariables Geográficas, Estructurales y de Movilidad}
-Para mitigar el sesgo de selección inherente al programa de Fotoc\'ivicas -- donde los radares se ubican estratégicamente en tramos con mayor siniestralidad, altos volúmenes de traslado y recurrente incumplimiento de límites de velocidad -- es necesario controlar por las características estructurales de la vía. A continuación se describen las covariables de los atributos físicos de la red vial, construidas a partir del conjunto de datos \textit{Vialidades primarias de la Ciudad de México} proporcionado por la Secretaría de Movilidad (SEMOVI). 
+A partir de estas ubicaciones se define el indicador de tratamiento $T_i$, que vale uno si el área $i$ contiene al menos una cámara y cero si es un control.
 
-\subsubsection{Atributos físicos de la red vial}
+\subsection{Siniestralidad}
 
-\begin{itemize}
-    \item \textbf{Número de vialidades (\textit{n\_vialidades}):} 
-    Esta variable contabiliza el número de ejes viales únicos que intersectan cada unidad de análisis. Permite controlar por la densidad de la red y la complejidad de la conectividad local, factores que elevan la probabilidad de conflictos vehiculares y, por ende, la probabilidad de que la autoridad asigne una cámara en dicho punto.
+\noindent Los incidentes viales provienen del conjunto de datos \emph{Incidentes viales reportados por C5} del Centro de Comando, Control, Cómputo, Comunicaciones y Contacto Ciudadano de la Ciudad de México (C5, 2024). Cada registro corresponde a un folio de atención, con su fecha, hora, coordenadas, tipo de incidente y la clasificación con la que se cerró. Se prefiere esta fuente frente a los registros de la SSC por dos razones. La primera es su cobertura temporal: los datos de la SSC solo tienen coordenadas geográficas a partir de junio de 2018, lo que impide construir tres años previos al programa, mientras que el C5 reporta incidentes desde diciembre de 2013. La segunda es su alcance: la base de la SSC se limita a incidentes con lesionados o fallecidos, mientras que el C5 integra llamadas al 911, botones de auxilio y videovigilancia, e incluye incidentes menores. Excluirlos impediría detectar un efecto del programa sobre la frecuencia de los incidentes, y no solo sobre su gravedad.\\
 
-    \item \textbf{Capacidad de la vía (\textit{max\_carriles}):} 
-    Corresponde al número máximo de carriles observado entre las vialidades de la celda. Se utiliza como un proxy de la capacidad vial y del volumen potencial de tránsito. Las vías con mayor número de carriles suelen permitir velocidades más altas y concentrar flujos masivos, lo que las hace candidatas prioritarias para el tratamiento.
-
-    \item \textbf{Sentido de circulación (\textit{both\_directions}):} 
-    Indicador binario que señala la presencia de al menos una vialidad de doble sentido en el área. La direccionalidad influye en la siniestralidad al introducir maniobras de giro y potenciales conflictos frontales o laterales que no existen en vías de un solo sentido.
-
-    \item \textbf{Jerarquía vial (\textit{via\_primaria}):} 
-    Variable dicotómica que indica si la unidad contiene vías clasificadas como primarias. Según el Reglamento de Tránsito, estas vías tienen funciones de flujo continuo o controlado por semáforos y límites de velocidad específicos (50 km/h), lo que las define como el objetivo central del programa sancionatorio.
-
-    \item \textbf{Vías de acceso controlado (\textit{via\_acc\_cont}):} 
-    Identifica la presencia de corredores con regulación y geometría específica, como entradas y salidas mediante carriles de aceleración y desincorporación. Estas vías (con límites de hasta 80 km/h) presentan niveles de riesgo y exposición distintos a las arterias convencionales, influyendo directamente en la decisión gubernamental de monitoreo.
-
-    \item \textbf{Complejidad vertical (\textit{max\_nivel}):} 
-    Representa el nivel máximo sobre el suelo (\textit{z-order}) de las vialidades presentes. Esta covariable es crítica en la Ciudad de México para encapsular la dinámica de vías de múltiples niveles, como el segundo piso del Periférico, donde los riesgos de siniestralidad y la visibilidad de los radares difieren del nivel de calle.
-
-    \item \textbf{Longitud vial acumulada (\textit{road\_length\_m}):} 
-    Mide la cantidad total de metros de red vial contenidos dentro del área de estudio. El control por longitud permite realizar un emparejamiento basado en la exposición física: una alta concentración de metros de vía suele corresponder a cruces de grandes avenidas o nudos viales complejos, los cuales implican un mayor flujo vehicular y una probabilidad intrínsecamente más alta de colisiones.
-\end{itemize}
-
-Estas variables operan como controles fijos en el cálculo del \textit{propensity score}, garantizando que la comparación se realice entre tramos viales con estructuras físicas, capacidades y jerarquías comparables, aislando así el efecto del radar de la peligrosidad natural del diseño vial.
-
-\subsubsection{Proxies de movilidad y exposición}
-
-Para capturar la dinámica de movilidad urbana y mitigar las distorsiones causadas por cambios en el flujo de personas, especialmente ante choques exógenos, se incorporaron \textit{proxies de movilidad} basados en el sistema de transporte masivo de la ciudad. El uso de estos indicadores es fundamental para controlar el choque exógeno de la pandemia de COVID-19, la cual provocó una reducción en la movilidad de entre el 40\% y el 60\%, permitiendo velocidades de circulación más altas y una recomposición en la severidad de los incidentes viales. A continuación se detalla la construcción y el procesamiento de estas fuentes.
-
-\paragraph{Fuentes de datos}
-
-\begin{itemize}
-    \item \textbf{Coordenadas de estaciones de metro (\textit{metro coordinates}):} 
-    Ante la ausencia de un registro unificado con precisión geográfica para todas las estaciones, se generó un conjunto de datos de creación propia mediante la extracción automática de información de Google Maps. Este proceso consistió en la búsqueda sistemática de cada una de las 167 estaciones del sistema para registrar sus coordenadas geográficas exactas (latitud y longitud), permitiendo así la georreferenciación precisa de la infraestructura de transporte dentro de la cuadrícula de análisis.
-
-    \item \textbf{Afluencia del metro:} 
-    Se utilizó el conjunto de datos \textit{``Afluencia diaria del metro CDMX''}, proporcionado por la Secretaría de Movilidad (SEMOVI), el cual registra el volumen diario de usuarios por línea y estación. Estos datos, con cobertura desde enero de 2010 hasta abril de 2025, se unieron (\textit{join}) con las coordenadas geográficas previamente obtenidas para localizar los flujos de personas en el espacio urbano.
-\end{itemize}
-
-\subsubsection{Construcción de variables para el emparejamiento (\textit{matching})}
-
-Para que estos datos temporales pudieran integrarse en el cálculo del \textit{propensity score} y asegurar que las unidades tratadas y de control fueran comparables en su dinámica de flujo previa a la intervención, se aplicó un proceso de agregación y ``compresión'' de las series históricas. A cada unidad de análisis se le asignó la información de la estación de metro más cercana, asumiendo que esta es la representación más fiel del flujo humano y la actividad comercial en esa zona específica.
-
-Las variables resultantes para el \textit{matching}, calculadas exclusivamente con datos previos al inicio del programa (22 de abril de 2019), son las siguientes:
-
-\begin{itemize}
-    \item \textbf{Distancia a la estación (\textit{distance\_to\_station}):} 
-    Mide la distancia en metros desde el centro de cada círculo a la estación de metro más cercana, sirviendo como un control de proximidad a nodos de alta actividad.
-
-    \item \textbf{Media de afluencia mensual (\textit{mean\_afluencia\_mensual}):} 
-    Representa el nivel promedio de demanda y exposición peatonal/vehicular de la zona durante el periodo preintervención.
-
-    \item \textbf{Desviación estándar de la afluencia (\textit{std\_afluencia\_mensual}):} 
-    Captura la volatilidad o variabilidad de los flujos en la zona, permitiendo emparejar áreas que no solo comparten niveles de tráfico similares, sino también patrones de estabilidad o fluctuación parecidos.
-\end{itemize}
-
-Este tratamiento de los datos permite que el modelo de evaluación asuma que, tras el emparejamiento, las diferencias en la siniestralidad no son producto de variaciones locales en la movilidad o del impacto diferenciado de la pandemia, sino del efecto causal de los radares de velocidad.
-
-\subsubsection{Estaciones de conteo permanente de tránsito}
-
-Para captar la exposición vehicular y el volumen de tráfico —factores que con frecuencia se omiten en evaluaciones locales de seguridad vial— incorporo datos de las \textit{estaciones de conteo permanente} mantenidas por la Secretaría de Infraestructura, Comunicaciones y Transportes (SICT).
-
-\paragraph{Obtención y procesamiento de los datos}
-
-La información se extrajo de los informes anuales de \textit{Datos Viales} (con cobertura de 2015 a 2024), los cuales reportan el volumen total anual y la distribución porcentual mensual para distintos puntos de la red carretera. Dado que estos datos se publican en archivos PDF no estructurados y con identificadores inconsistentes, fue necesario desarrollar una metodología de procesamiento que garantizara la integridad de la información. 
-
-Este proceso incluyó la localización de las tablas relevantes a partir de coordenadas geográficas y tramos carreteros, el uso de un \textit{large language model} (LLM) para extraer las cifras a un formato estructurado y la validación manual para seleccionar las 20 estaciones que permanecieron operando de manera continua durante todo el periodo de análisis.
-
-\paragraph{Contribución a la literatura}
-
-El valor de estas series no radica únicamente en incorporar una fuente adicional, sino en complementar la estrategia general de medición de la tesis. Estudios previos —como Quintero et al.\ (2023) o Madrigal y Rodríguez (2021)— no integraron controles explícitos para los cambios agregados en exposición vehicular durante la pandemia. Al combinar las estaciones de conteo de la SICT con la afluencia del Metro y la información georreferenciada del C5, este estudio observa mejor dónde ocurren los incidentes, cómo cambia la movilidad en distintos puntos de la ciudad y cuándo varía la exposición agregada al tráfico. Con ello, disminuye la probabilidad de atribuir a los radares caídas en la siniestralidad que en realidad responden a cambios más amplios en la circulación observados a partir de 2020.
-
-\paragraph{Resolución espacial y estandarización}
-
-Una limitación importante de la fuente es que las estaciones de conteo disponibles se ubican principalmente en las periferias de la ciudad, como plazas de cobro y accesos carreteros, y no en el tejido urbano central. Idealmente, el análisis utilizaría datos de flujo capturados directamente en cada una de las celdas de la cuadrícula de estudio; sin embargo, la ausencia de sensores urbanos de acceso público impide esta aproximación.
-
-En consecuencia, este trabajo aplica una \textit{``estandarización a nivel ciudad''} en lugar de un control de flujo específico por unidad. Esto implica asumir que las fluctuaciones de movilidad observadas en las entradas a la ciudad son un proxy razonable de la dinámica interna del área urbana. Para mitigar el posible error de medición derivado de este enfoque agregado, estas series se complementan con \textit{proxies} de tránsito de mayor resolución, como la afluencia del metro.
-
-\section{Siniestralidad y resultados}
-
-En esta sección se describe la construcción de la variable de siniestralidad y la forma en que se utiliza tanto como resultado principal (\textit{outcome}) como covariable en la fase de emparejamiento (\textit{matching}). Se parte de los registros de incidentes viales del Centro de Comando, Control, Cómputo, Comunicaciones y Contacto Ciudadano de la Ciudad de México (C5), y se detalla el proceso de depuración, clasificación y agregación de la información.
-
-\subsection{Fuente de datos y justificación}
-
-\noindent Los registros de incidentes viales cumplen un doble papel en el análisis. Por un lado, constituyen la variable dependiente principal para estimar el impacto del programa de fotocívicas. Por otro, se utilizan como covariable en el emparejamiento, con el fin de capturar el riesgo base de cada zona antes de la intervención. El Gobierno de la Ciudad de México señaló que la ubicación de las cámaras se definió con base en la incidencia histórica de hechos de tránsito, en particular en tramos con mayor número de muertos y lesionados. En este contexto, resulta indispensable controlar por el historial de siniestralidad para mitigar el sesgo de selección y evitar atribuir a las cámaras diferencias que se explican por condiciones de riesgo preexistentes.\\
-
-La información proviene del conjunto de datos \textit{``Incidentes viales reportados por C5''}. Esta fuente se prefiere frente a los registros de la Secretaría de Seguridad Ciudadana (SSC) por dos razones metodológicas:
+Los datos contienen 2,115,080 folios entre el 31 de diciembre de 2013 y el 29 de febrero de 2024. Para la limpieza se hizo lo siguiente:
 
 \begin{enumerate}
-    \item \textbf{Cobertura temporal:} los datos de la SSC solo cuentan con georreferenciación precisa a partir de junio de 2018, lo que impide construir una ventana simétrica de tres años previos y tres posteriores a la implementación de la política. En contraste, el C5 ofrece registros desde diciembre de 2013, lo que permite definir una ventana de análisis más amplia y balanceada.
-    \item \textbf{Representatividad:} la base de la SSC se restringe a incidentes con lesionados o fallecidos, mientras que el C5 integra llamadas al 911, activaciones de botones de auxilio y videovigilancia, incluyendo incidentes menores. Excluir estos eventos leves podría sesgar los resultados si la política incide sobre la frecuencia total de percances y no únicamente sobre su gravedad.
+    \item Se conservan los folios con código de cierre A (afirmativo), es decir, aquellos en los que una unidad de emergencia llegó al lugar y confirmó el incidente. Quedan 866,230.
+    \item Se recorta la ventana del análisis, del 22 de abril de 2016 al 21 de abril de 2022. Quedan 433,235.
+    \item Se conservan los incidentes tipificados como \emph{Accidente}, \emph{Cadáver} o \emph{Lesionado}, sin la clasificación de falsa alarma, para descartar llamadas que no corresponden a hechos de tránsito. Quedan 432,707.
+    \item Se eliminan cuatro folios repetidos y cinco registros con coordenadas en cero. Quedan 432,698.
 \end{enumerate}
 
-\subsection{Depuración y clasificación de incidentes}
+Los incidentes se clasifican en tres niveles mutuamente excluyentes según su gravedad: fatales (FCS), si se registró un cadáver en el lugar, con 1,957 incidentes; con lesionados (PIC), si la clasificación de la alarma fue de urgencias médicas, con 191,676, y menores (MIN), sin lesionados ni fallecidos, con 239,065.\\
 
-El universo inicial de análisis está conformado por 2\,115\,080 registros. A partir de esta base se aplicaron varios filtros para obtener una muestra consistente con los objetivos del estudio. En primer lugar, se conservaron únicamente los folios con código de cierre A (Afirmativo), que identifica incidentes verificados por las autoridades en el lugar de los hechos. Este paso permite eliminar duplicados, falsas alarmas e incidentes externos. En segundo lugar, se restringió la muestra a eventos tipificados como \textit{Accidente}, \textit{Cadáver} o \textit{Lesionado}, descartando otros tipos de llamadas al C5 que no están directamente relacionados con hechos de tránsito. En tercer lugar, se delimitó la ventana temporal para cubrir exclusivamente tres años antes y tres años después de la intervención, es decir, del 22 de abril de 2016 al 21 de abril de 2022.\\
+\textbf{Variable de resultado}. La variable de resultado $Y_{it}$ es el número de incidentes en el área $i$ durante el periodo $t$, tanto el total como para cada nivel de severidad. Los periodos van del día 22 de un mes al 21 del siguiente, de modo que el corte del 22 de abril de 2019 coincide con el inicio de un periodo, y la ventana tiene 36 periodos antes del programa y 36 después. Un incidente que cae en el área compartida por dos o más áreas tratadas se reparte en partes iguales entre ellas, como se detalla en la sección~\ref{sec:unidades}.\\
 
-Tras este proceso de depuración, la base analítica final quedó conformada por 432\,707 incidentes. Estos se agrupan en tres categorías mutuamente excluyentes, en línea con los estándares de la literatura internacional orientada a capturar tanto el volumen de choques como su impacto en salud pública:
-
-\begin{itemize}
-    \item \textbf{FCS (fatalidad):} incluye 1\,957 incidentes en los que se registró un cadáver en el lugar de los hechos.
-    \item \textbf{PIC (lesión personal):} agrupa 191\,681 incidentes en los que la clasificación de alarma fue \textit{Urgencias Médicas}.
-    \item \textbf{MIN (menor):} considera 239\,069 incidentes sin lesionados ni fallecidos, usualmente asociados con daños materiales o alcances leves.
-\end{itemize}
-
-\subsection{Uso de la siniestralidad en el análisis causal}
-
-Operativamente, la información de siniestralidad se utiliza con dos fines complementarios.
-
-\paragraph{Emparejamiento de unidades}
-
-En la etapa de emparejamiento, se calculan medias y desviaciones estándar mensuales de accidentes por área durante el periodo pretratamiento (2016--2019). Estas estadísticas permiten que el \textit{propensity score} agrupe áreas con perfiles de riesgo y volatilidad similares antes de la instalación de las cámaras. De esta forma, se reduce la probabilidad de comparar zonas estructuralmente muy distintas en su historial de siniestros.
-
-\paragraph{Estimación de efectos (diferencias en diferencias)}
-
-En la etapa de estimación, se emplea un diseño de diferencia en diferencias. Para ello, los datos se agregan a nivel mensual y por área, y se construyen dos tipos de indicadores:
+\textbf{Covariables de siniestralidad}. La misma fuente da lugar a cuatro covariables, que describen la siniestralidad de cada área en los tres años previos al programa. Se consideran los años hacia atrás a partir del 22 de abril de 2019: el año $-1$ va del 22 de abril de 2018 al 21 de abril de 2019, y así sucesivamente.
 
 \begin{itemize}
-    \item conteos absolutos de incidentes en cada categoría (FCS, PIC y MIN);
-    \item tasas por cada 1\,000 vehículos, utilizando información independiente de exposición vehicular.
+    \item \textbf{Nivel de incidentes} (\texttt{nivel\_incidentes}): promedio mensual de incidentes de todos los niveles en los tres años previos.
+    \item \textbf{Proporción con lesionados} (\texttt{pct\_lesionados}): fracción de esos incidentes que tuvo consecuencias personales; incluye tanto PIC como FCS.
+    \item \textbf{Tendencia} (\texttt{tendencia}): promedio mensual de incidentes del año $-1$ menos el del año $-3$. Un valor positivo indica que los incidentes del área venían en aumento antes del programa, y uno negativo, que venían a la baja.
+    \item \textbf{Algún incidente fatal} (\texttt{hubo\_fcs}): indicador de que el área registró al menos un incidente fatal en los tres años previos. Se usa un indicador y no un conteo porque los incidentes fatales son poco frecuentes: en un año dado, entre el 58\% y el 84\% de las áreas no registra ninguno.
 \end{itemize}
 
-Esta estrategia permite evaluar el comportamiento de la siniestralidad tanto en términos de frecuencia como de gravedad relativa, y determinar si las cámaras de velocidad lograron reducir los incidentes viales de manera localizada, una vez controlado el riesgo base y la exposición al tráfico.
+Con estas covariables se representan los factores que consideró la Secretaría de Movilidad al reubicar las cámaras, cuando se priorizaron los lugares donde los incidentes eran más frecuentes y más graves (SEMOVI, 2019). La tendencia, además, permite que el emparejamiento compare áreas cuya siniestralidad venía evolucionando de forma parecida antes del programa, lo que sirve directamente al supuesto de tendencias paralelas del modelo de diferencias en diferencias.
 
-\section{Pruebas de balance}
-Para garantizar la validez interna de las estimaciones y asegurar que las diferencias observadas en la siniestralidad puedan interpretarse de manera causal, es fundamental verificar la calidad del procedimiento de emparejamiento. Un proceso de matching exitoso es aquel que logra mitigar el sesgo de selección, construyendo un contrafactual donde las unidades de control y tratamiento sean estadísticamente comparables en función de sus covariables observables.
+\subsection{Infraestructura vial}
 
-\subsection{Supuesto de soporte común y recorte de la muestra}
-Un requisito central de la estrategia de identificación es la satisfacción del supuesto de \textbf{soporte común} (\textit{common support}). Este supuesto existe que, para cada valor del \textit{propensity score} observado en el grupo tratado, exista un conjunto suficiente de unidades de control con probabilidades de tratamiento similares. La ausencia de solapamiento en las distribuciones del \textit{propensity score} invalidaría la comparación, al intentar emparejar unidades estructuralmente distintas. 
+\noindent Las características de la red vial provienen del conjunto de datos \emph{Vialidades primarias de la Ciudad de México} de la Secretaría de Movilidad (SEMOVI, 2023). Contiene los tramos de las vías primarias y de acceso controlado de la ciudad, con el número de carriles, el sentido de circulación, el tipo de vía y el nivel en el que corre cada tramo: a nivel de calle, elevado o subterráneo. En total se identifican 149 vialidades: 135 con tramos de vía primaria y 21 con tramos de acceso controlado, ya que siete tienen tramos de ambos tipos. La misma red sirve para sortear los centros de los controles (sección~\ref{sec:controles}).\\
 
-El cálculo del \textit{propensity score} se realizó integrando aquellas dimensiones críticas que, de acuerdo con la lógica oficial, determinan la asignación de los radares de velocidad: atributos físicos de la red vial, proxies de movilidad y exposición vehicular, así como el historial de siniestralidad previo al tratamiento.  
+A partir de ella se construyen siete covariables, ponderadas por los metros de vía que caen dentro de cada área:
+
+\begin{itemize}
+    \item \textbf{Longitud vial} (\texttt{road\_length\_m}): metros de vía dentro del área.
+    \item \textbf{Número de vialidades} (\texttt{n\_vialidades}): vialidades distintas que cruzan el área.
+    \item \textbf{Carriles ponderados} (\texttt{carriles\_ponderados}): número promedio de carriles, ponderado por los metros de cada tramo.
+    \item \textbf{Acceso controlado} (\texttt{pct\_acceso\_controlado}): fracción de los metros de vía que corresponde a vías de acceso controlado.
+    \item \textbf{Doble sentido} (\texttt{pct\_doble\_sentido}): fracción de los metros de vía en tramos de doble sentido.
+    \item \textbf{Desnivel} (\texttt{pct\_desnivel}): fracción de los metros de vía en tramos elevados o bajo el suelo.
+    \item \textbf{Número de niveles} (\texttt{n\_niveles}): niveles distintos que se encuentran dentro del área.
+\end{itemize}
+
+Las covariables se ponderan por longitud porque así describen la composición de toda el área, y no solo la vía más grande que la cruza: un círculo atravesado por unos metros de una avenida de seis carriles no se parece a uno recorrido por ella de lado a lado. No se incluye la fracción de vía primaria porque, al contener la capa solo vías primarias y de acceso controlado, es igual a uno menos la fracción de acceso controlado. Las dos últimas covariables miden la ambigüedad vertical de cada área, que se discute en la sección~\ref{sec:limitaciones}.
+
+\subsection{Metro}
+
+\noindent La información del Metro combina dos fuentes de la Secretaría de Movilidad. La primera es la capa geográfica \emph{Ubicación de líneas y estaciones del Sistema de Transporte Colectivo Metro} (SEMOVI, 2026), con la ubicación de las estaciones. Tiene 195 registros para 163 estaciones, porque las estaciones de transbordo tienen un registro por línea. La segunda es la \emph{Afluencia diaria del Metro CDMX} (SEMOVI, 2025), que reporta el número de usuarios por día, línea y estación desde 2010.\\
+
+Para poder unir ambas fuentes fue necesario corregir el nombre de dos estaciones: la afluencia usa el nombre anterior de Niños Héroes, y la capa geográfica escribe ``Mixhiuca'' en lugar de Mixiuhca. Con estas correcciones, todos los pares de línea y estación de la afluencia encuentran su ubicación.\\
+
+De estas fuentes sale una sola covariable:
+
+\begin{itemize}
+    \item \textbf{Afluencia del Metro} (\texttt{afluencia\_nivel}): promedio mensual de usuarios de las estaciones ubicadas dentro del área, en los tres años previos al programa. Vale cero si el área no contiene ninguna estación.
+\end{itemize}
+
+La afluencia funciona como un indicador de la actividad y del tránsito de personas en la zona. Basta con un solo promedio porque la afluencia de una estación casi no cambia de un año a otro: lo que distingue a las áreas es qué estación tienen. A 300 metros, el 32\% de las áreas tratadas tiene alguna estación del Metro dentro, mientras que solo el 13\% de los controles la tiene. El cero representa una zona sin Metro, no falta de información. Se prefirió esta medida a la distancia a la estación más cercana, que obligaría a suponer que una estación influye en la zona incluso cuando queda fuera del área.
+
+\subsection{Resumen de variables}
+
+\noindent El cuadro~\ref{tab:variables} resume las variables del análisis. Las doce covariables se miden entre el 22 de abril de 2016 y el 21 de abril de 2019, y cada una tiene un solo valor por área, que permanece fijo tras la implementación del programa. Las doce entran al modelo del \emph{propensity score}. En la especificación principal~\eqref{eq:did}, las covariables se interactúan con el periodo posterior, excepto las de siniestralidad, que se excluyen por las razones expuestas en la sección~\ref{sec:especificacion}.
+
 \begin{table}[htbp]
     \centering
-    \caption{Soporte del Propensity Score por Distancias}
-    \label{tab:common-support}
-    \tiny
-    \begin{adjustbox}{max width=\textwidth}
-    \begin{tabular}{l c c l c c l c c}
+    \caption{Variables del análisis}
+    \label{tab:variables}
+    \footnotesize
+    \begin{tabularx}{\textwidth}{l l >{\raggedright\arraybackslash}X}
         \toprule
-        \multicolumn{3}{c}{\textbf{0 - 75 m}} & \multicolumn{3}{c}{\textbf{0 - 100 m}} & \multicolumn{3}{c}{\textbf{0 - 200 m}} \\
-        \cmidrule(lr){1-3} \cmidrule(lr){4-6} \cmidrule(lr){7-9}
-        \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} & \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} & \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} \\
-        \midrule\relax
-        {[}0.0002, 0.0205) & 92 & 56,591 & {[}0.0002, 0.0433) & 85 & 25,680 & {[}0.0002, 0.0163) & 89 & 65,147 \\
-        {[}0.0205, 0.0409) & 6 & 146 & {[}0.0433, 0.0864) & 11 & 101 & {[}0.0163, 0.0325) & 3 & 263 \\
-        {[}0.0409, 0.0612) & 2 & 44 & {[}0.0864, 0.1295) & 2 & 31 & {[}0.0487, 0.0649) & 1 & 41 \\
-        {[}0.0612, 0.0816) & 1 & 22 & {[}0.1726, 0.2158) & 1 & 13 & {[}0.0649, 0.0811) & 3 & 18 \\
-        {[}0.0816, 0.1019) & 2 & 15 & {[}0.3020, 0.3451) & 1 & 0 & {[}0.0972, 0.1134) & 1 & 5 \\
-        {[}0.1426, 0.1629) & 1 & 3 & {[}0.7331, 0.7763) & 1 & 1 & {[}0.1458, 0.1620) & 1 & 3 \\
-         &  &  &  &  &  & $> 0.3238$ & 1 & 0 \\
+        Variable & Fuente & Definición \\
         \midrule
-        \multicolumn{3}{c}{\textbf{0 - 300 m}} & \multicolumn{3}{c}{\textbf{0 - 400 m}} & \multicolumn{3}{c}{\textbf{0 - 500 m}} \\
-        \cmidrule(lr){1-3} \cmidrule(lr){4-6} \cmidrule(lr){7-9}
-        \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} & \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} & \textbf{PS Range} & \textbf{Tratamiento} & \textbf{Control} \\
-        \midrule\relax
-        {[}0.0003, 0.0092) & 80 & 45,974 & {[}0.0001, 0.0035) & 69 & 76,069 & {[}0.0001, 0.0025) & 59 & 87,810 \\
-        {[}0.0092, 0.0181) & 8 & 577 & {[}0.0035, 0.0070) & 12 & 2,576 & {[}0.0025, 0.0049) & 15 & 3,699 \\
-        {[}0.0181, 0.0270) & 3 & 155 & {[}0.0070, 0.0104) & 5 & 599 & {[}0.0049, 0.0074) & 5 & 861 \\
-        {[}0.0270, 0.0359) & 1 & 62 & {[}0.0104, 0.0139) & 3 & 196 & {[}0.0074, 0.0098) & 1 & 330 \\
-        {[}0.0447, 0.0536) & 1 & 24 & {[}0.0207, 0.0242) & 1 & 32 & {[}0.0098, 0.0122) & 1 & 146 \\
-        {[}0.0536, 0.0625) & 1 & 3 & {[}0.0276, 0.0311) & 1 & 11 & {[}0.0147, 0.0171) & 1 & 41 \\
-        {[}0.1069, 0.1158) & 1 & 5 & {[}0.0311, 0.0345) & 1 & 11 & {[}0.0220, 0.0244) & 1 & 10 \\
-        {[}0.1247, 0.1335) & 1 & 0 &  &  &  & {[}0.0317, 0.0341) & 1 & 3 \\
+        \multicolumn{3}{l}{\textit{Tratamiento y resultado}} \\
+        $T_i$ & SSC & Indicador de que el área contiene al menos una cámara \\
+        $Y_{it}$ & C5 & Incidentes en el área $i$ durante el periodo $t$, en total y por nivel \\
+        \midrule
+        \multicolumn{3}{l}{\textit{Siniestralidad previa}} \\
+        \texttt{nivel\_incidentes} & C5 & Incidentes al mes, promedio de los tres años previos \\
+        \texttt{pct\_lesionados} & C5 & Fracción de incidentes con lesionados o fallecidos \\
+        \texttt{tendencia} & C5 & Incidentes al mes del año $-1$ menos los del año $-3$ \\
+        \texttt{hubo\_fcs} & C5 & Al menos un incidente fatal en los tres años previos \\
+        \midrule
+        \multicolumn{3}{l}{\textit{Infraestructura vial}} \\
+        \texttt{road\_length\_m} & SEMOVI & Metros de vía dentro del área \\
+        \texttt{n\_vialidades} & SEMOVI & Vialidades distintas que cruzan el área \\
+        \texttt{carriles\_ponderados} & SEMOVI & Carriles promedio, ponderados por metros de vía \\
+        \texttt{pct\_acceso\_controlado} & SEMOVI & Fracción de los metros en vías de acceso controlado \\
+        \texttt{pct\_doble\_sentido} & SEMOVI & Fracción de los metros en vías de doble sentido \\
+        \texttt{pct\_desnivel} & SEMOVI & Fracción de los metros en tramos elevados o bajo el suelo \\
+        \texttt{n\_niveles} & SEMOVI & Niveles distintos dentro del área \\
+        \midrule
+        \multicolumn{3}{l}{\textit{Movilidad}} \\
+        \texttt{afluencia\_nivel} & SEMOVI & Usuarios al mes de las estaciones del Metro dentro del área; cero si no hay estación \\
         \bottomrule
-    \end{tabular}
-    \end{adjustbox}
-    \vspace{0.4em}
-    \begin{minipage}{0.93\textwidth}
-        \scriptsize \textit{Nota:} Se muestran las distribuciones de unidades tratadas y de control en el rango común del Propensity Score.
-    \end{minipage}
+    \end{tabularx}
 \end{table}
 
-Con el objetivo de robustecer el emparejamiento, se evaluó la densidad de controles disponibles para cada rango del propensity score. \footnote{Para el cálculo de los rangos evaluados se consideró el rango de valores de los propensity scores de las unidades de control, partiendo dicho rango en 20 bins del mismo tamaño, y contando cuántas unidades tenían un propensity score en dicho rango} Se estableció un umbral mínimo de tres unidades de control por cada unidad tratada dentro de un mismo rango para poder proceder con el emparejamiento; en caso contrario, la unidad tratada se excluye del análisis. Tras aplicar este procedimiento de \textit{trimming}, se identificaron cuatro casos específicos donde fue necesario restringir la muestra: 
- 
-\begin{itemize}
-    \item \textbf{Distancia de 50 metros}: Se excluyeron las unidades tratadas con un \textit{propensity score} mayor o igual a \textbf{0.3020}
-    \item \textbf{Distancia de 200 metros}: Se excluyeron las unidades tratadas con un \textit{propensity score} mayor o igual a \textbf{0.3238}
-    \item \textbf{Distancia de 300 metros}: Se excluyeron las unidades tratadas con un \textit{propensity score} mayor o igual a \textbf{0.1247}
-\end{itemize}
+\section{Unidades de análisis y muestra}
 
-Para el resto de las distancias y rangos analizados, las distribuciones muestran un solapamiento adecuado, lo que permite construir un universo de controles representativo y similar a las unidades tratadas sin necesidad de exclusiones adicionales
+\noindent La unidad de análisis es un área circular de radio $r$, con $r \in \{100, 150, 200, 250, 300\}$ metros, observada en cada uno de los 72 periodos de la ventana. Tanto las áreas tratadas como las de control son círculos del mismo radio, lo que hace posible compararlas entre sí. A continuación se especifica cómo se definen los centros de los círculos de ambos tipos de unidades.
 
-\subsection{Evaluación del balance mediante SMD}
+\subsection{Unidades tratadas}
+\label{sec:unidades}
 
-Una vez definida la muestra con soporte común, se procedió a verificar la calidad del balance entre las unidades tratadas y sus respectivos contrafactuales. Para este propósito, se utilizó la \textit{Diferencia de Medias Estandarizada} (\textit{Standardized Mean Difference}, SMD), un indicador robusto que permite cuantificar el desequilibrio de las covariables sin depender del tamaño de la muestra. De acuerdo con el consenso en la literatura de inferencia causal, se considera que un proceso de emparejamiento es exitoso cuando los valores absolutos de SMD se sitúan por debajo del umbral de $0.1$, lo que garantiza que las unidades son estadísticamente comparables y que el sesgo de selección ha sido mitigado.
+\noindent Algunas cámaras están tan cerca entre sí que sus círculos prácticamente coinciden, y tratarlas por separado contaría dos veces la misma zona. Por ello, dos cámaras se agrupan en una sola unidad tratada cuando sus círculos de 300 metros comparten más del 60\% de su área, lo que equivale a que sus ubicaciones estén a menos de 192 metros. El centro de cada unidad es el promedio de las ubicaciones de sus cámaras. Tras la construcción, las 113 cámaras quedan en 99 unidades tratadas: 87 con una sola cámara, 10 con dos y 2 con tres.\\
 
-La Figura~[3.2] resume este diagnóstico para los distintos radios analizados (desde $37.5$ hasta $250$ metros), comparando la SMD antes (\textit{unadjusted}) y después (\textit{matched}) del procedimiento de emparejamiento.
+El conjunto de unidades tratadas se construye una sola vez, con el radio de 300 metros, y se mantiene igual en el resto de los radios. Así, siempre se habla de los mismos centros, y lo único que cambia entre estimaciones es el radio.\\
+
+Dos condiciones acotan el umbral del 60\%. Por un lado, con un umbral de 50\% se agruparían dos cámaras separadas por 204 metros, cuyo centro queda a 102 metros de cada una: a 100 metros, esa unidad tratada no contendría ninguna cámara. Con 60\%, la cámara más alejada del centro de su unidad está a 81 metros. Por otro lado, con un umbral de 70\% se agrupan menos cámaras y aparecen círculos traslapados desde los 100 metros, mientras que con 60\% no hay ningún traslape en ese radio.\footnote{Ningún umbral evita todos los casos límite. Las unidades 32 y 77 son dos cámaras sobre el mismo tramo del segundo piso del Periférico, con sus centros a 205 metros, y quedaron separadas por 13 metros. Con un umbral de 50\%, que sí las agrupa, el efecto estimado a 300 metros en la especificación principal cambia a lo más 0.18 errores estándar en los cuatro niveles de gravedad.}\\
+
+\textbf{Traslape entre unidades tratadas}. Con esta regla, los círculos de unidades distintas pueden traslaparse parcialmente en los radios mayores. A 100 metros no hay ningún traslape; a 300 metros, 36 unidades comparten parte de su área con alguna otra, y en esas áreas compartidas cae el 5.5\% de los incidentes. Cada incidente en un área compartida se reparte en partes iguales entre las unidades que lo contienen: cuenta $1/2$ en cada una si cae en dos círculos, $1/3$ si cae en tres, y así sucesivamente. Con este reparto, la suma de los incidentes de todas las unidades coincide con el número real de incidentes, 44,153 a 300 metros, en lugar de los 46,730 que resultarían de contar dos veces los compartidos.\\
+
+El reparto resuelve el conteo de los incidentes, pero implica que los incidentes de unidades traslapadas dejan de ser independientes. Por ello, las unidades tratadas conectadas por algún traslape forman una \emph{componente}, que es la que se usa para agrupar los errores estándar y para remuestrear en el \emph{bootstrap}. Es importante distinguir que una componente no es una unidad de análisis: cada unidad conserva su propio círculo y su propio emparejamiento, y las componentes cambian con el radio. La figura~\ref{fig:componentes} muestra un ejemplo: las mismas cinco unidades tratadas forman cinco componentes a 100 metros, cuatro a 200 y una sola a 300. Entre las 93 unidades de la muestra final hay 93 componentes a 100 metros, 86 a 200 y 72 a 300.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Comparación de SMD para radios evaluados}
-    \includegraphics[width=\textwidth]{Imagenes/smd-comparisons.png}
+    \includegraphics[width=\linewidth]{Imagenes/componente-tratado-100-200-300.pdf}
+    \caption{Las mismas cinco unidades tratadas en tres radios}
+    \label{fig:componentes}
+    \begin{minipage}{0.95\linewidth}
+        \footnotesize \textit{Nota:} Cada círculo es una unidad tratada, centrada en el promedio de sus cámaras. Las líneas rojas unen las unidades cuyos círculos se traslapan; las unidades conectadas forman una componente. En gris, la red de vías primarias y de acceso controlado. La escala es la misma en los tres paneles.
+    \end{minipage}
 \end{figure}
 
-De manera consistente en todas las especificaciones, se observa una reducción sustancial en los valores de SMD para la mayoría de las covariables, lo que confirma que el algoritmo de \textit{nearest neighbor matching} logró construir grupos de control significativamente más similares a los tratados en comparación con la muestra original.
+\subsection{Controles}
+\label{sec:controles}
+
+\noindent La construcción de los controles se hace sobre la misma red vial, considerando tanto las vías primarias como las de acceso controlado. Se colocan 20,000 puntos al azar, con probabilidad proporcional a la longitud de cada tramo, de modo que cada metro de vía tiene la misma probabilidad de recibir un punto. Se eligió esta construcción, frente a usar los cruces de la red o una malla, porque es la que menos decisiones arbitrarias requiere: no hay que definir qué cuenta como un cruce ni dónde empieza la malla, y cubre por igual los tramos y los cruces.\\
+
+Una vez sorteados los puntos, se eliminan los que quedan a menos de 600 metros del centro de alguna unidad tratada, es decir, a menos de dos veces el radio más grande. Con esto, ningún control comparte área con una unidad tratada en ninguno de los cinco radios. Quedan 14,656 posibles controles, alrededor de 148 por cada unidad tratada, y este conjunto también se mantiene fijo para todos los radios.\\
+
+Inicialmente se permite que los candidatos se traslapen entre sí: cada candidato representa el contrafactual de su propia zona, y exigir que no se traslaparan reduciría el conjunto a unos cientos de puntos y empeoraría el emparejamiento. Por la misma razón, los incidentes de los candidatos cuentan completos y no se reparten. La restricción se impone sobre los controles seleccionados: en el emparejamiento, ningún control puede quedar a menos de dos radios de otro control ya elegido, de modo que los controles de la muestra final no se traslapan entre sí y cada uno forma su propia componente.
+
+\subsection{Muestra final}
+
+\noindent Dado que las covariables se calculan dentro del círculo, el emparejamiento se hace por separado en cada radio. En cada radio, algunas unidades tratadas no encuentran un control suficientemente parecido (sección~\ref{sec:emparejamiento}): tres a 100 metros, una a 150, ninguna a 200, dos a 250 y una a 300. Para que las estimaciones de los cinco radios describan exactamente las mismas zonas, la muestra final se restringe a las 93 unidades tratadas que encuentran pareja en los cinco radios. Los controles sí se eligen de nuevo en cada radio. En resumen:
 
 \begin{itemize}
-    \item \textbf{Radios de alta precisión (37.5 m, 50 m y 100 m):} En estas escalas, el balance alcanzado es óptimo. En el radio de $50$ metros, prácticamente todas las variables —incluyendo el historial de siniestralidad pretratamiento y los \textit{proxies} de movilidad— se sitúan cerca del valor cero. Para las distancias de $37.5$ y $100$ metros, si bien variables como la distancia a estaciones de metro o la jerarquía vial presentan desbalances residuales mínimos, el SMD medio posterior al emparejamiento se mantiene por debajo del umbral crítico de $0.1$.
-    \item \textbf{Radios intermedios (150 m y 200 m):}  A medida que el área de influencia se expande, la complejidad de las unidades espaciales aumenta. No obstante, el emparejamiento logra estabilizar la mayoría de las dimensiones críticas. En el radio de $200$ metros se observa una mayor dispersión en variables estructurales como el sentido de circulación (\textit{Both Directions}) y el nivel de la traza (\textit{Max Nivel}), aunque el balance global sigue permitiendo comparaciones válidas.
-    \item \textbf{Radio de 250 m:}  En esta escala se registra la mayor variabilidad residual. Debido a la extensión del área, las unidades tratadas presentan configuraciones viales más heterogéneas, lo que dificulta encontrar controles perfectos en todas las dimensiones simultáneamente. Sin embargo, aun en este caso, el procedimiento de \textit{matching} reduce drásticamente el sesgo observado en la muestra original, mejorando la comparabilidad de las distribuciones respecto al escenario sin ajuste.
+    \item 113 cámaras forman 99 unidades tratadas;
+    \item 20,000 puntos sorteados dejan 14,656 candidatos a control;
+    \item 93 unidades tratadas encuentran pareja en los cinco radios, y cada una se empareja con un control.
 \end{itemize}
 
-En conclusión, los diagnósticos de balance confirman que la estrategia de identificación es robusta. Aunque en los radios de mayor tamaño existen variables que superan levemente la cota de $0.1$, la mejora generalizada en la similitud de las covariables permite proceder con la estimación de los efectos mediante modelos de \textit{diferencia en diferencias}, bajo el supuesto de que las diferencias observadas en la siniestralidad no son producto de disparidades estructurales preexistentes entre los grupos, sino del efecto causal de los radares de velocidad. Las pruebas visuales de tendencias paralelas para todos los radios considerados pueden consultarse en el Apéndice~\ref{chap:tendencias-paralelas}, mientras que los resultados de las regresiones de las pruebas placebo se encuentran detallados en el Apéndice A.1.
+Cada radio se estima, entonces, sobre 186 áreas observadas en 72 periodos. El efecto estimado es el efecto promedio sobre estas 93 unidades tratadas, y no sobre las 99; la sección~\ref{sec:excluidas} describe a las seis que quedan fuera.
+
+\section{Emparejamiento y balance}
+\label{sec:emparejamiento}
+
+\subsection{\emph{Propensity score}}
+
+\noindent El \emph{propensity score} se estima con una regresión logística del indicador de tratamiento sobre las doce covariables, con las 99 unidades tratadas y los 14,656 candidatos. La estimación no usa penalización, porque el objetivo no es predecir bien en una muestra que no se observa, sino balancear las covariables en la muestra con la que se trabaja; una regresión penalizada encoge los coeficientes y deja a propósito parte del desbalance que se quiere corregir. Las covariables se estandarizan antes de estimar. La regresión logística no depende de la escala de las variables, pero estandarizarlas hace que los coeficientes sean comparables entre sí y que el algoritmo de estimación converja. El modelo se estima con el método de Newton, que es el procedimiento estándar para la regresión logística, y converge en siete iteraciones. Con el algoritmo por defecto de la biblioteca utilizada, L-BFGS de \emph{scikit-learn}, el modelo no converge si las covariables no se estandarizan y, aun estandarizadas, se detiene antes de llegar al óptimo, con diferencias que alcanzan para cambiar hasta 18 de los 99 pares.
+
+\subsection{Reglas del emparejamiento}
+
+\noindent Cada unidad tratada se empareja con un control, sin reemplazo, de acuerdo con cuatro reglas:
+
+\begin{itemize}
+    \item \textbf{Caliper}. Un control solo es elegible si su logit del \emph{propensity score} está a menos de 0.2 desviaciones estándar del de la unidad tratada, que es el ancho recomendado en la literatura (Austin, 2011). Una unidad tratada sin controles dentro del caliper se queda sin pareja.
+    \item \textbf{Desempate por distancia de Mahalanobis}. Dentro del caliper suele haber cientos de controles con un \emph{propensity score} casi idéntico; la diferencia mediana entre ellos es de 0.0002. Si se eligiera entre ellos por \emph{propensity score} sería casi como elegir al azar, por lo que se elige el más cercano en todas las covariables a la vez, con la distancia de Mahalanobis (Rosenbaum y Rubin, 1985). Esto reduce la diferencia estandarizada promedio de 0.093 a 0.070 sin perder ningún par.
+    \item \textbf{Orden}. Las unidades tratadas eligen control de mayor a menor \emph{propensity score}, de modo que las más difíciles de emparejar eligen primero, cuando hay más controles disponibles.
+    \item \textbf{Separación entre controles}. Un control no es elegible si queda a menos de dos radios de otro control ya elegido.
+\end{itemize}
+
+El emparejamiento se rehace en cada radio con las covariables medidas a ese radio. Reutilizar en todos los radios los pares formados a 300 metros deteriora el balance, porque un control que se parece a su unidad tratada en un círculo de 300 metros no necesariamente se le parece en uno de 100.
+
+\subsection{Soporte común}
+
+\noindent El emparejamiento solo es defendible donde las distribuciones del \emph{propensity score} de tratadas y controles se traslapan; de hacerlo fuera de esa zona, la comparación sería difícil de sostener. A 300 metros, el \emph{propensity score} de las tratadas va de 0.001 a 0.140, con mediana de 0.011, y el de los candidatos va de casi cero a 0.139, con mediana de 0.004. Solo una unidad tratada queda por encima del candidato más alto. Las tratadas se concentran en valores más altos que los candidatos, como se esperaría si las cámaras se ubicaron en zonas más riesgosas, pero incluso en el quintil más alto de las tratadas hay 740 candidatos en el mismo rango. La figura~\ref{fig:soporte} muestra las dos distribuciones antes y después del emparejamiento.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/soporte-comun-300.pdf}
+    \caption{Distribución del \emph{propensity score} a 300 metros}
+    \label{fig:soporte}
+    \begin{minipage}{0.95\linewidth}
+        \footnotesize \textit{Nota:} El panel (a) compara las 99 unidades tratadas con los 14,656 candidatos a control; el panel (b), las 93 unidades tratadas de la muestra final con sus controles emparejados. El eje horizontal está en escala logarítmica porque la mayoría de los valores se concentra cerca de cero.
+    \end{minipage}
+\end{figure}
+
+\subsection{Balance}
+
+\noindent El balance se mide con la diferencia de medias estandarizada (SMD) de cada covariable:
+\[
+    \text{SMD} = \frac{\bar{X}_T - \bar{X}_C}{\sqrt{(s_T^2 + s_C^2)/2}},
+\]
+donde $\bar{X}$ y $s^2$ son la media y la varianza de la covariable en las tratadas ($T$) y en los controles ($C$). A diferencia de una prueba de hipótesis, no depende del tamaño de la muestra. Se considera que una covariable está balanceada cuando el valor absoluto de su SMD es menor a 0.1 (Austin, 2009).\\
+
+El cuadro~\ref{tab:balance} reporta las medias y las SMD a 300 metros. Antes del emparejamiento, las tratadas tienen más incidentes, más incidentes fatales, más carriles y más afluencia del Metro que los candidatos, lo que confirma que las cámaras no se ubicaron al azar: la SMD promedio en valor absoluto es de 0.266, y diez de las doce covariables superan el umbral. Después del emparejamiento, la SMD promedio baja a 0.065 y solo tres covariables lo superan: la longitud vial (0.120), la proporción con lesionados (0.115) y la afluencia del Metro (0.141). En los demás radios, la SMD promedio después del emparejamiento va de 0.045 a 0.055, y entre una y dos covariables superan el umbral; el valor más alto es de 0.268, a 200 metros.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Balance de covariables a 300 metros}
+    \label{tab:balance}
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{l r r r r r}
+        \toprule
+        & \multicolumn{3}{c}{Media} & \multicolumn{2}{c}{SMD} \\
+        \cmidrule(lr){2-4} \cmidrule(lr){5-6}
+        Covariable & Tratadas & Candidatos & Controles & Antes & Después \\
+        \midrule
+        \texttt{nivel\_incidentes} & 6.22 & 4.57 & 6.02 & 0.634 & 0.070 \\
+        \texttt{pct\_lesionados} & 0.40 & 0.40 & 0.39 & 0.000 & 0.115 \\
+        \texttt{tendencia} & 0.13 & $-0.08$ & 0.20 & 0.168 & $-0.051$ \\
+        \texttt{hubo\_fcs} & 0.70 & 0.41 & 0.72 & 0.647 & $-0.047$ \\
+        \texttt{road\_length\_m} & 2,686 & 2,405 & 2,533 & 0.238 & 0.120 \\
+        \texttt{n\_vialidades} & 2.15 & 1.97 & 2.09 & 0.196 & 0.066 \\
+        \texttt{carriles\_ponderados} & 3.05 & 2.75 & 3.04 & 0.495 & 0.015 \\
+        \texttt{pct\_acceso\_controlado} & 0.36 & 0.30 & 0.35 & 0.161 & 0.013 \\
+        \texttt{pct\_doble\_sentido} & 0.11 & 0.07 & 0.10 & 0.179 & 0.047 \\
+        \texttt{pct\_desnivel} & 0.10 & 0.10 & 0.09 & $-0.020$ & 0.051 \\
+        \texttt{n\_niveles} & 1.59 & 1.51 & 1.56 & 0.128 & 0.042 \\
+        \texttt{afluencia\_nivel} & 237,667 & 107,239 & 173,912 & 0.322 & 0.141 \\
+        \bottomrule
+    \end{tabular}
+    \begin{minipage}{0.95\linewidth}
+        \vspace{0.4em}
+        \footnotesize \textit{Nota:} Las columnas \emph{Tratadas} y \emph{Controles} corresponden a las 93 unidades tratadas de la muestra final y a sus controles emparejados; \emph{Candidatos}, a los 14,656 candidatos a control. La SMD antes del emparejamiento compara las 99 unidades tratadas con los candidatos.
+    \end{minipage}
+\end{table}
+
+Las diferencias que quedan se atienden de dos formas en la estimación. Los efectos fijos por unidad absorben cualquier diferencia de nivel entre tratadas y controles que no cambie en el tiempo, de modo que una diferencia en la longitud vial o en la afluencia del Metro no sesga el efecto por sí misma. Lo que sí podría sesgarlo es que esas diferencias hicieran evolucionar distinto a ambos grupos después de 2019, y para eso la especificación principal interactúa las covariables de infraestructura vial y la afluencia del Metro con el periodo posterior. La proporción con lesionados no se incluye en esa interacción, por las razones expuestas en la sección~\ref{sec:especificacion}; que su diferencia no se traduzca en trayectorias distintas es lo que evalúa el \emph{event study} del capítulo 4.
+
+\subsection{Unidades excluidas}
+\label{sec:excluidas}
+
+\noindent Las seis unidades tratadas que quedan fuera de la muestra final no son un descarte al azar: son las zonas más peligrosas de la red. Antes del programa registraban 13.5 incidentes al mes, 2.2 veces el promedio de las 93 analizadas. Las seis habían tenido al menos un incidente fatal, contra el 70\% de las demás, tienen más carriles y más vía de acceso controlado, triplican la afluencia del Metro y su siniestralidad venía creciendo más rápido (figura~\ref{fig:excluidas}). No se parecen a ningún candidato a control, y por eso el emparejamiento no les encuentra pareja en al menos uno de los radios. La consecuencia es que los resultados de esta tesis no se extienden a ellas: si las cámaras tuvieran un efecto mayor justo donde el riesgo es más alto, este análisis no podría detectarlo.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/unidades-excluidas.pdf}
+    \caption{Las seis unidades excluidas frente a las 93 analizadas}
+    \label{fig:excluidas}
+    \begin{minipage}{0.95\linewidth}
+        \footnotesize \textit{Nota:} Cada punto es el promedio del grupo a 300 metros dividido entre el de las 93 unidades tratadas analizadas, cuyo valor aparece entre paréntesis. La línea punteada marca el valor de las 93 tratadas.
+    \end{minipage}
+\end{figure}
+
+\section{Limitaciones de los datos}
+\label{sec:limitaciones}
+
+\begin{itemize}
+    \item \textbf{No se observa el tránsito vehicular}. No se cuenta con información de cuántos vehículos circulaban dentro de la ciudad ni de las velocidades a las que lo hacían. Las áreas circulares mitigan en parte el desvío del tránsito hacia vías alternas, pero no es posible confirmarlo, y tampoco se puede saber si las cámaras modificaron las velocidades. Los únicos datos públicos de aforo vehicular a los que se tuvo acceso son los de las casetas de acceso a la ciudad, pero forman una sola serie para toda la ciudad, que los efectos fijos por periodo ya absorben.
+    \item \textbf{No se sabe en qué nivel de la vialidad ocurrió cada incidente}. Si bien el C5 reporta las coordenadas de cada incidente, no especifica en qué nivel ocurrió, de modo que un incidente en un segundo piso no se distingue de uno a nivel de calle. El 42\% de las cámaras tiene vías de más de un nivel dentro de su círculo de 300 metros, y en esas áreas se cuentan incidentes sobre los que la cámara no podía influir, lo que diluye el efecto estimado hacia cero. Las covariables de desnivel y número de niveles buscan controlar esta ambigüedad, pero no la eliminan.
+    \item \textbf{Dos cámaras no tienen su ubicación real}. Las cámaras 25 y 53 tienen la coordenada de otra cámara, y los cruces que describe la fuente para ellas están a varios kilómetros. Según la red vial, en ambos cruces hay otras cámaras del programa a menos de 100 metros, por lo que esas zonas probablemente ya forman parte de alguna unidad tratada, pero no es posible confirmarlo.
+    \item \textbf{Solo se observan los incidentes reportados y confirmados}. Los incidentes menores que no se reportaron al C5, o en los que ninguna unidad de emergencia confirmó el hecho, no aparecen en los datos. Si el registro hubiera cambiado de forma distinta en las zonas tratadas y en sus controles después del programa, los resultados estarían sesgados.
+\end{itemize}
