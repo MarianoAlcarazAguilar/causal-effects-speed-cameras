@@ -417,3 +417,13 @@ cada renglón: los controles sin emparejar arrancan en 3.842 y los emparejados e
 
 Las cuatro medias de la especificación principal: control 6.019 → 5.366,
 tratadas 6.222 → 5.421.
+
+## Corrección: error estándar de la brecha posterior (2026-11-02)
+
+`estimacion.py` le sacaba raíz a `t_test(...).sd`, que ya es el error estándar,
+así que `EE_suma` (la brecha `tratado + tratado:post` del modelo (1)) salía
+inflada: a 300 m, 0.597 en lugar de 0.357; en FCS, unas 15 veces. Corregido y
+regeneradas `conclusion-brecha` y `brecha-posterior*`. Ninguna brecha posterior
+es significativa antes ni después (|z| < 1.2); las estrellas siempre estuvieron
+bien. Las salidas guardadas de `conclusiones.ipynb`, `interpretation.ipynb` y
+`did-estimation.ipynb` siguen mostrando el valor viejo: no usar `EE_suma` de ahí.

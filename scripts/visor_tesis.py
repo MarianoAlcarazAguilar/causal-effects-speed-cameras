@@ -273,7 +273,14 @@ def job_diff(base: str, target: str):
         (new / "flat.tex").write_text(flatten(new), "utf-8")
         attempts = [("completo", []),
                     ("conservador (sin marcar matemáticas ni figuras)",
-                     ["--math-markup=off", "--graphics-markup=none"])]
+                     ["--math-markup=off", "--graphics-markup=none"]),
+                    # Tablas reestructuradas (\multicolumn, \cmidrule) y \textbf que cruzan
+                    # párrafos rompen la marca fina: se comparan como bloque entero.
+                    ("por bloques (tablas y negritas completas)",
+                     ["--math-markup=off", "--graphics-markup=none",
+                      "--exclude-textcmd=textbf,textit,texttt,emph,textsc",
+                      "--config=PICTUREENV=(?:picture|DIFnomarkup|table|tabular|tabularx"
+                      "|longtable|adjustbox)[\\w\\d*@]*"])]
         err = ""
         for mode, extra in attempts:
             r = subprocess.run(["latexdiff", *extra, str(old / "flat.tex"), str(new / "flat.tex")],
@@ -782,7 +789,7 @@ body.notoc #toc{display:none}
 #tocl .chgleg::before{content:"";width:8px;height:8px;border-radius:50%;background:#e8890c;flex:none}
 .page{margin:0 auto 14px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15);position:relative}
 .page canvas{display:block;width:100%;height:100%}
-.page .n{position:absolute;right:-34px;top:0;font-size:11px;color:var(--mute)}
+.page .n{position:absolute;right:-34px;top:0;font-size:11px;color:var(--mute);user-select:none}
 .hl{position:absolute;z-index:1;pointer-events:none;border-radius:2px}
 body.nohl .hl{display:none}
 .hl.del{background:rgba(214,48,39,.22)}.hl.add{background:rgba(47,91,211,.22)}
@@ -801,6 +808,10 @@ body.nohl .hl{display:none}
 .textLayer{position:absolute;inset:0;overflow:hidden;line-height:1;text-size-adjust:none;-webkit-text-size-adjust:none;forced-color-adjust:none;transform-origin:0 0;z-index:2}
 .textLayer span,.textLayer br{color:transparent;position:absolute;white-space:pre;cursor:text;transform-origin:0 0}
 .textLayer ::selection{background:rgba(47,91,211,.28)}
+.textLayer br::selection{background:transparent}
+.textLayer span.markedContent{top:0;height:0}
+.textLayer .endOfContent{display:block;position:absolute;inset:100% 0 0;z-index:-1;cursor:default;user-select:none}
+.textLayer .endOfContent.active{top:0}
 #cbtn{position:fixed;display:none;z-index:20;background:var(--acc);color:#fff;border:0;border-radius:6px;padding:5px 10px;font:inherit;font-size:13px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 #cmodal{position:fixed;inset:0;background:rgba(20,25,35,.35);display:none;align-items:center;justify-content:center;z-index:30}
 #cmodal .box{background:var(--panel);border-radius:10px;padding:16px;width:min(560px,92vw);box-shadow:0 10px 40px rgba(0,0,0,.3)}
@@ -899,10 +910,82 @@ class Viewer{
     if(!(tok===this.token||!div.isConnected))return;
     div.prepend(c);
     const tl=document.createElement('div');tl.className='textLayer';tl.style.setProperty('--scale-factor',scale);div.appendChild(tl);
-    page.getTextContent().then(tc=>pdfjsLib.renderTextLayer({textContentSource:tc,container:tl,viewport:vp,textDivs:[]}).promise).catch(()=>{});
+    page.getTextContent().then(tc=>pdfjsLib.renderTextLayer({textContentSource:tc,container:tl,viewport:vp,textDivs:[]}).promise)
+      .then(()=>bindTextLayer(tl)).catch(()=>{});
     this.drawMarks(div);
   }
 }
+
+// ---------- selección de texto
+// Puerto del TextLayerBuilder de pdf.js 3.11: un div «endOfContent» detrás del texto que se mueve
+// junto al punto donde va la selección. Sin él, al pasar el cursor por el hueco entre renglones el
+// navegador estira la selección hasta el final de la página y parpadea.
+const textLayers=new Map();
+function resetEnd(end,tl){tl.append(end);end.style.width='';end.style.height='';end.classList.remove('active')}
+function bindTextLayer(tl){
+  const end=document.createElement('div');end.className='endOfContent';tl.append(end);textLayers.set(tl,end);
+  tl.addEventListener('mousedown',()=>end.classList.add('active'));
+}
+(()=>{let down=false, prev=null;
+  const resetAll=()=>{for(const [tl,end] of textLayers){if(!tl.isConnected)textLayers.delete(tl);else resetEnd(end,tl)}};
+  document.addEventListener('pointerdown',()=>{down=true});
+  document.addEventListener('pointerup',()=>{down=false;resetAll()});
+  window.addEventListener('blur',()=>{down=false;resetAll()});
+  document.addEventListener('keyup',()=>{if(!down)resetAll()});
+  document.addEventListener('selectionchange',()=>{
+    const sel=document.getSelection(); if(!sel.rangeCount){resetAll();return}
+    const range=sel.getRangeAt(0);
+    for(const [tl,end] of textLayers){if(!tl.isConnected){textLayers.delete(tl);continue}
+      if(range.intersectsNode(tl))end.classList.add('active');else resetEnd(end,tl)}
+    const modStart=prev&&(range.compareBoundaryPoints(Range.END_TO_END,prev)===0||range.compareBoundaryPoints(Range.START_TO_END,prev)===0);
+    let a=modStart?range.startContainer:range.endContainer; if(a.nodeType===3)a=a.parentNode;
+    const tl=a.parentElement?.closest('.textLayer'), end=tl&&textLayers.get(tl);
+    if(end&&a.parentElement){end.style.width=tl.style.width;end.style.height=tl.style.height;
+      a.parentElement.insertBefore(end,modStart?a:a.nextSibling)}
+    prev=range.cloneRange();
+  });
+})();
+// En huecos y márgenes el navegador no sabe a qué texto apunta el cursor: se lleva la selección al
+// punto más cercano del renglón que está a esa altura (como en Preview).
+function caretNear(tl,x,y){
+  let best=null, bd=1e9;
+  for(const sp of tl.querySelectorAll('span')){const t=sp.firstChild; if(!t||t.nodeType!==3||!t.length)continue;
+    const r=sp.getBoundingClientRect(); if(!r.width)continue;
+    const dy=y<r.top?r.top-y:y>r.bottom?y-r.bottom:0, dx=x<r.left?r.left-x:x>r.right?x-r.right:0, d=dy*1000+dx;
+    if(d<bd){bd=d;best={sp,t,r}}}
+  if(!best)return null; const {t,r}=best;
+  if(x<=r.left)return {node:t,off:0}; if(x>=r.right)return {node:t,off:t.length};
+  const c=document.caretRangeFromPoint?.(x,(r.top+r.bottom)/2);
+  if(c&&c.startContainer===t)return {node:t,off:c.startOffset};
+  return {node:t,off:Math.round(t.length*(x-r.left)/r.width)};
+}
+const layerAt=(x,y)=>{const pg=document.elementsFromPoint(x,y).find(e=>e.classList?.contains('page'));return pg?.querySelector('.textLayer')};
+let selDrag=null;
+// El arrastre lo maneja el visor completo (si el navegador y el visor se turnan, la selección
+// parpadea); doble y triple clic siguen siendo del navegador.
+document.addEventListener('mousedown',e=>{selDrag=null; if(e.button!==0||e.detail>1)return;
+  const tl=e.target.closest?.('.textLayer'); if(!tl)return;
+  const p=caretNear(tl,e.clientX,e.clientY); if(!p)return;
+  e.preventDefault(); selDrag={tl,x:e.clientX,y:e.clientY,sc:tl.closest('.scroll')}; textLayers.get(tl)?.classList.add('active');
+  const s=getSelection(); if(e.shiftKey&&s.rangeCount)s.extend(p.node,p.off);else s.collapse(p.node,p.off)});
+function selExtend(){const d=selDrag; if(!d)return;
+  const tl=layerAt(d.x,d.y)||d.tl; d.tl=tl;
+  const p=caretNear(tl,d.x,d.y), s=getSelection(); if(p&&s.rangeCount)s.extend(p.node,p.off)}
+document.addEventListener('mousemove',e=>{if(!selDrag)return; if(!(e.buttons&1)){selDrag=null;return}
+  selDrag.x=e.clientX; selDrag.y=e.clientY; selExtend()});
+// arrastrar hasta el borde desplaza (el navegador ya no lo hace porque el arrastre es del visor)
+setInterval(()=>{const d=selDrag; if(!d?.sc)return; const r=d.sc.getBoundingClientRect(), m=40;
+  const v=d.y>r.bottom-m?d.y-(r.bottom-m):d.y<r.top+m?d.y-(r.top+m):0; if(!v)return;
+  d.sc.scrollTop+=Math.max(-40,Math.min(40,v/2)); selExtend()},30);
+document.addEventListener('mouseup',()=>{selDrag=null},true);
+// El PDF parte el texto en renglones y trae números de página: se limpia al copiar y al citar.
+function cleanSel(s){
+  return s.split('\n').filter(l=>!/^\s*\d{1,4}\s*$/.test(l)).join('\n')
+    .replace(/(\p{L})-\n(?=\p{Ll})/gu,'$1').replace(/\s*\n\s*/g,' ').replace(/[ \t]{2,}/g,' ').trim();
+}
+document.addEventListener('copy',e=>{const sel=getSelection(); if(!sel.rangeCount)return;
+  const n=sel.anchorNode, el=n&&(n.nodeType===1?n:n.parentElement); if(!el?.closest('.textLayer,.page'))return;
+  e.clipboardData.setData('text/plain',cleanSel(sel.toString())); e.preventDefault()});
 
 // posición (en px dentro del scroll) de un destino del índice
 Viewer.prototype.yOf=function(it){
@@ -959,13 +1042,47 @@ function myers(A,B){ // devuelve [borradoEnA, agregadoEnB] como Uint8Array; null
   }
   return [del,add];
 }
+// Myers solo aguanta pocas diferencias (memoria ~D²). Para capítulos reescritos se ancla primero
+// con palabras que salen una sola vez en cada lado (patience diff) y Myers corre en los huecos.
+function diffTokens(A,B){
+  const del=new Uint8Array(A.length), add=new Uint8Array(B.length), stack=[[0,A.length,0,B.length]];
+  const markAll=(a0,a1,b0,b1)=>{for(let i=a0;i<a1;i++)del[i]=1;for(let j=b0;j<b1;j++)add[j]=1};
+  while(stack.length){
+    let [a0,a1,b0,b1]=stack.pop();
+    while(a0<a1&&b0<b1&&A[a0]===B[b0]){a0++;b0++}
+    while(a0<a1&&b0<b1&&A[a1-1]===B[b1-1]){a1--;b1--}
+    if(a0===a1||b0===b1){markAll(a0,a1,b0,b1);continue}
+    let anchors=[];
+    if((a1-a0)+(b1-b0)>3000){
+      const cA=new Map(), cB=new Map();
+      for(let i=a0;i<a1;i++){const v=cA.get(A[i]);cA.set(A[i],v===undefined?i:-1)}
+      for(let j=b0;j<b1;j++){const v=cB.get(B[j]);cB.set(B[j],v===undefined?j:-1)}
+      const pairs=[]; for(let i=a0;i<a1;i++){const pa=cA.get(A[i]),pb=cB.get(A[i]); if(pa===i&&pb!==undefined&&pb>=0)pairs.push([i,pb])}
+      // subsecuencia creciente más larga en posición de B
+      const tails=[], prev=new Int32Array(pairs.length).fill(-1), tIdx=[];
+      pairs.forEach((p,k)=>{let lo=0,hi=tails.length; while(lo<hi){const m=(lo+hi)>>1; if(tails[m]<p[1])lo=m+1;else hi=m}
+        tails[lo]=p[1]; tIdx[lo]=k; prev[k]=lo?tIdx[lo-1]:-1});
+      for(let k=tails.length?tIdx[tails.length-1]:-1;k>=0;k=prev[k])anchors.push(pairs[k]);
+      anchors.reverse();
+    }
+    if(anchors.length){
+      let pa=a0,pb=b0;
+      for(const [i,j] of anchors){stack.push([pa,i,pb,j]);pa=i+1;pb=j+1}
+      stack.push([pa,a1,pb,b1]); continue;
+    }
+    const r=myers(A.slice(a0,a1),B.slice(b0,b1));
+    if(!r){markAll(a0,a1,b0,b1);continue}
+    r[0].forEach((v,k)=>{if(v)del[a0+k]=1}); r[1].forEach((v,k)=>{if(v)add[b0+k]=1});
+  }
+  return [del,add];
+}
 let lado={key:'',hunks:[],cur:-1};
 async function computeLado(){
   const [L,R]=viewers; if(view!=='lado'||tab!=='comparar'||!L?.doc||!R?.doc)return;
   const key=L.url+'|'+R.url; if(key===lado.key)return; lado.key=key; $('#navc').textContent='comparando…';
   const [a,b]=await Promise.all([pdfWords(L.doc,L.url),pdfWords(R.doc,R.url)]); if(lado.key!==key)return;
   const ids=new Map(), id=w=>{let v=ids.get(w);if(v===undefined){v=ids.size;ids.set(w,v)}return v};
-  const res=myers(a.toks.map(t=>id(t.w)),b.toks.map(t=>id(t.w)));
+  const res=diffTokens(a.toks.map(t=>id(t.w)),b.toks.map(t=>id(t.w)));
   if(!res){$('#navc').textContent='demasiados cambios';return}
   const [del,add]=res, hA=new Int32Array(a.toks.length).fill(-1), hB=new Int32Array(b.toks.length).fill(-1), hunks=[];
   let i=0,j=0;
@@ -1201,7 +1318,7 @@ let pending=null, comments=[];
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',4000)}
 document.addEventListener('mouseup',e=>{
   if(e.target.closest('#cbtn,#cmodal,#cpanel'))return;
-  setTimeout(()=>{const sel=getSelection(),q=sel.toString().trim(),b=$('#cbtn');
+  setTimeout(()=>{const sel=getSelection(),q=cleanSel(sel.toString()),b=$('#cbtn');
     const node=sel.anchorNode&&(sel.anchorNode.nodeType===1?sel.anchorNode:sel.anchorNode.parentElement);
     if(!q||!node||!node.closest('.textLayer')){b.style.display='none';return}
     const r=sel.getRangeAt(0).getBoundingClientRect(), pane=node.closest('.pane');

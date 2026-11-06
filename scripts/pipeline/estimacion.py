@@ -280,7 +280,7 @@ class Panel:
             suma = r.t_test(f"tratado + {interaccion} = 0")
             fila |= {
                 "suma": float(suma.effect[0]),
-                "EE_suma": float(np.sqrt(suma.sd[0, 0])),
+                "EE_suma": float(suma.sd[0, 0]),  # `sd` ya es el error estándar
                 "sig_suma": estrellas(float(suma.pvalue)),
             }
         else:
