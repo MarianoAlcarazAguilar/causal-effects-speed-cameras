@@ -1,256 +1,244 @@
-\chapter{Estimación y Resultados}
+\chapter{Resultados}
+\label{chap:resultados}
 
-\noindent Una vez consolidada la muestra emparejada mediante el \textit{propensity score matching}, se procede con la fase de estimación, para cuantificar el impacto que tuvieron los radares de velocidad. El objetivo último es identificar si la implementación del progarama de Fotoc\'ivicas generó un cambio significativo en la siniestralidad vial en las áreas tratadas.
+\noindent Este capítulo presenta las estimaciones del efecto de las cámaras sobre los incidentes viales en las 93 unidades tratadas de la muestra final. La primera sección reporta el efecto principal a 300 metros, muestra cómo cambia según el grupo de comparación y discute qué magnitudes son compatibles con los datos. Las siguientes evalúan el supuesto de tendencias paralelas, separan el efecto por tipo de incidente y por radio, revisan el papel de la pandemia y reportan la sensibilidad del resultado a la construcción de la muestra.
 
-\section{Definición de variables de resultados}
-\noindent Para capturar el impacto real, el análisis se realiza sobre cuatro dimensiones de severidad, tratadas cada una como variables dependientes:
+\section{Efecto principal}
+\label{sec:efecto-principal}
 
-\begin{itemize}
-    \item \textbf{Hechos de tránsito generales}: el agregado total de incidentes registrados
-    \item \textbf{Incidentes menores (MIN)}: hechos de tránsito que no resultaron con personas lesionadas ni fallecimientos
-    \item \textbf{Incidentes con lesionados (PIC)}: eventos que involucraron lesiones personales 
-    \item \textbf{Incidentes fatales (FCS)}: hechos de tránsito donde se registró al menos una persona fallecida en el lugar
-\end{itemize}
+\noindent En la especificación principal~\eqref{eq:did}, sobre el total de incidentes, se estima un efecto puntual de las cámaras equivalente a una reducción de 0.11 incidentes al mes en cada área, es decir, 1.8\% menos que la media de los controles antes del programa, que registraban en promedio 6.02 incidentes al mes. El efecto no es distinguible de cero: su error estándar es de 0.18, y el intervalo de confianza al 95\% del \emph{bootstrap} va de una reducción de 0.36 a un aumento de 0.13 incidentes al mes, es decir, de $-6.0\%$ a $+2.2\%$. El cuadro~\ref{tab:principal} reporta las tres especificaciones del capítulo 2 a 300 metros, con todos los incidentes.\\
 
-Adicionalmente, cada uno de estos incidentes se evalúa bajo dos métricas: en \textbf{nivles absolutos} (conteo mensual de incidentes por área), y en \textbf{tasas de siniestralidad}. Esta última métrica se construye normalizando el número de incidentes por cada $1,000$ vehículos que circularon en la ciudad durante el mes de de observación, utilizando los datos de los radares de conteo permanente para controlar por variaciones en la exposición vehicular. 
+Las especificaciones (1) y (2) tienen el mismo coeficiente estimado, una reducción de 0.15 incidentes al mes (2.5\%). Esto era de esperarse: como el panel está balanceado y el tratamiento fue simultáneo, los efectos fijos no mueven el coeficiente (sección~\ref{sec:especificacion}), aunque sí aumentan la varianza explicada. Al agregar las covariables interactuadas con el periodo posterior, la reducción estimada baja a 0.11.\\
 
-\section{Estimación}
-\noindent Para poder estimar los efectos de las cámaras de velocidad sobre cada uno de los resultados definidos anteriormente, hago uso de dos modelos complementarios, uno que no incluye efectos fijos, y otro que sí lo hace. El primero está definido como sigue,
-
-\[
-    y_{it} = \alpha + \beta \cdot treat_i + \gamma \cdot post_t + \delta \cdot treat\_post_{it} + \epsilon_{it}
-\]
-
-Donde,
-\begin{itemize}
-    \item $y_{it}$ representa el outcome (total de accidentes o tasa) observado en la área $i$ durante el mes $t$
-    \item $treat_i$ es una variable indicadora para las áreas que tienen un radar de velocidad. Es igual a $1$ si la área está tratada
-    \item $post_t$ es una varialbe indicadora igual a $1$ para los meses posteriores al inicio del programa (abril de 2019)
-    \item $treat\_post_{it}$ es el término de interacción que captura la exposición al tratamiento de las áreas. 
-    \item $\beta$ es el parámetro de interés que estima el \textbf{efecto promedio del tratamiento sobre los tratados (ATT)}
-\end{itemize}
-
-\noindent Por otro lado, el modelo en el cual se incluyen efectos fijos queda definido de la siguiente forma,
-
-\[
-    y_{it} = \gamma_i + \lambda_t + \delta \cdot treat\_post_{it} + \epsilon_{it}
-\]
-En esta especificación, $\gamma_i$ corresponde a los efectos fijos por cada área, y captura todas las características invariantes en el tiempo, mientras que $\lambda_t$ son los efectos fijos por mes, y absorbe los cambios comunes en toda la ciudad en un mes determinado. El coeficiente $\delta$ es la estimación del impacto causal aislando todos los factores anteriores. 
-
-La interpretación causal de esta estrategia descansa en tres elementos complementarios. Primero, que una vez condicionado el análisis a las unidades emparejadas por el \textit{propensity score} y a sus características geográficas, viales y de movilidad, la ubicación de los radares de velocidad pueda considerarse quasi aleatoria respecto a los resultados de siniestralidad. Segundo, que exista soporte común suficiente para construir contrafactuales razonables, condición que se satisface mediante el recorte de la muestra y las pruebas de balance presentadas anteriormente. Tercero, dado que el efecto se estima mediante diferencia en diferencias sobre la muestra emparejada, se requiere que en ausencia del programa las áreas tratadas y sus controles hubieran seguido trayectorias paralelas. Como se discute en el capítulo anterior, tanto la inspección visual de las series pretratamiento como las pruebas placebo resultan, en general, consistentes con este supuesto. 
-
-\section{Resultados}
-\noindent Tras la estimación de los modelos de diferencia en diferencias sobre la muestra emparejada, los resultados principales indican que \textbf{no existe evidencia estadística suficiente para afirmar que las cámaras de velocidad del programa de Fotoc\'ivicas generaron una reducción localizada de la siniestralidad} en su entorno inmediato.  
-
-Como se observa en la tabla \ref{tab:results-main-general}, el coeficiente de interacción $treat\_post$ que captura el efecto promedio del tratamiento sobre los tratados (ATT), no alcanza niveles de significancia estadísticos ($p > 0.05$) en ninguna de las especificaciones analizadas. 
-
-Las tablas \ref{tab:results-main-general}, \ref{tab:results-main-min}, \ref{tab:results-main-pic} y \ref{tab:results-main-fcs} permiten comparar simultáneamente los coeficientes estimados para cada radio en cada uno de los niveles de severidad de los incidentes, distinguiendo entre modelos sin efectos fijos y con efectos fijos, y entre resultados en niveles y en tasas.
+El coeficiente de Post en la especificación (1) indica que los controles registraron 0.65 incidentes menos al mes después del inicio del programa, una caída de 11\%. Esa caída, sin embargo, la comparten tratadas y controles e incluye otros factores, como la pandemia (sección~\ref{sec:pandemia}), por lo que no se le puede atribuir a las cámaras.
 
 \begin{table}[htbp]
     \centering
-    \caption{Resultados sobre hechos de tránsito generales}
-    \label{tab:results-main-general}
+    \caption{Efecto de las cámaras sobre los incidentes a 300 metros}
+    \label{tab:principal}
     \footnotesize
-    \begin{adjustbox}{max width=\textwidth}
-    \begin{tabular}{lcccccc}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{l c c c}
         \toprule
-        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        & (1) & (2) & (3) \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
-        Intersección & $1.198^{***}$ & $1.444^{***}$ & $2.393^{***}$ & $3.177^{***}$ & $4.321^{***}$ & $5.578^{***}$ \\
-         & $(0.030)$ & $(0.031)$ & $(0.045)$ & $(0.050)$ & $(0.062)$ & $(0.076)$ \\
-        Tratamiento & $0.073^{*}$ & $0.074$ & $0.068$ & $-0.021$ & $-0.032$ & $0.066$ \\
-         & $(0.043)$ & $(0.045)$ & $(0.064)$ & $(0.071)$ & $(0.087)$ & $(0.109)$ \\
-        Tiempo & $-0.240^{***}$ & $-0.282^{***}$ & $-0.430^{***}$ & $-0.502^{***}$ & $-0.710^{***}$ & $-0.926^{***}$ \\
-         & $(0.039)$ & $(0.041)$ & $(0.059)$ & $(0.066)$ & $(0.084)$ & $(0.100)$ \\
-        Tratamiento x Tiempo & $0.012$ & $0.031$ & $0.040$ & $0.057$ & $0.097$ & $0.162$ \\
-         & $(0.057)$ & $(0.061)$ & $(0.085)$ & $(0.096)$ & $(0.118)$ & $(0.144)$ \\
+        Tratado & 0.203 & & \\
+         & (0.435) & & \\
+        Tratado $\times$ Post & $-0.148$ & $-0.148$ & $-0.106$ \\
+         & (0.196) & (0.198) & (0.181) \\
+         & & $[-0.437,\ 0.086]$ & $[-0.364,\ 0.132]$ \\
+        Post & $-0.653^{***}$ & & \\
+         & (0.128) & & \\
+        \addlinespace
+        Efecto, \% del control & $-2.5\%$ & $-2.5\%$ & $-1.8\%$ \\
+        Tratado $+$ Tratado $\times$ Post & 0.055 & & \\
+         & (0.357) & & \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
-        Tratamiento x Tiempo & $0.012$ & $0.031$ & $0.040$ & $0.057$ & $0.097$ & $0.162$ \\
-         & $(0.057)$ & $(0.061)$ & $(0.085)$ & $(0.096)$ & $(0.118)$ & $(0.144)$ \\
-        \midrule
-        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
-        Intersección & $7.51 \times {10^{-5}}^{***}$ & $9.03 \times {10^{-5}}^{***}$ & $1.50 \times {10^{-4}}^{***}$ & $1.99 \times {10^{-4}}^{***}$ & $2.71 \times {10^{-4}}^{***}$ & $3.49 \times {10^{-4}}^{***}$ \\
-         & $(1.85 \times 10^{-6})$ & $(1.91 \times 10^{-6})$ & $(2.81 \times 10^{-6})$ & $(3.14 \times 10^{-6})$ & $(3.90 \times 10^{-6})$ & $(4.74 \times 10^{-6})$ \\
-        Tratamiento & $4.44 \times {10^{-6}}^{*}$ & $4.69 \times {10^{-6}}^{*}$ & $4.23 \times 10^{-6}$ & $-1.37 \times 10^{-6}$ & $-2.13 \times 10^{-6}$ & $4.12 \times 10^{-6}$ \\
-         & $(2.67 \times 10^{-6})$ & $(2.83 \times 10^{-6})$ & $(4.00 \times 10^{-6})$ & $(4.46 \times 10^{-6})$ & $(5.46 \times 10^{-6})$ & $(6.78 \times 10^{-6})$ \\
-        Tiempo & $-8.07 \times {10^{-6}}^{***}$ & $-8.95 \times {10^{-6}}^{***}$ & $-1.34 \times {10^{-5}}^{***}$ & $-1.29 \times {10^{-5}}^{***}$ & $-1.91 \times {10^{-5}}^{***}$ & $-2.48 \times {10^{-5}}^{***}$ \\
-         & $(2.58 \times 10^{-6})$ & $(2.73 \times 10^{-6})$ & $(3.85 \times 10^{-6})$ & $(4.33 \times 10^{-6})$ & $(5.46 \times 10^{-6})$ & $(6.46 \times 10^{-6})$ \\
-        Tratamiento x Tiempo & $1.33 \times 10^{-6}$ & $2.23 \times 10^{-6}$ & $3.35 \times 10^{-6}$ & $3.78 \times 10^{-6}$ & $6.44 \times 10^{-6}$ & $1.05 \times 10^{-5}$ \\
-         & $(3.71 \times 10^{-6})$ & $(3.98 \times 10^{-6})$ & $(5.53 \times 10^{-6})$ & $(6.23 \times 10^{-6})$ & $(7.65 \times 10^{-6})$ & $(9.35 \times 10^{-6})$ \\
-        \midrule
-        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
-        Tratamiento x Tiempo & $1.33 \times 10^{-6}$ & $2.23 \times 10^{-6}$ & $3.35 \times 10^{-6}$ & $3.78 \times 10^{-6}$ & $6.44 \times 10^{-6}$ & $1.05 \times 10^{-5}$ \\
-         & $(3.71 \times 10^{-6})$ & $(3.98 \times 10^{-6})$ & $(5.53 \times 10^{-6})$ & $(6.23 \times 10^{-6})$ & $(7.65 \times 10^{-6})$ & $(9.35 \times 10^{-6})$ \\
-
+        Efectos fijos de área y periodo & No & Sí & Sí \\
+        Covariables $\times$ Post & No & No & Sí \\
+        Media previa del control & 6.02 & 6.02 & 6.02 \\
+        Desv. estándar previa del control & 3.86 & 3.86 & 3.86 \\
+        Observaciones & 13,392 & 13,392 & 13,392 \\
+        \emph{Clusters} & 165 & 165 & 165 \\
+        $R^2$ & 0.009 & 0.509 & 0.513 \\
         \bottomrule
     \end{tabular}
-    \end{adjustbox}
-
-    \vspace{0.4em}
-    \begin{minipage}{0.93\textwidth}
-        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \begin{minipage}{0.95\linewidth}
+        \vspace{0.4em}
+        \footnotesize \textit{Nota:} Estimación por mínimos cuadrados ordinarios de las ecuaciones~\eqref{eq:did1}, \eqref{eq:did2} y~\eqref{eq:did} sobre las 93 unidades tratadas de la muestra final y sus controles emparejados, en círculos de 300 metros y en los 72 periodos mensuales de la ventana, del día 22 de un mes al 21 del siguiente. La variable dependiente es el número de incidentes de todos los niveles de gravedad por área y periodo. En las especificaciones (2) y (3), Tratado y Post quedan absorbidos por los efectos fijos. Entre paréntesis, errores estándar agrupados por componente; entre corchetes, el intervalo de confianza al 95\% del \emph{bootstrap} del proceso completo, con 2,000 repeticiones. El efecto en porcentaje divide Tratado $\times$ Post entre la media del control antes del programa, que en la especificación (1) es la constante. Tratado $+$ Tratado $\times$ Post es la diferencia entre tratadas y controles después del programa. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
     \end{minipage}
 \end{table}
+
+\textbf{Cómo cambia el resultado según la comparación}. La figura~\ref{fig:escalera} estima el mismo efecto a 300 metros con las alternativas que se discutieron en el capítulo 2, desde la más sencilla hasta la especificación principal. Comparar las zonas tratadas antes y después del programa da una reducción de 14\%, pero esa caída incluye todo lo que le ocurrió a la ciudad después de abril de 2019, empezando por la pandemia. Una diferencia en diferencias contra 631 áreas sin cámara, tomadas del conjunto de candidatos de modo que no se traslapen entre sí, da una reducción de 13.7\%, significativa al 1\% y dentro del rango que reporta la literatura internacional, pero si se quitan las seis unidades que se quedan sin pareja, esta reducción baja a 10.1\%.\\
+
+El emparejamiento es el paso que más pesa. Cuando cada zona tratada se compara con una zona sin cámara igual de peligrosa, la reducción cae a 2.5\% y deja de ser significativa. Los controles emparejados empiezan en 6.02 incidentes al mes, y no en 3.84 como las 631 áreas sin cámara, y después del programa bajan casi lo mismo que las tratadas. La mayor parte de la reducción que se observa al comparar contra el resto de la ciudad es la diferencia entre zonas peligrosas y zonas con menos incidentes, y no el efecto de las cámaras.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/conclusion-escalera.pdf}
+    \caption{Efecto estimado a 300 metros según el grupo de comparación}
+    \label{fig:escalera}
+    \begin{minipage}{0.95\linewidth}
+        \footnotesize \textit{Nota:} Cada punto es el efecto estimado con todos los incidentes, como porcentaje del nivel previo del grupo con el que se compara; las líneas son el intervalo de confianza al 95\% con errores estándar agrupados por componente. El primer renglón compara a las 99 unidades tratadas consigo mismas antes y después del programa; el segundo y el tercero comparan a las 99 y a las 93 unidades tratadas con 631 áreas sin cámara que no se traslapan entre sí; los dos últimos, a las 93 con sus controles emparejados. En rojo, el intervalo del \emph{bootstrap} de la especificación principal.
+    \end{minipage}
+\end{figure}
+
+\textbf{Qué magnitudes son compatibles con los datos}. Que el efecto no sea significativo no implica necesariamente que las cámaras no hayan tenido ningún efecto. Lo que el intervalo de confianza permite es decir qué efectos son compatibles con los datos, que, como ya se adelantaba, van desde un pequeño aumento hasta una reducción de 6\% en el total de incidentes. En los incidentes con lesionados, que es lo que mide la mayor parte de la literatura, el intervalo a 300 metros va de una reducción de 9.2\% a un aumento de 3.4\%. Bajo el supuesto de tendencias paralelas, este intervalo descarta las reducciones de entre 12\% y 28\% en incidentes con lesionados que reportan los estudios internacionales (Mountain et al., 2005; Li et al., 2013, 2020; Graham et al., 2019). Vale la pena subrayar que esta tesis compara áreas circulares, por lo que inevitablemente cuenta incidentes sobre los que las cámaras no podían influir, mientras que esos estudios miden el tramo de vía inmediato a la cámara.\\
+
+El intervalo también muestra hasta dónde se hubieran podido observar cambios significativos: para distinguirse de cero, el efecto tendría que haber sido una reducción de más de 6\% en el total de incidentes y de más de 9\% en los incidentes con lesionados.
+
+\section{Tendencias previas}
+\label{sec:tendencias-previas}
+
+\noindent La figura~\ref{fig:event-study} muestra los coeficientes del \emph{event study} descrito en el capítulo 2 para los cinco radios.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/conclusion-event-study.pdf}
+    \caption{\emph{Event study} por radio}
+    \label{fig:event-study}
+    \begin{minipage}{0.95\linewidth}
+        \footnotesize \textit{Nota:} Cada punto es el coeficiente de Tratado $\times$ año en la especificación principal con un indicador para cada año, como porcentaje de la media previa del control; las líneas son el intervalo de confianza al 95\% con errores estándar agrupados por componente. El año $-1$ es la referencia y está fijo en cero. La zona sombreada corresponde al periodo posterior al programa.
+    \end{minipage}
+\end{figure}
+
+Antes del programa, ningún coeficiente se distingue de cero: ninguno pasa de 4\% de la media previa del control de su radio, y la prueba conjunta no se rechaza en ningún caso, con valores $p$ de entre 0.54 y 0.99. A 300 metros, los coeficientes de los años $-3$ y $-2$ corresponden a 2.2\% y 1.1\%, de modo que, en los puntos estimados, la brecha entre tratadas y controles ya se venía cerrando: las tratadas se acercaban poco a poco al nivel de sus controles, aunque, de nuevo, esto no se distingue de cero.\\
+
+Esto no demuestra que las tendencias sean paralelas, pero tampoco hay evidencia de que no lo sean. Además, los intervalos de los años previos, de entre $\pm 6\%$ y $\pm 9\%$, son amplios frente al efecto estimado, de alrededor de 2\%, de modo que una diferencia de tendencias de ese tamaño no se hubiera detectado. En todo caso, si la tendencia previa fuera real, solo podría hacer que la reducción atribuible a las cámaras fuera menor que la estimada.\\
+
+Los coeficientes posteriores al programa tampoco se distinguen de cero. El primer año es el más negativo en cuatro de los cinco radios, y en el tercero los estimados regresan a cero o se vuelven positivos en cuatro de los cinco. Este patrón no puede interpretarse como un efecto que se desvanece, porque ningún coeficiente es significativo, pero sí permite decir que no hay evidencia de una reducción en ninguno de los tres años.
+
+\section{Efecto por tipo de incidente y por radio}
+\label{sec:por-severidad}
+
+\noindent El cuadro~\ref{tab:por-nivel} y la figura~\ref{fig:por-nivel} muestran la especificación principal para todos los tipos de incidente y los cinco radios. No se observa nada que cambie la conclusión: en todos los casos, el intervalo del \emph{bootstrap} incluye el cero.\\
+
+\textbf{Todos los incidentes}. El estimado puntual es un aumento de 5.6\% a 100 metros y una reducción en los demás radios, sin un patrón claro: ninguna reducción puntual supera el 2.6\%, que es la de 250 metros.\\
+
+\textbf{Incidentes menores}. La mayor reducción puntual es de 4.0\%, a 150 metros, y en los radios mayores se acerca a cero.\\
+
+\textbf{Incidentes con lesionados}. Es el único tipo en el que el estimado puntual baja conforme aumenta el radio, con un aumento de 9.5\% a 100 metros y la mayor reducción, de 4.3\%, a 250 metros. A 100 metros se encuentra el único coeficiente estadísticamente significativo con los errores estándar agrupados ($p<0.05$), pero la significancia se pierde con el \emph{bootstrap}, cuyo intervalo va de $-4.5\%$ a $+13.4\%$, lo que hace difícil interpretarlo como un efecto real.\\
+
+\textbf{Incidentes fatales}. Los resultados son difíciles de interpretar porque estos incidentes son muy pocos: a 300 metros, los controles registraban 0.04 incidentes fatales al mes por área antes del programa. Esta baja frecuencia se refleja en el ancho de los intervalos de confianza, que van de reducciones de entre 17\% y 42\% a aumentos de entre 37\% y 56\%, según el radio, por lo que no se puede afirmar nada sobre los incidentes fatales, ni a favor ni en contra. Para distinguirse de cero, el efecto hubiera tenido que ser muy grande.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/conclusion-por-nivel.pdf}
+    \caption{Efecto estimado por tipo de incidente y por radio}
+    \label{fig:por-nivel}
+    \begin{minipage}{0.95\linewidth}
+        \footnotesize \textit{Nota:} Cada punto es el coeficiente de Tratado $\times$ Post en la especificación principal~\eqref{eq:did}, como porcentaje de la media previa del control en ese radio y tipo de incidente; las líneas son el intervalo de confianza al 95\% del \emph{bootstrap} del proceso completo. El panel (d) tiene su propia escala.
+    \end{minipage}
+\end{figure}
 
 \begin{table}[htbp]
     \centering
-    \caption{Resultados sobre hechos de tránsito sin lesionados (MIN)}
-    \label{tab:results-main-min}
-    \footnotesize
-    \begin{adjustbox}{max width=\textwidth}
-    \begin{tabular}{lcccccc}
+    \caption{Efecto por tipo de incidente y por radio}
+    \label{tab:por-nivel}
+    \scriptsize
+    \setlength{\tabcolsep}{3pt}
+    \renewcommand{\arraystretch}{0.9}
+    \begin{tabular}{l c c c c c}
         \toprule
-        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        & 100 m & 150 m & 200 m & 250 m & 300 m \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
-        Intersección & ${0.719}^{***}$ & ${0.823}^{***}$ & ${1.422}^{***}$ & ${1.894}^{***}$ & ${2.668}^{***}$ & ${3.428}^{***}$ \\
-         & $(0.021)$ & $(0.021)$ & $(0.031)$ & $(0.035)$ & $(0.045)$ & $(0.055)$ \\
-        Tratamiento & $0.025$ & ${0.076}^{**}$ & $0.015$ & $-0.030$ & $-0.086$ & $0.004$ \\
-         & $(0.030)$ & $(0.032)$ & $(0.044)$ & $(0.051)$ & $(0.063)$ & $(0.078)$ \\
-        Tiempo & ${-0.257}^{***}$ & ${-0.273}^{***}$ & ${-0.490}^{***}$ & ${-0.598}^{***}$ & ${-0.878}^{***}$ & ${-1.106}^{***}$ \\
-         & $(0.026)$ & $(0.027)$ & $(0.039)$ & $(0.045)$ & $(0.056)$ & $(0.068)$ \\
-        Tratamiento x Tiempo & $-0.004$ & $-0.031$ & $0.021$ & $0.022$ & $0.089$ & $0.081$ \\
-         & $(0.038)$ & $(0.040)$ & $(0.055)$ & $(0.064)$ & $(0.079)$ & $(0.097)$ \\
+        \multicolumn{6}{l}{\textit{Panel A. Todos los incidentes}} \\
+        Tratado $\times$ Post & 0.125 & $-0.040$ & $-0.091$ & $-0.131$ & $-0.106$ \\
+         & (0.097) & (0.109) & (0.131) & (0.158) & (0.181) \\
+        \% del control & 5.6 & $-1.4$ & $-2.4$ & $-2.6$ & $-1.8$ \\
+         & $[-5.7, 8.0]$ & $[-6.7, 4.8]$ & $[-6.0, 4.5]$ & $[-5.6, 3.1]$ & $[-6.0, 2.2]$ \\
+        Media previa & 2.22 (2.52) & 2.95 (2.70) & 3.87 (3.02) & 5.03 (3.43) & 6.02 (3.86) \\
+        $R^2$ & 0.555 & 0.509 & 0.496 & 0.491 & 0.513 \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
-        Tratamiento x Tiempo & $-0.004$ & $-0.031$ & $0.021$ & $0.022$ & $0.089$ & $0.081$ \\
-         & $(0.038)$ & $(0.040)$ & $(0.055)$ & $(0.064)$ & $(0.079)$ & $(0.097)$ \\
+        \multicolumn{6}{l}{\textit{Panel B. Incidentes menores (MIN)}} \\
+        Tratado $\times$ Post & 0.041 & $-0.069$ & $-0.068$ & $-0.052$ & $-0.045$ \\
+         & (0.075) & (0.082) & (0.102) & (0.118) & (0.140) \\
+        \% del control & 3.1 & $-4.0$ & $-2.9$ & $-1.7$ & $-1.2$ \\
+         & $[-8.8, 6.8]$ & $[-9.8, 3.6]$ & $[-6.8, 3.7]$ & $[-5.3, 3.7]$ & $[-5.9, 3.0]$ \\
+        Media previa & 1.32 (1.77) & 1.71 (1.92) & 2.33 (2.18) & 3.03 (2.44) & 3.68 (2.76) \\
+        $R^2$ & 0.452 & 0.415 & 0.412 & 0.407 & 0.433 \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
-        Intersección & ${4.50 \times 10^{-5}}^{***}$ & ${5.15 \times 10^{-5}}^{***}$ & ${8.90 \times 10^{-5}}^{***}$ & ${1.19 \times 10^{-4}}^{***}$ & ${1.67 \times 10^{-4}}^{***}$ & ${2.15 \times 10^{-4}}^{***}$ \\
-         & $(1.31 \times 10^{-6})$ & $(1.33 \times 10^{-6})$ & $(1.95 \times 10^{-6})$ & $(2.22 \times 10^{-6})$ & $(2.79 \times 10^{-6})$ & $(3.41 \times 10^{-6})$ \\
-        Tratamiento & $1.47 \times 10^{-6}$ & ${4.70 \times 10^{-6}}^{**}$ & $9.86 \times 10^{-7}$ & $-1.88 \times 10^{-6}$ & $-5.48 \times 10^{-6}$ & $1.46 \times 10^{-7}$ \\
-         & $(1.89 \times 10^{-6})$ & $(1.99 \times 10^{-6})$ & $(2.77 \times 10^{-6})$ & $(3.16 \times 10^{-6})$ & $(3.90 \times 10^{-6})$ & $(4.84 \times 10^{-6})$ \\
-        Tiempo & ${-1.29 \times 10^{-5}}^{***}$ & ${-1.36 \times 10^{-5}}^{***}$ & ${-2.50 \times 10^{-5}}^{***}$ & ${-2.94 \times 10^{-5}}^{***}$ & ${-4.35 \times 10^{-5}}^{***}$ & ${-5.42 \times 10^{-5}}^{***}$ \\
-         & $(1.71 \times 10^{-6})$ & $(1.76 \times 10^{-6})$ & $(2.48 \times 10^{-6})$ & $(2.88 \times 10^{-6})$ & $(3.63 \times 10^{-6})$ & $(4.39 \times 10^{-6})$ \\
-        Tratamiento x Tiempo & $-2.02 \times 10^{-7}$ & $-1.60 \times 10^{-6}$ & $1.68 \times 10^{-6}$ & $1.40 \times 10^{-6}$ & $5.34 \times 10^{-6}$ & $5.26 \times 10^{-6}$ \\
-         & $(2.45 \times 10^{-6})$ & $(2.60 \times 10^{-6})$ & $(3.55 \times 10^{-6})$ & $(4.12 \times 10^{-6})$ & $(5.09 \times 10^{-6})$ & $(6.25 \times 10^{-6})$ \\
+        \multicolumn{6}{l}{\textit{Panel C. Incidentes con lesionados (PIC)}} \\
+        Tratado $\times$ Post & $0.085^{**}$ & 0.028 & $-0.020$ & $-0.085$ & $-0.065$ \\
+         & (0.042) & (0.055) & (0.067) & (0.077) & (0.080) \\
+        \% del control & 9.5 & 2.3 & $-1.3$ & $-4.3$ & $-2.8$ \\
+         & $[-4.5, 13.4]$ & $[-5.7, 9.6]$ & $[-7.6, 8.6]$ & $[-8.6, 4.6]$ & $[-9.2, 3.4]$ \\
+        Media previa & 0.89 (1.20) & 1.22 (1.38) & 1.52 (1.53) & 1.97 (1.75) & 2.30 (1.90) \\
+        $R^2$ & 0.386 & 0.359 & 0.358 & 0.368 & 0.391 \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
-        Tratamiento x Tiempo & $-2.02 \times 10^{-7}$ & $-1.60 \times 10^{-6}$ & $1.68 \times 10^{-6}$ & $1.40 \times 10^{-6}$ & $5.34 \times 10^{-6}$ & $5.26 \times 10^{-6}$ \\
-         & $(2.45 \times 10^{-6})$ & $(2.60 \times 10^{-6})$ & $(3.55 \times 10^{-6})$ & $(4.12 \times 10^{-6})$ & $(5.09 \times 10^{-6})$ & $(6.25 \times 10^{-6})$ \\
+        \multicolumn{6}{l}{\textit{Panel D. Incidentes fatales (FCS)}} \\
+        Tratado $\times$ Post & $-0.001$ & 0.001 & $-0.003$ & 0.006 & 0.004 \\
+         & (0.004) & (0.005) & (0.005) & (0.006) & (0.006) \\
+        \% del control & $-7.7$ & 3.4 & $-17.4$ & 18.6 & 11.6 \\
+         & $[-42.1, 51.3]$ & $[-33.3, 51.0]$ & $[-42.3, 55.9]$ & $[-19.4, 36.7]$ & $[-17.4, 37.1]$ \\
+        Media previa & 0.014 (0.120) & 0.018 (0.134) & 0.019 (0.139) & 0.032 (0.182) & 0.036 (0.193) \\
+        $R^2$ & 0.035 & 0.032 & 0.029 & 0.029 & 0.029 \\
+        \midrule
+        Efectos fijos & Sí & Sí & Sí & Sí & Sí \\
+        Cov. $\times$ Post & Sí & Sí & Sí & Sí & Sí \\
+        Observaciones & 13,392 & 13,392 & 13,392 & 13,392 & 13,392 \\
+        \emph{Clusters} & 186 & 183 & 179 & 171 & 165 \\
         \bottomrule
     \end{tabular}
-    \end{adjustbox}
-
-    \vspace{0.4em}
-    \begin{minipage}{0.93\textwidth}
-        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \begin{minipage}{0.95\linewidth}
+        \vspace{0.4em}
+        \scriptsize \textit{Nota:} Especificación principal~\eqref{eq:did}, estimada por mínimos cuadrados ordinarios con efectos fijos de área y periodo y covariables interactuadas con Post; Tratado y Post quedan absorbidos por los efectos fijos, por lo que no se reportan ni su suma con Tratado $\times$ Post. Muestra: las 93 unidades tratadas y sus controles emparejados en cada radio, en 72 periodos mensuales. Variable dependiente: incidentes del tipo indicado por área y periodo. Entre paréntesis bajo el coeficiente, el error estándar agrupado por componente; entre corchetes, el intervalo de confianza al 95\% del \emph{bootstrap} del proceso completo, como porcentaje de la media previa del control; junto a esa media, su desviación estándar. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
     \end{minipage}
 \end{table}
+
+\section{La pandemia}
+\label{sec:pandemia}
+
+\noindent El periodo posterior a la implementación del programa incluye, además, los dos primeros años de la pandemia de COVID-19, y esto se refleja en los datos (figura~\ref{fig:pandemia}). A 300 metros, los incidentes cayeron cerca de 57\% respecto de su nivel antes de la pandemia, pasando de alrededor de 6 al mes a solo 2.5 entre abril y mayo de 2020, y no fue sino hasta finales de 2021 que regresaron a su nivel previo. El mismo cambio se observa en las casetas de peaje de la periferia de la ciudad, donde el volumen vehicular cayó 46\% en abril de 2020, en línea con la caída del tránsito descrita en el capítulo 2.\\
+
+Lo relevante es si esos años cargan los resultados estimados. El golpe fue igual para ambos grupos, ya que tratadas y controles caen y se recuperan juntas. En el peor periodo, del 22 de abril al 21 de mayo de 2020, las tratadas registraron 2.58 incidentes por área y los controles 2.53. Además, la parte común del choque la absorben los efectos fijos de periodo.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/conclusion-pandemia.pdf}
+    \caption{Incidentes y volumen vehicular durante la ventana de análisis}
+    \label{fig:pandemia}
+    \begin{minipage}{0.95\linewidth}
+        \footnotesize \textit{Nota:} El panel (a) muestra el promedio mensual de incidentes por área de las 93 unidades tratadas y de sus controles emparejados, a 300 metros. El panel (b) muestra el volumen vehicular mensual en las estaciones de conteo permanente de las casetas de peaje de acceso a la ciudad, como índice con base 100 en el promedio previo al programa. La línea punteada marca el inicio de las fotocívicas, el 22 de abril de 2019; la zona sombreada, el primer año de la pandemia, a partir del 23 de marzo de 2020. Fuente del panel (b): elaboración propia con los informes anuales de \emph{Datos viales} de la Secretaría de Infraestructura, Comunicaciones y Transportes (Ruiz, 2015, 2016, 2017, 2018, 2019; Jiménez, 2020, 2021; Arganis, 2022; Nuño, 2023, 2024; Esteva, 2025).
+    \end{minipage}
+\end{figure}
+
+Los coeficientes posteriores del \emph{event study} (figura~\ref{fig:event-study}) permiten revisar, además, que la pandemia no esté cargando el resultado. De ser así, se esperaría que el coeficiente del segundo año, que corresponde al año de la pandemia, se apartara del resto. A 300 metros, los coeficientes de los tres años posteriores son de $-3.3\%$, $-0.1\%$ y $+1.3\%$, ninguno se distingue de cero y el del año de la pandemia no se aparta de los otros dos. No se encuentra evidencia de que la pandemia esté cargando el resultado.
+
+\section{Análisis de sensibilidad}
+\label{sec:robustez}
+
+\noindent El cuadro~\ref{tab:robustez} reporta el efecto sobre el total de incidentes con dos variantes de la muestra. La primera no restringe la muestra a las unidades tratadas que encuentran pareja en los cinco radios, sino que usa todos los pares de cada radio, entre 96 y 99. Los resultados son prácticamente iguales a los de la especificación principal, con un efecto a 300 metros de $-2.4\%$ en lugar de $-1.8\%$, y ninguno se distingue de cero.\\
+
+La segunda no empareja. Compara las 99 unidades tratadas con 631 áreas sin cámara, tomadas del conjunto de candidatos de modo que no se traslapen entre sí, con efectos fijos de área y periodo y sin covariables. En todos los radios se obtienen reducciones grandes y significativas, de entre 13.7\% y 35.7\%. Es el mismo resultado que muestra la figura~\ref{fig:escalera} a 300 metros, ahora en los cinco radios. La reducción desaparece al comparar cada zona tratada con un control igual de peligroso, lo que indica que proviene de las diferencias entre zonas y no de las cámaras.\\
+
+Por último, dos cambios a la especificación no alteran el resultado. Con un umbral de agrupación de 50\% en lugar de 60\%, que une a las unidades 32 y 77 (sección~\ref{sec:unidades}), el efecto a 300 metros pasa de $-2.4\%$ a $-2.6\%$ con todos los pares de ese radio. Interactuar las covariables con un indicador por periodo, en lugar de con Post, da exactamente el mismo coeficiente, como es de esperar en un panel balanceado con tratamiento simultáneo, y solo cambia el error estándar, de 0.181 a 0.185.
 
 \begin{table}[htbp]
     \centering
-    \caption{Resultados sobre hechos de tránsito con lesionados (PIC)}
-    \label{tab:results-main-pic}
-    \footnotesize
-    \begin{adjustbox}{max width=\textwidth}
-    \begin{tabular}{lcccccc}
+    \caption{Sensibilidad del efecto sobre el total de incidentes}
+    \label{tab:robustez}
+    \scriptsize
+    \setlength{\tabcolsep}{3pt}
+    \renewcommand{\arraystretch}{0.9}
+    \begin{tabular}{l c c c c c}
         \toprule
-        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
+        & 100 m & 150 m & 200 m & 250 m & 300 m \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
-        Intersección & ${0.470}^{***}$ & ${0.613}^{***}$ & ${0.956}^{***}$ & ${1.262}^{***}$ & ${1.631}^{***}$ & ${2.124}^{***}$ \\
-         & $(0.015)$ & $(0.016)$ & $(0.022)$ & $(0.025)$ & $(0.030)$ & $(0.036)$ \\
-        Tratamiento & ${0.047}^{**}$ & $-0.003$ & $0.050$ & $0.008$ & $0.049$ & $0.052$ \\
-         & $(0.021)$ & $(0.023)$ & $(0.031)$ & $(0.035)$ & $(0.042)$ & $(0.051)$ \\
-        Tiempo & $0.019$ & $-0.005$ & ${0.067}^{**}$ & ${0.103}^{***}$ & ${0.171}^{***}$ & ${0.183}^{***}$ \\
-         & $(0.022)$ & $(0.024)$ & $(0.032)$ & $(0.036)$ & $(0.044)$ & $(0.051)$ \\
-        Tratamiento x Tiempo & $0.018$ & ${0.059}^{*}$ & $0.017$ & $0.034$ & $0.015$ & $0.088$ \\
-         & $(0.031)$ & $(0.034)$ & $(0.046)$ & $(0.052)$ & $(0.063)$ & $(0.076)$ \\
+        \multicolumn{6}{l}{\textit{Panel A. Especificación principal, 93 pares en cada radio}} \\
+        Tratado $\times$ Post & 0.125 & $-0.040$ & $-0.091$ & $-0.131$ & $-0.106$ \\
+         & (0.097) & (0.109) & (0.131) & (0.158) & (0.181) \\
+        \% del control & 5.6 & $-1.4$ & $-2.4$ & $-2.6$ & $-1.8$ \\
+        Media previa & 2.22 (2.52) & 2.95 (2.70) & 3.87 (3.02) & 5.03 (3.43) & 6.02 (3.86) \\
+        Observaciones & 13,392 & 13,392 & 13,392 & 13,392 & 13,392 \\
+        \emph{Clusters} & 186 & 183 & 179 & 171 & 165 \\
+        $R^2$ & 0.555 & 0.509 & 0.496 & 0.491 & 0.513 \\
+        Cov. $\times$ Post & Sí & Sí & Sí & Sí & Sí \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
-        Tratamiento x Tiempo & $0.018$ & $0.059$ & $0.017$ & $0.034$ & $0.015$ & $0.088$ \\
-         & $(0.031)$ & $(0.034)$ & $(0.046)$ & $(0.052)$ & $(0.063)$ & $(0.076)$ \\
+        \multicolumn{6}{l}{\textit{Panel B. Todos los pares de cada radio}} \\
+        Tratado $\times$ Post & 0.112 & $-0.073$ & $-0.083$ & $-0.190$ & $-0.150$ \\
+         & (0.099) & (0.117) & (0.142) & (0.157) & (0.181) \\
+        \% del control & 4.9 & $-2.3$ & $-2.0$ & $-3.6$ & $-2.4$ \\
+        Media previa & 2.29 (2.56) & 3.13 (2.91) & 4.19 (3.39) & 5.20 (3.59) & 6.32 (4.15) \\
+        Pares & 96 & 98 & 99 & 97 & 98 \\
+        Observaciones & 13,824 & 14,112 & 14,256 & 13,968 & 14,112 \\
+        \emph{Clusters} & 192 & 193 & 191 & 179 & 175 \\
+        $R^2$ & 0.551 & 0.545 & 0.543 & 0.533 & 0.564 \\
+        Cov. $\times$ Post & Sí & Sí & Sí & Sí & Sí \\
         \midrule
-        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
-        Intersección & ${2.95 \times 10^{-5}}^{***}$ & ${3.83 \times 10^{-5}}^{***}$ & ${5.99 \times 10^{-5}}^{***}$ & ${7.91 \times 10^{-5}}^{***}$ & ${1.02 \times 10^{-4}}^{***}$ & ${1.33 \times 10^{-4}}^{***}$ \\
-         & $(9.35 \times 10^{-7})$ & $(1.02 \times 10^{-6})$ & $(1.38 \times 10^{-6})$ & $(1.55 \times 10^{-6})$ & $(1.86 \times 10^{-6})$ & $(2.22 \times 10^{-6})$ \\
-        Tratamiento & ${2.93 \times 10^{-6}}^{**}$ & $-7.27 \times 10^{-8}$ & $3.09 \times 10^{-6}$ & $4.29 \times 10^{-7}$ & $3.06 \times 10^{-6}$ & $3.35 \times 10^{-6}$ \\
-         & $(1.34 \times 10^{-6})$ & $(1.46 \times 10^{-6})$ & $(1.97 \times 10^{-6})$ & $(2.19 \times 10^{-6})$ & $(2.61 \times 10^{-6})$ & $(3.19 \times 10^{-6})$ \\
-        Tiempo & ${4.99 \times 10^{-6}}^{***}$ & ${4.81 \times 10^{-6}}^{***}$ & ${1.20 \times 10^{-5}}^{***}$ & ${1.68 \times 10^{-5}}^{***}$ & ${2.43 \times 10^{-5}}^{***}$ & ${2.95 \times 10^{-5}}^{***}$ \\
-         & $(1.46 \times 10^{-6})$ & $(1.61 \times 10^{-6})$ & $(2.17 \times 10^{-6})$ & $(2.41 \times 10^{-6})$ & $(2.95 \times 10^{-6})$ & $(3.41 \times 10^{-6})$ \\
-        Tratamiento x Tiempo & $1.62 \times 10^{-6}$ & $3.66 \times 10^{-6}$ & $1.51 \times 10^{-6}$ & $2.36 \times 10^{-6}$ & $1.55 \times 10^{-6}$ & $5.68 \times 10^{-6}$ \\
-         & $(2.10 \times 10^{-6})$ & $(2.31 \times 10^{-6})$ & $(3.11 \times 10^{-6})$ & $(3.48 \times 10^{-6})$ & $(4.19 \times 10^{-6})$ & $(5.06 \times 10^{-6})$ \\
-        \midrule
-        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
-        Tratamiento x Tiempo & $1.62 \times 10^{-6}$ & $3.66 \times 10^{-6}$ & $1.51 \times 10^{-6}$ & $2.36 \times 10^{-6}$ & $1.55 \times 10^{-6}$ & $5.68 \times 10^{-6}$ \\
-         & $(2.10 \times 10^{-6})$ & $(2.31 \times 10^{-6})$ & $(3.11 \times 10^{-6})$ & $(3.48 \times 10^{-6})$ & $(4.19 \times 10^{-6})$ & $(5.06 \times 10^{-6})$ \\
+        \multicolumn{6}{l}{\textit{Panel C. Sin emparejar, 99 unidades tratadas y 631 áreas sin cámara}} \\
+        Tratado $\times$ Post & $-0.329^{***}$ & $-0.358^{***}$ & $-0.380^{***}$ & $-0.451^{***}$ & $-0.525^{***}$ \\
+         & (0.089) & (0.103) & (0.119) & (0.147) & (0.166) \\
+        \% del control & $-35.7$ & $-24.7$ & $-17.5$ & $-15.4$ & $-13.7$ \\
+        Media previa & 0.92 (1.52) & 1.45 (1.92) & 2.17 (2.48) & 2.93 (3.02) & 3.84 (3.58) \\
+        Observaciones & 52,560 & 52,560 & 52,560 & 52,560 & 52,560 \\
+        \emph{Clusters} & 730 & 727 & 723 & 715 & 708 \\
+        $R^2$ & 0.583 & 0.573 & 0.589 & 0.613 & 0.631 \\
+        Cov. $\times$ Post & No & No & No & No & No \\
         \bottomrule
     \end{tabular}
-    \end{adjustbox}
-
-    \vspace{0.4em}
-    \begin{minipage}{0.93\textwidth}
-        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+    \begin{minipage}{0.95\linewidth}
+        \vspace{0.4em}
+        \scriptsize \textit{Nota:} Estimación por mínimos cuadrados ordinarios con efectos fijos de área y periodo, en 72 periodos mensuales. La variable dependiente es el número de incidentes de todos los niveles de gravedad por área y periodo. Los paneles A y B corresponden a la especificación principal~\eqref{eq:did}; el panel A usa las 93 unidades tratadas que encuentran pareja en los cinco radios, y el panel B, todos los pares de cada radio. El panel C corresponde a la especificación~\eqref{eq:did2}, sin emparejamiento, y compara las 99 unidades tratadas con 631 áreas sin cámara que no se traslapan entre sí. Tratado y Post quedan absorbidos por los efectos fijos. Entre paréntesis bajo el coeficiente, el error estándar agrupado por componente; junto a la media del control antes del programa, su desviación estándar. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
     \end{minipage}
 \end{table}
-
-\begin{table}[htbp]
-    \centering
-    \caption{Resultados sobre hechos de tránsito con personas fallecidas (FCS)}
-    \label{tab:results-main-fcs}
-    \footnotesize
-    \begin{adjustbox}{max width=\textwidth}
-    \begin{tabular}{lcccccc}
-        \toprule
-        & 75 m & 100 m & 200 m & 300 m & 400 m & 500 m \\
-        \midrule
-        \multicolumn{7}{l}{\textit{Panel A. Total de accidentes, sin efectos fijos}} \\
-        Intersección & ${0.009}^{***}$ & ${0.008}^{***}$ & ${0.015}^{***}$ & ${0.020}^{***}$ & ${0.022}^{***}$ & ${0.026}^{***}$ \\
-         & $(0.002)$ & $(0.002)$ & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ \\
-        Tratamiento & $8.36 \times 10^{-4}$ & $9.42 \times 10^{-4}$ & $0.002$ & $0.001$ & $0.005$ & ${0.010}^{**}$ \\
-         & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.004)$ \\
-        Tiempo & $-0.002$ & ${-0.004}^{*}$ & ${-0.007}^{***}$ & ${-0.006}^{**}$ & $-0.002$ & $-0.004$ \\
-         & $(0.002)$ & $(0.002)$ & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.004)$ \\
-        Tratamiento x Tiempo & $-0.002$ & $0.002$ & $0.002$ & $3.95 \times 10^{-5}$ & $-0.007$ & $-0.007$ \\
-         & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.005)$ & $(0.005)$ & $(0.006)$ \\
-        \midrule
-        \multicolumn{7}{l}{\textit{Panel B. Total de accidentes, con efectos fijos}} \\
-        Tratamiento x Tiempo & $-0.002$ & $0.002$ & $0.002$ & $3.95 \times 10^{-5}$ & $-0.007$ & $-0.007$ \\
-         & $(0.003)$ & $(0.003)$ & $(0.004)$ & $(0.005)$ & $(0.005)$ & $(0.006)$ \\
-        \midrule
-        \multicolumn{7}{l}{\textit{Panel C. Tasa de accidentes, sin efectos fijos}} \\
-        Intersección & ${5.62 \times 10^{-7}}^{***}$ & ${5.35 \times 10^{-7}}^{***}$ & ${9.54 \times 10^{-7}}^{***}$ & ${1.30 \times 10^{-6}}^{***}$ & ${1.40 \times 10^{-6}}^{***}$ & ${1.59 \times 10^{-6}}^{***}$ \\
-         & $(9.90 \times 10^{-8})$ & $(9.75 \times 10^{-8})$ & $(1.28 \times 10^{-7})$ & $(1.51 \times 10^{-7})$ & $(1.62 \times 10^{-7})$ & $(1.78 \times 10^{-7})$ \\
-        Tratamiento & $4.78 \times 10^{-8}$ & $5.54 \times 10^{-8}$ & $1.51 \times 10^{-7}$ & $7.85 \times 10^{-8}$ & $2.86 \times 10^{-7}$ & ${6.19 \times 10^{-7}}^{**}$ \\
-         & $(1.43 \times 10^{-7})$ & $(1.41 \times 10^{-7})$ & $(1.88 \times 10^{-7})$ & $(2.17 \times 10^{-7})$ & $(2.39 \times 10^{-7})$ & $(2.74 \times 10^{-7})$ \\
-        Tiempo & $-1.01 \times 10^{-7}$ & $-1.65 \times 10^{-7}$ & ${-3.72 \times 10^{-7}}^{**}$ & $-2.77 \times 10^{-7}$ & $9.20 \times 10^{-9}$ & $-6.96 \times 10^{-8}$ \\
-         & $(1.39 \times 10^{-7})$ & $(1.34 \times 10^{-7})$ & $(1.67 \times 10^{-7})$ & $(2.11 \times 10^{-7})$ & $(2.43 \times 10^{-7})$ & $(2.62 \times 10^{-7})$ \\
-        Tratamiento x Tiempo & $-8.88 \times 10^{-8}$ & $1.70 \times 10^{-7}$ & $1.71 \times 10^{-7}$ & $2.27 \times 10^{-8}$ & $-4.58 \times 10^{-7}$ & $-4.45 \times 10^{-7}$ \\
-         & $(1.97 \times 10^{-7})$ & $(2.03 \times 10^{-7})$ & $(2.57 \times 10^{-7})$ & $(3.05 \times 10^{-7})$ & $(3.43 \times 10^{-7})$ & $(3.92 \times 10^{-7})$ \\
-        \midrule
-        \multicolumn{7}{l}{\textit{Panel D. Tasa de accidentes, con efectos fijos}} \\
-        Tratamiento x Tiempo & $-8.88 \times 10^{-8}$ & $1.70 \times 10^{-7}$ & $1.71 \times 10^{-7}$ & $2.27 \times 10^{-8}$ & $-4.58 \times 10^{-7}$ & $-4.45 \times 10^{-7}$ \\
-         & $(1.97 \times 10^{-7})$ & $(2.03 \times 10^{-7})$ & $(2.57 \times 10^{-7})$ & $(3.05 \times 10^{-7})$ & $(3.43 \times 10^{-7})$ & $(3.92 \times 10^{-7})$ \\
-        \bottomrule
-    \end{tabular}
-    \end{adjustbox}
-
-    \vspace{0.4em}
-    \begin{minipage}{0.93\textwidth}
-        \tiny \textit{Nota:} Cada coeficiente aparece con su error estándar robusto entre paréntesis. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
-    \end{minipage}
-\end{table}
-
-
-En el caso de los \textbf{hechos de tránsito generales}, los coeficientes estimados son consistentemente positivos -- lo que podría sugerir un ligero incremento relativo de incidentes en zonas tratadas --, sin embargo, carecen siempre de robustez estadística. 
-
-Respecto a los incidentes fatales (FCS), la literatura sugiere que este es el rubro donde los radares suelen ser más efectivos. No obstante, en este análisis no se ha identificado dicho efecto, pues de nuevo, no se encuentra significancia en los resultados que puedan respaldarlo, incluso existe inconsistencia en los signos de los coeficientes, pues varían entre positivo y negativo, sin seguir alguna tendencia clara persistente con el aumento del radio de las áreas. 
-
-Un resultado que vale la pena destacar es que en todas las regresiones realizadas la variable del \textbf{tiempo} ($post_t$) \textbf{es siempre negativa y estadísticamente significativa.} Este hallazgo indica que, tras la implementación de las Fotoc\'ivicas en abril de 2019, hubo una \textbf{reducción generalizada de la siniestralidad} en todas las áreas analizadas (tanto tratadas como de control). Dado que el grupo de control fue construido mediante \textit{propensity score matching}, este descenso sugiere dos hipótesis fundamentales:
-
-\begin{enumerate}
-    \item \textbf{Efecto generalizado}: dada la naturaleza pública de la ubicación de los radares y la transición hacia un modelo cívico-educativo, podría haber generado un cambio de comportamiento que va más allá de la ubicación puntual de los radares. Si los conductores estaban conscientes de que la ciudad cuenta con dichos sistemas, pueden haber cambiado su conducta no solo en las zonas con radares, sino también en zonas similares. 
-    \item \textbf{Migración de incidentes}: la ausencia de un efecto localizado, sumado a la caída general en celdas comparables, puede sugerir que los incidentes migraron a otro tipo de zonas que son estructuralmente distintas a aquellas propensas a tener un radar de velocidad.
-\end{enumerate}
-
-Recordemos que el Gobierno de la Ciudad de México buscaba que las Fotoc\'ivicas generaran un cambio de conducta y no fueran un programa recaudatorio, razón por la cual hicieron pública la ubicación de todos los radares. Sin embargo, esta apertura es precisamente lo que puede haber diluido el efecto localizado: al saber dónde están las cámaras, es más fácil para los conductores evadir esas zonas o ajustar su velocidad solo en ese punto. Esta transparencia, sumada a que muchas sanciones todavía son económicas y no cívicas, podría estar fomentando una evasión sistemática que impide detectar un impacto puntual y directo en las celdas donde están los radares.
-
-Los hallazgos de esta investigación presentan contrastes significativos con las evaluaciones oficiales y la literatura previa sobre el programa de Fotoc\'ivicas (SEMOVI, 2020; Madrigal y Rodríguez, 2021; Quintero et al., 2023). Mientras que la SEMOVI y Quintero et al. reportan reducciones porcentuales de hasta dos dígitos en la siniestralidad, los coeficientes de la variable de tiempo en este estudio sugieren que dicho descenso (situado entre el 15\% y 20\%) es de naturaleza sistémica y no localizada. Dado que Quintero et al. emplean una unidad de análisis a nivel municipal, es altamente probable que sus resultados capturen el efecto generalizado observado en toda la ciudad, independientemente de la presencia de radares en zonas específicas.
-
-Por otro lado, a diferencia de Madrigal y Rodríguez (2021) --quien reconoce limitaciones en la construcción de su contrafactual--, esta tesis emplea el Propensity Score Matching (PSM) para garantizar que las unidades de control sean estadísticamente comparables, mitigando así el sesgo de selección, y derivado de ello, se observa que la significancia del impacto de los radares no existe. Si bien resulta complejo determinar si la reducción generalizada en los incidentes es atribuible exclusivamente al cambio de esquema sancionatorio o a factores exógenos no observados, la evidencia obtenida solo permite concluir que no existe un efecto causal localizado derivado de la ubicación física de las cámaras.
-
-Leídos en conjunto, estos resultados permiten distinguir entre una caída agregada de la siniestralidad en la ciudad y un efecto causal atribuible a la presencia inmediata de una cámara. Esa distinción ayuda a entender parte de la evidencia previa para la CDMX: los estudios con unidades espaciales amplias pueden estar capturando cambios sistémicos del programa o del contexto urbano, mientras que una evaluación local con un contrafactual más estricto exige evidencia más puntual alrededor de los radares.
