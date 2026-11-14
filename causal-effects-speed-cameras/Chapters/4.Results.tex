@@ -51,7 +51,7 @@ El coeficiente de Post en la especificación (1) indica que los controles regist
 
 \textbf{Cómo cambia el resultado según la comparación}. La figura~\ref{fig:escalera} estima el mismo efecto a 300 metros con las alternativas que se discutieron en el capítulo 2, desde la más sencilla hasta la especificación principal. Comparar las zonas tratadas antes y después del programa da una reducción de 14\%, pero esa caída incluye todo lo que le ocurrió a la ciudad después de abril de 2019, empezando por la pandemia. Una diferencia en diferencias contra 631 áreas sin cámara, tomadas del conjunto de candidatos de modo que no se traslapen entre sí, da una reducción de 13.7\%, significativa al 1\% y dentro del rango que reporta la literatura internacional, pero si se quitan las seis unidades que se quedan sin pareja, esta reducción baja a 10.1\%.\\
 
-El emparejamiento es el paso que más pesa. Cuando cada zona tratada se compara con una zona sin cámara igual de peligrosa, la reducción cae a 2.5\% y deja de ser significativa. Los controles emparejados empiezan en 6.02 incidentes al mes, y no en 3.84 como las 631 áreas sin cámara, y después del programa bajan casi lo mismo que las tratadas. La mayor parte de la reducción que se observa al comparar contra el resto de la ciudad es la diferencia entre zonas peligrosas y zonas con menos incidentes, y no el efecto de las cámaras.
+Cuando cada zona tratada se compara con una zona sin cámara igual de peligrosa, la reducción cae a 2.5\% y deja de ser significativa. Los controles emparejados empiezan en 6.02 incidentes al mes, y no en 3.84 como las 631 áreas sin cámara, y después del programa bajan casi lo mismo que las tratadas. La mayor parte de la reducción que se observa al comparar contra el resto de la ciudad es la diferencia entre zonas peligrosas y zonas con menos incidentes, y no el efecto de las cámaras. La sección~\ref{sec:robustez} muestra que agregar primero las covariables, sin emparejar, también elimina buena parte de esa diferencia.
 
 \begin{figure}[htbp]
     \centering
@@ -188,11 +188,13 @@ Los coeficientes posteriores del \emph{event study} (figura~\ref{fig:event-study
 \section{Análisis de sensibilidad}
 \label{sec:robustez}
 
-\noindent El cuadro~\ref{tab:robustez} reporta el efecto sobre el total de incidentes con dos variantes de la muestra. La primera no restringe la muestra a las unidades tratadas que encuentran pareja en los cinco radios, sino que usa todos los pares de cada radio, entre 96 y 99. Los resultados son prácticamente iguales a los de la especificación principal, con un efecto a 300 metros de $-2.4\%$ en lugar de $-1.8\%$, y ninguno se distingue de cero.\\
+\noindent Esta sección evalúa si los resultados anteriores dependen de alguna de las decisiones que se tomaron sobre cómo construir la muestra, como qué unidades tratadas entran en la comparación, cómo se agrupan las cámaras y contra qué áreas se comparan. En caso de que alguna de estas decisiones cargue el resultado, se esperaría ver movimientos en el efecto estimado. Para ello, se repite la estimación cambiando una decisión a la vez. En la mayoría de los casos se espera que el resultado no cambie, a excepción de uno que se detalla más adelante. El cuadro~\ref{tab:robustez} reporta los resultados para el total de incidentes.\\
 
-La segunda no empareja. Compara las 99 unidades tratadas con 631 áreas sin cámara, tomadas del conjunto de candidatos de modo que no se traslapen entre sí, con efectos fijos de área y periodo y sin covariables. En todos los radios se obtienen reducciones grandes y significativas, de entre 13.7\% y 35.7\%. Es el mismo resultado que muestra la figura~\ref{fig:escalera} a 300 metros, ahora en los cinco radios. La reducción desaparece al comparar cada zona tratada con un control igual de peligroso, lo que indica que proviene de las diferencias entre zonas y no de las cámaras.\\
+Se evalúa primero qué sucede cuando no se restringe la muestra a las unidades tratadas que encuentran pareja en todos los radios, restricción con la que la muestra quedó en 93 unidades tratadas. Aquí se estudia cada radio con todas las unidades tratadas que encuentran pareja en ese radio, por lo que entran entre 96 y 99, según el radio. Los resultados son prácticamente iguales a los de la especificación principal, el efecto a 300 metros cambia de $-1.8\%$ a $-2.4\%$, y en ningún caso se distinguen de cero.\\
 
-Por último, dos cambios a la especificación no alteran el resultado. Con un umbral de agrupación de 50\% en lugar de 60\%, que une a las unidades 32 y 77 (sección~\ref{sec:unidades}), el efecto a 300 metros pasa de $-2.4\%$ a $-2.6\%$ con todos los pares de ese radio. Interactuar las covariables con un indicador por periodo, en lugar de con Post, da exactamente el mismo coeficiente, como es de esperar en un panel balanceado con tratamiento simultáneo, y solo cambia el error estándar, de 0.181 a 0.185.
+Después se prescinde por completo del emparejamiento. Se comparan las 99 unidades tratadas contra las 631 áreas sin cámara que resultan de tomar los candidatos de forma que no se traslapen entre sí, con la especificación principal. En la sección~\ref{sec:efecto-principal} ya se había evaluado una comparación similar, en la que primero se empareja y al final se agregan las covariables; aquí, en cambio, las covariables entran sin el emparejamiento. Con ellas, la reducción aún es significativa a 100, 150 y 200 metros, de 24.6\%, 14.6\% y 8.6\%, y deja de serlo a 250 y 300 metros, con 5.5\% y 4.5\%. Con esto y con la figura~\ref{fig:escalera} se ve que el emparejamiento es el que termina de eliminar la significancia estadística en todos los radios. Cabe recordar que esto se debe en buena medida a que las áreas sin cámara son mucho menos peligrosas que los controles emparejados, ya que a 100 metros registraban en promedio 0.92 incidentes al mes, contra 2.22 de los controles emparejados, y a 300 metros, 3.84 contra 6.02. Por ello, el efecto en porcentaje también es mucho mayor.\\
+
+Por último, hay otros dos cambios que no tienen impacto en el resultado. Si el umbral para agrupar cámaras baja de 60\% a 50\%, las unidades tratadas pasan de 99 a 98, y el efecto a 300 metros, considerando todos los pares de ese radio, pasa de $-2.4\%$ a $-2.6\%$. Por otro lado, si las covariables se interactúan con un indicador por periodo en lugar de con Post, se obtiene el mismo coeficiente, como es de esperar en un panel balanceado en el que el tratamiento entra al mismo tiempo para todas las unidades, y solo cambia el error estándar, de 0.181 a 0.185.
 
 \begin{table}[htbp]
     \centering
@@ -227,18 +229,18 @@ Por último, dos cambios a la especificación no alteran el resultado. Con un um
         Cov. $\times$ Post & Sí & Sí & Sí & Sí & Sí \\
         \midrule
         \multicolumn{6}{l}{\textit{Panel C. Sin emparejar, 99 unidades tratadas y 631 áreas sin cámara}} \\
-        Tratado $\times$ Post & $-0.329^{***}$ & $-0.358^{***}$ & $-0.380^{***}$ & $-0.451^{***}$ & $-0.525^{***}$ \\
-         & (0.089) & (0.103) & (0.119) & (0.147) & (0.166) \\
-        \% del control & $-35.7$ & $-24.7$ & $-17.5$ & $-15.4$ & $-13.7$ \\
+        Tratado $\times$ Post & $-0.226^{***}$ & $-0.212^{**}$ & $-0.187^{*}$ & $-0.160$ & $-0.174$ \\
+         & (0.080) & (0.093) & (0.110) & (0.131) & (0.153) \\
+        \% del control & $-24.6$ & $-14.6$ & $-8.6$ & $-5.5$ & $-4.5$ \\
         Media previa & 0.92 (1.52) & 1.45 (1.92) & 2.17 (2.48) & 2.93 (3.02) & 3.84 (3.58) \\
         Observaciones & 52,560 & 52,560 & 52,560 & 52,560 & 52,560 \\
         \emph{Clusters} & 730 & 727 & 723 & 715 & 708 \\
-        $R^2$ & 0.583 & 0.573 & 0.589 & 0.613 & 0.631 \\
-        Cov. $\times$ Post & No & No & No & No & No \\
+        $R^2$ & 0.585 & 0.575 & 0.591 & 0.616 & 0.634 \\
+        Cov. $\times$ Post & Sí & Sí & Sí & Sí & Sí \\
         \bottomrule
     \end{tabular}
     \begin{minipage}{0.95\linewidth}
         \vspace{0.4em}
-        \scriptsize \textit{Nota:} Estimación por mínimos cuadrados ordinarios con efectos fijos de área y periodo, en 72 periodos mensuales. La variable dependiente es el número de incidentes de todos los niveles de gravedad por área y periodo. Los paneles A y B corresponden a la especificación principal~\eqref{eq:did}; el panel A usa las 93 unidades tratadas que encuentran pareja en los cinco radios, y el panel B, todos los pares de cada radio. El panel C corresponde a la especificación~\eqref{eq:did2}, sin emparejamiento, y compara las 99 unidades tratadas con 631 áreas sin cámara que no se traslapan entre sí. Tratado y Post quedan absorbidos por los efectos fijos. Entre paréntesis bajo el coeficiente, el error estándar agrupado por componente; junto a la media del control antes del programa, su desviación estándar. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+        \scriptsize \textit{Nota:} Estimación por mínimos cuadrados ordinarios con efectos fijos de área y periodo, en 72 periodos mensuales. La variable dependiente es el número de incidentes de todos los niveles de gravedad por área y periodo. Los tres paneles corresponden a la especificación principal~\eqref{eq:did}. El panel A usa las 93 unidades tratadas que encuentran pareja en los cinco radios; el panel B, todos los pares de cada radio, y el panel C no empareja y compara las 99 unidades tratadas con 631 áreas sin cámara que no se traslapan entre sí. Tratado y Post quedan absorbidos por los efectos fijos. Entre paréntesis bajo el coeficiente, el error estándar agrupado por componente; junto a la media del control antes del programa, su desviación estándar. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
     \end{minipage}
 \end{table}
