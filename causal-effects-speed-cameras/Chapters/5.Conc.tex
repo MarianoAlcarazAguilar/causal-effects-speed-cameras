@@ -1,47 +1,24 @@
 \chapter*{Conclusiones}
 \addcontentsline{toc}{chapter}{Conclusiones}
 
-% Estructura propuesta. Texto continuo, sin secciones; un bloque de uno o dos
-% párrafos por punto. Cada bloque dice de dónde sale su contenido.
+\noindent Esta tesis evalúa el efecto de las cámaras de velocidad del programa de fotocívicas sobre los incidentes viales en la Ciudad de México. Para hacerlo, se construyó un diseño que busca comparar zonas que realmente sean comparables. Las 113 cámaras se agruparon en 99 unidades tratadas que se mantienen fijas en cinco radios, de 100 a 300 metros cada 50 metros; los controles se tomaron de la misma red vial en la que están las cámaras, y cada unidad tratada se emparejó por \emph{propensity score} con un control igual de peligroso antes del programa. Sobre esa muestra, con las 93 unidades tratadas que encuentran pareja en los cinco radios, se estimó un modelo de diferencias en diferencias.\\
 
-% [1] La respuesta. La pregunta de la intro (cómo cambiaron los incidentes
-% alrededor de las cámaras desde fotocívicas), el diseño en una frase (áreas
-% circulares, emparejamiento y diferencias en diferencias) y el resultado: -1.8%
-% a 300 m, con un intervalo de -6.0% a +2.2%, sin efecto distinguible de cero en
-% ningún radio ni tipo de incidente. (Cap. 4, secciones 4.1 y 4.3.)
+Las cámaras del programa no muestran un efecto decisivo sobre el número de incidentes viales. A 300 metros, el efecto estimado es una reducción de 0.11 incidentes al mes por área, lo que equivale a 1.8\% de la media de los controles antes del programa. Este efecto no se puede distinguir de cero, con un intervalo de confianza del \emph{bootstrap} que va de $-6.0\%$ a $+2.2\%$, y en ningún radio ni tipo de incidente se observa algo que haga cambiar la conclusión.\\
 
-% [2] Contra la hipótesis. La intro plantea reducciones de 10-20%, mayores en los
-% incidentes graves. Bajo tendencias paralelas, los datos descartan reducciones de
-% ese tamaño (y las de 12-28% en lesionados de la literatura), pero no una de
-% hasta 6% en el total o 9% en lesionados. En fatales no se puede concluir nada.
-% (Cap. 4, 4.1, 4.2 y 4.3.)
+Lo que sí se puede descartar, bajo el supuesto de tendencias paralelas, es la hipótesis con la que se empezó este análisis, que esperaba reducciones de entre 10\% y 20\%, mayores en los incidentes con lesionados o fatalidades. Los datos son compatibles con reducciones de hasta 6\% en el total de incidentes y de hasta 9\% en los incidentes con lesionados, pero no con las que se planteaban en un inicio. En los incidentes fatales no se puede concluir nada, ya que son tan pocos que el efecto tendría que haber sido muy grande para distinguirse del ruido.\\
 
-% [3] Por qué difiere de lo reportado para la CDMX. Retoma los tres elementos que
-% el cap. 1 dice que condicionan los resultados (línea 39 de 1.Rev.tex):
-%   - la escala: comparar contra toda la ciudad da -14%; con zonas comparables
-%     desaparece (escalera de la 4.1 y sensibilidad de la 4.5). Quintero et al.
-%     miden alcaldías.
-%   - la ubicación: las cámaras se pusieron donde había más incidentes, y por eso
-%     la comparación ingenua confunde zonas peligrosas con efecto.
-%   - la sanción: la sanción cívica puede restar fuerza disuasiva. Es una
-%     posible explicación, no algo que se pruebe aquí.
-% También el efecto canguro y el tamaño del área: el cap. 2 lo plantea y nadie lo
-% retoma; los resultados por radio no muestran un efecto concentrado cerca de la
-% cámara.
+Estos resultados difieren de lo que se había reportado para la Ciudad de México, en buena medida porque se comparan cosas distintas. Quintero et al.\ (2023) estudian alcaldías completas y encuentran que, tras la llegada de fotocívicas, la tendencia de colisiones con lesionados y de muertes aumentó. Ese resultado describe el cambio de todo el programa en la ciudad, que en esta tesis afecta por igual a tratadas y controles y, por lo tanto, se resta. Madrigal y Rodríguez (2021), en cambio, estudian el tramo inmediato a cada cámara y encuentran reducciones en los incidentes con lesionados y fatales, aunque con niveles de confianza de entre 85\% y 90\%. Su escala es más cercana a la de esta tesis, pero sus controles son cruces de la red primaria sin emparejar. Por lo mismo, las magnitudes de esos trabajos no se comparan directamente con las de esta tesis. Quintero et al.\ reportan cambios en la tendencia semanal de alcaldías completas, y Madrigal y Rodríguez, efectos sobre el tramo inmediato a cada cámara, por lo que ninguno está en las mismas unidades que el cambio en los incidentes mensuales de un área circular. La escalera de resultados de la sección~\ref{sec:efecto-principal} muestra qué tanto importa esa decisión. Como las cámaras se ubicaron donde ya había más incidentes, comparar contra el resto de la ciudad da una reducción de 13.7\%, que desaparece al comparar contra zonas igual de peligrosas.\\
 
-% [4] Qué se estima y qué no. Es el efecto local de estar cerca de una cámara
-% bajo el mismo régimen de sanciones, no el efecto del programa en toda la
-% ciudad. Y no habla de las 6 zonas más peligrosas, que quedaron fuera.
-% (conclusiones.ipynb §7, primeros dos puntos; cap. 3, unidades excluidas.)
+Tampoco se observa el efecto canguro que se discutía en el capítulo 2. Si los conductores frenaran solo frente a la cámara y aceleraran después, el efecto debería ser mayor en el radio más chico y diluirse o invertirse en los mayores. Sin embargo, a 100 metros el estimado es un aumento de 5.6\%, y ningún radio se distingue de cero.\\
 
-% [5] Limitaciones que el lector debe tener en mente. La prueba de tendencias
-% previas tiene poca potencia; la inferencia es aproximada (el cap. 2 promete
-% aquí las limitaciones del bootstrap: no es formalmente válido para vecino más
-% cercano y las 93 unidades se toman como fijas); no hay datos de tránsito ni de
-% velocidad. Las limitaciones de los datos ya están en el cap. 3, así que solo se
-% remite a ellas. (conclusiones.ipynb §7.)
+Lo que se mide es el efecto de tener una cámara cerca, con las mismas sanciones en toda la ciudad, y solo en las unidades para las que se encontró un control realmente comparable. Si el programa tuvo un efecto disuasivo en toda la ciudad, este diseño lo resta y no lo puede ver. Además, se dejaron fuera seis unidades, que son las más peligrosas de la ciudad, justamente porque no se les encontró un buen control. Si en ellas el efecto fue distinto al estimado, no es posible saberlo, al menos no con este diseño.\\
 
-% [6] Qué haría falta y qué implica. Datos de aforo y velocidad dentro de la
-% ciudad serían la mejora más valiosa. Para la política, cautela al atribuir a
-% las cámaras las caídas que se observan en toda la ciudad. Opcional: el
-% emparejamiento podría usarse para elegir dónde ampliar el programa y evaluarlo.
+La prueba de tendencias paralelas no da señales de que el supuesto se esté violando, pero hay que reconocer que tiene poca potencia, por lo que una diferencia de tendencias del tamaño del efecto estimado no se hubiera detectado. Por otro lado, los errores estándar convencionales tratan a los pares emparejados como si estuvieran dados, cuando en realidad se construyeron con los mismos datos. Con otra muestra, el \emph{propensity score} sería distinto y el emparejamiento elegiría otros controles, y esa incertidumbre no queda reflejada en ellos. El \emph{bootstrap} del proceso completo busca incorporar esa incertidumbre, pero tampoco es formalmente válido para el emparejamiento por vecino más cercano (Abadie e Imbens, 2008), y en cada repetición se toman como dadas las 93 unidades tratadas. Por eso la discusión se apoya en la magnitud de los efectos más que en su significancia. Por último, no se tienen datos de tránsito ni de velocidades dentro de la ciudad, por lo que lo mejor que se pudo hacer con la pandemia fue verificar que no estuviera cargando el resultado.\\
+
+Sobre por qué se observan estos resultados, hay varias posibles explicaciones. La primera tiene que ver con el propio diseño, que tiende a acercar el efecto a cero. Un área de 300 metros incluye incidentes en calles y en niveles de la vía sobre los que la cámara no tiene efecto, y el 42\% de las cámaras tiene vías de más de un nivel dentro de su círculo (sección~\ref{sec:limitaciones}). Sería ideal saber en qué nivel sucedió cada incidente, para poder atribuirlo sin ambigüedad a una vía; esto, además, permitiría ver si hubo migración de incidentes hacia otras calles.\\
+
+La segunda es que las cámaras parecen no estar generando el cambio de conducta que se esperaba, aunque sin datos de velocidad esto no se puede comprobar. Quintero et al.\ (2023) atribuyen su resultado a que las sanciones cívicas son más difíciles de hacer cumplir, y la figura~\ref{fig:sanciones} muestra que la mayoría de las infracciones siguen terminando en multas económicas, posiblemente por la cantidad de vehículos con placas foráneas que circulan por la ciudad. Valdría la pena evaluar qué hacer en esos casos.\\
+
+La tercera es que una cámara difícilmente cambia por sí sola la forma en que se maneja en una vía diseñada para circular rápido. El enfoque de sistema seguro recomienda atacar varios frentes a la vez, y las vialidades donde están las cámaras, primarias y de acceso controlado, no invitan a respetar el límite. La guía de Job et al.\ (2020) sugiere, además, combinar cámaras visibles con otras menos visibles, de modo que los conductores no ajusten su velocidad solo en los puntos que ya conocen.\\
+
+En resumen, no hay evidencia de que las cámaras hayan reducido los incidentes en su entorno, pero tampoco de que los hayan aumentado; si tuvieron un efecto, fue menor al esperado. La principal lección de este análisis es que hay que tener mucho cuidado con qué se compara y por qué. La misma pregunta, con los mismos datos, da una reducción de 14\% o un efecto que no se distingue de cero, dependiendo de contra qué zonas se comparen las cámaras.

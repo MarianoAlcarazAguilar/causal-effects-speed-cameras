@@ -235,6 +235,8 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       unidades fusionadas por traslape con grupos fijos a 300 m (que es su punto 1),
       covariables de 18 a 12 con la medición que lo respalda, y reparto de
       incidentes compartidos. Sin esto, los puntos 1–8 le llegan sin contexto.
+      Incluir también que su 3b (Sant'Anna y Zhao, 2020) se decidió no hacer:
+      no se menciona en la tesis, solo en esta nota.
 
 ---
 
