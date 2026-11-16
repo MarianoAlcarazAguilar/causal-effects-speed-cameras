@@ -29,11 +29,12 @@ scripts/
   analisis/         Los notebooks que justifican cada paso, numerados en orden
   visor/            Visor local de la tesis (ver abajo)
 figures/            Scripts de las figuras de la tesis, uno por capítulo
+.claude/skills/
+  figuras-tesis/    Estilo, convenciones y ejemplos de las figuras (ver abajo)
 data/               Insumos versionados (ver abajo)
 notas/              Revisión del asesor, pendientes y apuntes
 historico/          El análisis de septiembre de 2026, como referencia. Ya nada lo usa
 nbsetup.py          Arranque de los notebooks
-.claude/skills/figuras-tesis/   Estilo, fuentes y convenciones de las figuras (lo importan los scripts de figures/)
 ```
 
 ### `scripts/pipeline/`
@@ -90,7 +91,8 @@ genera vive en `.visor/`, que no está en git.
 ### `figures/scripts/`
 
 Cada script genera los PDF de un capítulo en `tesis/Imagenes/`. Con `--png` deja
-además una vista previa en `figures/png/`.
+además una vista previa en `figures/png/`. El estilo lo importan de la skill
+`figuras-tesis` (abajo).
 
 | Script | Figuras |
 | --- | --- |
@@ -98,6 +100,28 @@ además una vista previa en `figures/png/`.
 | `capitulo3_figures.py` | Capítulo 3 y soporte común del apéndice A |
 | `capitulo4_figures.py` | Capítulo 4 (lee el *bootstrap* versionado; no lo recalcula) |
 | `apendice_figures.py` | Apéndice B. Necesita `data/raw/businesses-cdmx.json`, que no está versionado |
+
+### `.claude/skills/figuras-tesis/`
+
+Una skill de Claude Code del proyecto: todo lo necesario para que una figura nueva se
+vea como las de la tesis. Claude la carga sola cuando, trabajando en este repo, se le
+pide una figura; también se puede leer como documentación.
+
+| Ruta | Qué es |
+| --- | --- |
+| `SKILL.md` | Cuándo usarla, el flujo para agregar una figura y las reglas que más se olvidan |
+| `assets/` | `tesis.mplstyle` y las fuentes Latin Modern |
+| `scripts/estilo_tesis.py` | Registra las fuentes y aplica el estilo; los colores (`OSCURO`, `CLARO`, `ACENTO`…), el ancho de la figura y utilidades como `cero()`, `pct()` y `guardar()` |
+| `references/convenciones.md` | Las reglas de las figuras, cada una con el caso de la tesis del que salió |
+| `references/tipos-de-figura.md` | Qué figura usar para qué, y lo que se probó y no funcionó |
+| `references/latex.md` | Cómo insertarlas: caption, nota a renglón sencillo y cómo evitar que muevan páginas |
+| `examples/` | Cinco ejemplos que corren solos, con su PNG: escalera de coeficientes, *event study*, distribuciones, *love plot* y mapa resaltado |
+
+**Los scripts de `figures/scripts/` importan el estilo de aquí:** cambiar
+`estilo_tesis.py`, `tesis.mplstyle` o las fuentes cambia todas las figuras de la tesis.
+La skill pasa el validador oficial de skills; no hace falta empaquetarla como `.skill`,
+porque Claude Code la lee como carpeta (el `.skill` es solo para compartirla o
+instalarla en claude.ai).
 
 ## Cómo correrlo
 
@@ -107,7 +131,8 @@ el apéndice B necesita además `h3` (v4).
 - **La tesis:** `python3 scripts/visor` abre el visor en
   http://127.0.0.1:8765, compila al guardar y compara contra cualquier versión de
   git. Para compilar a mano: `tectonic -X compile tesis/main.tex`.
-- **Las figuras:** `python figures/scripts/<script>.py`.
+- **Las figuras:** `python figures/scripts/<script>.py` (con `--png` para la vista
+  previa). Para una figura nueva, partir de `.claude/skills/figuras-tesis/`.
 - **Los notebooks:** empiezan con `from nbsetup import *`, que deja el directorio
   de trabajo en la raíz del repo y pone `scripts/` en el path. Funciona desde
   cualquier carpeta gracias a un archivo `.pth` en el entorno, que es local a esta
@@ -136,7 +161,8 @@ El remoto es `git@github-personal:MarianoAlcarazAguilar/causal-effects-speed-cam
 con la cuenta personal. El `.gitignore` es una lista de permitidos: un archivo
 nuevo queda fuera hasta que se agrega explícitamente. Las imágenes de
 `tesis/Imagenes/` no están versionadas; se regeneran con los scripts de
-`figures/`.
+`figures/`. La skill `figuras-tesis` sí está versionada (su `.md`, `.py`,
+`.mplstyle`, fuentes y PNG de ejemplo), así que un clon puede regenerar las figuras.
 
 Hasta el 16 de noviembre de 2026 la tesis vivía en `causal-effects-speed-cameras/`.
 El visor busca ahí las versiones anteriores, así que sigue pudiendo comparar contra
