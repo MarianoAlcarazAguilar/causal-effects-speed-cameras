@@ -3,7 +3,7 @@ Pool de unidades de control.
 
 Los centros candidatos son puntos aleatorios sobre la red vial, muestreados
 proporcionalmente a la longitud de cada segmento. De las construcciones que se
-consideraron en `scripts/resume-911/control-design.ipynb` es la que menos
+consideraron en `scripts/analisis/03-control-design.ipynb` es la que menos
 decisiones arrastra: no hay que definir qué cuenta como intersección ni dónde
 empieza una rejilla, y cubre tramos y cruces porque unos y otros son parte de la
 red.

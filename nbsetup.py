@@ -26,8 +26,7 @@ SCRIPTS = ROOT / "scripts"
 # Ejecutar siempre como si el notebook viviera en la raíz.
 os.chdir(ROOT)
 
-# `scripts/` en el path permite tanto `import grid_builder` como
-# `from scripts import grid_builder`.
+# `scripts/` en el path permite `from pipeline import ...` desde cualquier notebook.
 for path in (ROOT, SCRIPTS):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))

@@ -21,14 +21,14 @@
 # Figuras del capítulo 4 (resultados).
 !/figures/scripts/capitulo4_figures.py
 
-!/causal-effects-speed-cameras/
-!/causal-effects-speed-cameras/**/
-!/causal-effects-speed-cameras/**/*.tex
-!/causal-effects-speed-cameras/**/*.bib
-!/causal-effects-speed-cameras/**/*.sty
-!/causal-effects-speed-cameras/**/*.cls
-!/causal-effects-speed-cameras/**/*.bst
-!/causal-effects-speed-cameras/**/*.py
+!/tesis/
+!/tesis/**/
+!/tesis/**/*.tex
+!/tesis/**/*.bib
+!/tesis/**/*.sty
+!/tesis/**/*.cls
+!/tesis/**/*.bst
+!/tesis/**/*.py
 
 !/scripts/
 !/scripts/**/
@@ -40,6 +40,13 @@
 !/scripts/**/*.Rmd
 !/scripts/**/*.do
 !/scripts/**/*.sh
+
+# Análisis de septiembre, como referencia: ya nada lo usa.
+!/historico/
+!/historico/**/
+!/historico/**/*.py
+!/historico/**/*.ipynb
+!/historico/**/*.md
 
 # Clean inputs for rebuilding the analysis without repeating data cleaning.
 !/data/

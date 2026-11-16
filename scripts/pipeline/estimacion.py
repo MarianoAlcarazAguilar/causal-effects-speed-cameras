@@ -3,7 +3,7 @@ Panel de estimación y diferencias en diferencias.
 
 Convierte un emparejamiento en el panel de unidad × periodo y corre las
 especificaciones de la tesis. Las decisiones están justificadas en
-`scripts/resume-911/did-estimation.ipynb`; aquí se documentan, no se argumentan.
+`scripts/analisis/06-did-estimation.ipynb`; aquí se documentan, no se argumentan.
 
     from pipeline import Datos, muestra_comun, Panel, tabla_resultados
 

@@ -1,126 +1,123 @@
 # Tesis: el efecto de las Fotocívicas sobre los incidentes viales
 
-Efecto causal de las cámaras de velocidad de la Ciudad de México sobre los
-incidentes viales, alrededor de la transición de Fotomultas a Fotocívicas el 22
-de abril de 2019. Diferencias en diferencias sobre unidades circulares
-emparejadas por propensity score, en cinco radios de 100 a 300 metros.
+Efecto causal de las cámaras de velocidad del programa Fotocívicas sobre los
+incidentes viales en la Ciudad de México, a partir de su entrada en vigor el 22
+de abril de 2019. Diferencias en diferencias sobre áreas circulares de 100 a 300
+metros alrededor de las cámaras, emparejadas por *propensity score* con zonas
+igual de peligrosas de la misma red vial.
 
-Actualizado: 2026-11-01.
+Licenciatura en Ciencia de Datos, ITAM. Asesor: Dr. Alberto Simpser.
 
 ## Estado
 
-**El análisis está cerrado. Lo que falta es redactar.** La lista única de
-pendientes, en orden, está en
-[`scripts/resume-911/pendientes.md`](scripts/resume-911/pendientes.md): primero
-el capítulo 3, después el 4, una línea del 2, las conclusiones con la
-introducción, y la nota para el asesor. La revisión que motivó la reconstrucción
-está en [`revision-alberto.md`](scripts/resume-911/revision-alberto.md).
+El análisis y la redacción están completos (110 páginas). Falta la dedicatoria,
+los agradecimientos, el año de la portada y la fecha del colofón. La revisión del
+asesor que motivó la reconstrucción está en
+[`notas/revision-alberto.md`](notas/revision-alberto.md).
 
-El resultado principal es un nulo: ninguno de los 40 intervalos del bootstrap
-excluye el cero. A 300 m, con todos los incidentes, el intervalo va de −6.0% a
-+2.2% de la media del grupo de control.
+El resultado principal es un nulo. A 300 metros, el efecto sobre el total de
+incidentes es de −1.8% de la media previa del control, con un intervalo del
+*bootstrap* de −6.0% a +2.2%, y ningún radio ni tipo de incidente se distingue de
+cero.
 
 ## Dónde está cada cosa
 
-**El análisis final, como código** — `scripts/pipeline/`. Cada módulo corre solo
-e imprime sus verificaciones.
+```
+tesis/              La tesis en LaTeX: main.tex, Chapters/, Apendices/, Referencias/
+scripts/
+  pipeline/         El análisis final como código
+  analisis/         Los notebooks que justifican cada paso, numerados en orden
+  visor_tesis.py    Visor local de la tesis
+figures/            Scripts, estilo y fuentes de las figuras de la tesis
+data/               Insumos versionados (ver abajo)
+notas/              Revisión del asesor, pendientes y apuntes
+historico/          El análisis de septiembre de 2026, como referencia. Ya nada lo usa
+nbsetup.py          Arranque de los notebooks
+```
+
+### `scripts/pipeline/`
+
+Cada módulo corre solo e imprime sus verificaciones.
 
 | Módulo | Qué hace |
 | --- | --- |
 | `limpieza.py` | `Datos`: carga y limpia las fuentes, en el CRS métrico |
 | `construir_afluencia.py` | Genera `data/afluencia-metro-diaria.parquet` desde el CSV crudo. Se corre una vez |
 | `unidades.py` | `UnidadesTratadas`: 113 cámaras → 99 unidades, círculos por radio y reparto de incidentes compartidos |
-| `controles.py` | `UnidadesControl`: el pool de controles sobre la red vial |
-| `features.py` | `Features`: las 12 covariables del propensity score |
-| `emparejamiento.py` | `Emparejamiento` y `muestra_comun`: propensity score, emparejamiento y las 93 tratadas comunes a los cinco radios |
-| `estimacion.py` | `Panel` y `tabla_resultados`: el panel y las tres especificaciones del DiD |
+| `controles.py` | `UnidadesControl`: los candidatos a control sobre la red vial |
+| `features.py` | `Features`: las 12 covariables del *propensity score* |
+| `emparejamiento.py` | `Emparejamiento` y `muestra_comun`: *propensity score*, emparejamiento y las 93 tratadas comunes a los cinco radios |
+| `estimacion.py` | `Panel` y `tabla_resultados`: el panel y las tres especificaciones del modelo |
 
-**El raciocinio y las pruebas** — `scripts/resume-911/`, en el orden en que se
-construyó el análisis. Lo que el pipeline ejecuta, aquí se justifica.
+### `scripts/analisis/`
+
+Lo que el pipeline ejecuta, aquí se justifica. Se leen en orden.
 
 | Notebook | Qué contiene |
 | --- | --- |
-| `recap-data` | Exploración de las fuentes |
-| `unit-design` | Diseño de las unidades tratadas |
-| `control-design` | Diseño del pool de controles |
-| `feature-design` | Las 12 covariables y por qué esas |
-| `propensity-score` | Modelo, emparejamiento, balance y figuras de soporte común y tendencias previas |
-| `did-estimation` | Panel y especificaciones del DiD, con la verificación contra el pipeline |
-| `bootstrap` | Bootstrap del proceso completo. Tarda unos 75 minutos y guarda su resultado en `data/bootstrap-coeficientes.parquet` |
-| `interpretation` | La escalera de modelos, de la comparación ingenua al modelo final, y las tablas de la tesis |
-| `efecto-por-anio` | El efecto por año del periodo posterior |
-| `conclusiones` | Redacción de las conclusiones, con sus figuras. Al inicio dice a qué capítulo va cada sección |
-| `auxiliary-figures` | Figuras auxiliares |
+| `01-recap-data` | Exploración de las fuentes |
+| `02-unit-design` | Diseño de las unidades tratadas |
+| `03-control-design` | Diseño de los candidatos a control |
+| `04-feature-design` | Las 12 covariables y por qué esas |
+| `05-propensity-score` | Modelo, emparejamiento, balance, soporte común y tendencias previas |
+| `06-did-estimation` | Panel y especificaciones, con la verificación contra el pipeline |
+| `07-bootstrap` | *Bootstrap* del proceso completo. Tarda unos 75 minutos y guarda su resultado en `data/bootstrap-coeficientes.parquet` |
+| `08-interpretation` | La escalera de comparaciones y las tablas de la tesis |
+| `09-efecto-por-anio` | El efecto por año del periodo posterior |
+| `10-conclusiones` | Las figuras de los resultados y las conclusiones |
+| `11-auxiliary-figures` | Figuras auxiliares |
 
-**Lo demás:**
+### `figures/scripts/`
 
-| Ubicación | Qué es |
+Cada script genera los PDF de un capítulo en `tesis/Imagenes/`. Con `--png` deja
+además una vista previa en `figures/png/`.
+
+| Script | Figuras |
 | --- | --- |
-| `causal-effects-speed-cameras/` | Las fuentes en LaTeX (`main.tex`, `Chapters/`). Los capítulos 3 y 4 todavía describen el análisis anterior |
-| `figures/` | Las figuras de la tesis, en SVG |
-| `notas/` | Transcripción de apuntes: conclusiones y errores cometidos |
-| `nbsetup.py` | Arranque de los notebooks |
-| `scripts/*.py`, `scripts/auxiliar/`, `scripts/writing/` | La versión anterior del análisis. Quedan como referencia; el análisis actual no los usa. `google_places_aggregate.py`, `places_api.py` y `test_response_structure.py` son del análisis de densidad de negocios |
+| `intro_figures.py` | Introducción |
+| `capitulo3_figures.py` | Capítulo 3 y soporte común del apéndice A |
+| `capitulo4_figures.py` | Capítulo 4 (lee el *bootstrap* versionado; no lo recalcula) |
+| `apendice_figures.py` | Apéndice B. Necesita `data/raw/businesses-cdmx.json`, que no está versionado |
 
 ## Cómo correrlo
 
-El entorno es el de conda `tesis-cameras`. No hay un archivo de entorno fijado.
+El entorno es el de conda `tesis-cameras`. No hay un archivo de entorno fijado;
+el apéndice B necesita además `h3` (v4).
 
-Cada notebook empieza con `from nbsetup import *`, que deja el directorio de
-trabajo en la raíz del repo e importa lo de siempre. Funciona desde cualquier
-carpeta gracias a un archivo `.pth` en el entorno, que es local a esta máquina:
-en otra, hay que crearlo o agregar la raíz del repo al `PYTHONPATH`.
-
-Los módulos del pipeline corren solos, por ejemplo
-`python scripts/pipeline/estimacion.py`. Los notebooks corren de principio a fin
-con `jupyter nbconvert --execute`. El único lento es el bootstrap, y como su
-resultado está versionado, ningún otro notebook necesita volver a correrlo.
+- **La tesis:** `python3 scripts/visor_tesis.py` abre el visor en
+  http://127.0.0.1:8765, compila al guardar y compara contra cualquier versión de
+  git. Para compilar a mano: `tectonic -X compile tesis/main.tex`.
+- **Las figuras:** `python figures/scripts/<script>.py`.
+- **Los notebooks:** empiezan con `from nbsetup import *`, que deja el directorio
+  de trabajo en la raíz del repo y pone `scripts/` en el path. Funciona desde
+  cualquier carpeta gracias a un archivo `.pth` en el entorno, que es local a esta
+  máquina: en otra, hay que agregar la raíz del repo al `PYTHONPATH`.
 
 ## Insumos versionados
 
-Unos 20 MB en total.
-
 | Archivo | Qué es |
 | --- | --- |
-| `data/classified-incidents.parquet` | Incidentes viales del C5, clasificados en MIN, PIC y FCS |
+| `data/classified-incidents.parquet` | Incidentes viales del C5, clasificados en MIN, PIC y FCS (en la tesis, FSC) |
 | `data/vialidades.json` | Red vial primaria y de acceso controlado |
 | `data/fotocivicas-ubicacion-puntos/` | Ubicación de las 113 cámaras |
 | `data/stcmetro_shp/` | Estaciones y líneas del Metro. Cada shapefile con sus archivos hermanos: sin el `.prj` se pierde el CRS |
 | `data/afluencia-metro-diaria.parquet` | Afluencia diaria del Metro, generada desde el CSV crudo, que no está versionado |
-| `data/volumen-total-mensual.parquet` | Volumen de las casetas de peaje. No entra a la estimación; solo a la figura de la pandemia |
-| `data/bootstrap-coeficientes.parquet` | Resultado del bootstrap: 80,000 coeficientes |
+| `data/volumen-total-mensual.parquet` | Volumen de las casetas de peaje. Solo describe la caída de la movilidad en la pandemia |
+| `data/bootstrap-coeficientes.parquet` | Resultado del *bootstrap* |
+| `data/localidadurbana/` | Contorno de la Ciudad de México, para los hexágonos del apéndice B |
 
-## Preservar el análisis de densidad de negocios
+**No versionado:** `data/raw/businesses-cdmx.json`, los conteos de Google Places del
+apéndice B. Los términos de Google no permiten publicarlos y volver a consultarlos
+hoy no reproduciría los conteos. Hay que respaldarlo aparte.
 
-Notebook: `scripts/writing/mexico-city-business-density.ipynb`. No forma parte de
-la reconstrucción y se conserva tal cual, con sus propios insumos:
-
-- `data/raw-data/businesses-cdmx.json`: las respuestas de Google guardadas.
-  Volver a consultarlas hoy no reproduciría los conteos históricos.
-- `data/localidadurbana/`: el shapefile de cobertura geográfica.
-- `data/classified-incidents.parquet`: el análisis lo usa para elegir sus
-  hexágonos. No sobrescribirlo con una limpieza nueva.
-- `data/vialidades.json`.
-- `data/graphs/establecimientos-en-la-cdmx.png` y
-  `data/graphs/distribucion-establecimientos-cdmx-hexagonos.png`.
-
-**El JSON de negocios, el shapefile de cobertura y esas figuras no están
-versionados.** Un clon trae el notebook pero no todo lo necesario para
-reproducirlo. Hay que tener un respaldo externo y no borrar esos archivos
-locales.
-
-## Git y respaldos
+## Git
 
 El remoto es `git@github-personal:MarianoAlcarazAguilar/causal-effects-speed-cameras.git`,
 con la cuenta personal. El `.gitignore` es una lista de permitidos: un archivo
-nuevo queda fuera hasta que se agrega explícitamente.
+nuevo queda fuera hasta que se agrega explícitamente. Las imágenes de
+`tesis/Imagenes/` no están versionadas; se regeneran con los scripts de
+`figures/`.
 
-Quedan fuera los datos crudos, los grids, emparejamientos y paneles del análisis
-anterior, `data/pickle_objects/`, los PDF y los respaldos. Un clon no es un
-archivo completo: los datos originales y la extracción manual del volumen
-vehicular hay que respaldarlos aparte. Los archivos `.gsheet` son enlaces, no
-respaldos de sus hojas.
-
-**Pendiente de seguridad:** en el notebook versionado de densidad de negocios
-apareció una llave de la API de Google. Rotarla y quitarla del historial sigue
-pendiente hasta confirmarlo.
+Hasta el 16 de noviembre de 2026 la tesis vivía en `causal-effects-speed-cameras/`.
+El visor busca ahí las versiones anteriores, así que sigue pudiendo comparar contra
+cualquier commit.

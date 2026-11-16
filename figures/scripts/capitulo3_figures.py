@@ -2,7 +2,7 @@
 Figuras del capítulo 3, con el estilo de la tesis (figures/tesis.mplstyle).
 
 1. Componentes traslapadas: las mismas cinco unidades tratadas a 100, 200 y
-   300 m. Port de `scripts/resume-911/auxiliary-figures.ipynb`.
+   300 m. Port de `scripts/analisis/11-auxiliary-figures.ipynb`.
 2. Soporte común a 300 m, antes y después de emparejar. Figura 2 de
    `propensity-score.ipynb`.
 3. Unidades excluidas contra las 93 analizadas. Port de `conclusiones.ipynb`.
@@ -13,7 +13,7 @@ Todo sale de la muestra que se reporta: los 93 pares de `muestra_comun`.
 
     python figures/scripts/capitulo3_figures.py
 
-Los PDF van a causal-effects-speed-cameras/Imagenes/.
+Los PDF van a tesis/Imagenes/.
 """
 
 import sys
@@ -27,7 +27,7 @@ from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 
 ROOT = Path(__file__).resolve().parents[2]
-PDF_DIR = ROOT / "causal-effects-speed-cameras" / "Imagenes"
+PDF_DIR = ROOT / "tesis" / "Imagenes"
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 

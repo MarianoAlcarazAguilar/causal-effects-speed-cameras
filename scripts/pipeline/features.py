@@ -3,7 +3,7 @@ Covariables del propensity score, para tratadas y controles.
 
 Un objeto `Features` que construye la matriz completa a partir de las unidades
 de los dos grupos. Las definiciones y sus recortes están justificados en
-`scripts/resume-911/feature-design.ipynb`; aquí se documenta la decisión, no se
+`scripts/analisis/04-feature-design.ipynb`; aquí se documenta la decisión, no se
 vuelve a argumentar.
 
     from pipeline import Datos, UnidadesTratadas, UnidadesControl, Features

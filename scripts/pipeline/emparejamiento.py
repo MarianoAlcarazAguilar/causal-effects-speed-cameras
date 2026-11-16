@@ -13,7 +13,7 @@ Propensity score y emparejamiento.
     emp.balance        # SMD antes y después, por covariable
     love_plot(emp.balance)
 
-Las decisiones, justificadas en `scripts/resume-911/propensity-score.ipynb`:
+Las decisiones, justificadas en `scripts/analisis/05-propensity-score.ipynb`:
 
 - **Logit por máxima verosimilitud con el método de Newton, sin penalización y
   sobre covariables estandarizadas.** El propensity score no busca predecir
