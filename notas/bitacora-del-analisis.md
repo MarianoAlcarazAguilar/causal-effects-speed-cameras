@@ -181,7 +181,7 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   **Lo que NO era un problema, y no hay que presentarlo como tal:** elegir un
   subconjunto de covariables por radio según el SMD. El SMD se calculaba sobre las
   18 variables, incluidas las que se quitaban del score (`calculate_smd` en
-  `scripts/historico/ps_matching.py`), así que la tabla no salía bien por construcción.
+  `scripts/historico/4-circulos/ps_matching.py`), así que la tabla no salía bien por construcción.
   Elegir la especificación del score por el balance que produce, revisado sobre
   todas las variables, es práctica estándar. En la versión nueva la lista es fija
   por otras razones —redundancia y ruido medidos—, no porque la anterior estuviera
@@ -256,7 +256,7 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       Incluir también que su 3b (Sant'Anna y Zhao, 2020) se decidió no hacer:
       no se menciona en la tesis, solo en esta nota.
 
-      **Hecho: nota «cambios tesis 16 nov 2026» en Google Docs, con lo que cambió, por qué y en qué página está cada cosa.**
+      **Hecho: [`nota-a-alberto-2026-11-16.md`](nota-a-alberto-2026-11-16.md), con lo que cambió, por qué y en qué página está cada cosa.**
 
 ---
 
@@ -448,5 +448,6 @@ así que `EE_suma` (la brecha `tratado + tratado:post` del modelo (1)) salía
 inflada: a 300 m, 0.597 en lugar de 0.357; en FCS, unas 15 veces. Corregido y
 regeneradas `conclusion-brecha` y `brecha-posterior*`. Ninguna brecha posterior
 es significativa antes ni después (|z| < 1.2); las estrellas siempre estuvieron
-bien. Las salidas guardadas de `scripts/analisis/10-conclusiones.ipynb`, `scripts/analisis/08-interpretation.ipynb` y
-`scripts/analisis/06-did-estimation.ipynb` siguen mostrando el valor viejo: no usar `EE_suma` de ahí.
+bien. El 16 de noviembre se corrigió también la copia del cálculo dentro de
+`scripts/analisis/06-did-estimation.ipynb` (su verificación contra el pipeline fallaba)
+y se volvieron a correr el 06, el 08 y el 10, así que sus salidas ya traen 0.357.

@@ -5,7 +5,7 @@ Figuras del capítulo 4 (resultados), con el estilo de la tesis
 Port de las figuras de `scripts/analisis/10-conclusiones.ipynb`:
 
 1. conclusion-escalera: el efecto a 300 m conforme la comparación se vuelve
-   más rigurosa. Los siete pasos se estiman en `interpretation.ipynb` (Parte I)
+   más rigurosa. Los siete pasos se estiman en `scripts/analisis/08-interpretation.ipynb` (Parte I)
    y aquí, como en el notebook, solo se grafican.
 2. conclusion-por-nivel: la especificación (3) por radio y tipo de incidente.
 3. conclusion-pandemia: serie mensual de tratadas y controles y volumen en casetas.
@@ -54,7 +54,7 @@ def cero(ax):
 
 
 def resultados_con_bootstrap(emparejamientos, boot) -> pd.DataFrame:
-    """tabla_resultados con el IC 95% percentil del bootstrap, como interpretation.ipynb."""
+    """tabla_resultados con el IC 95% percentil del bootstrap, como 08-interpretation.ipynb."""
     r = tabla_resultados(emparejamientos)
     r["espec"] = r.especificacion.map(ESPEC)
     ic = (boot.groupby(["radio", "nivel", "especificacion"]).coef
@@ -68,7 +68,7 @@ def resultados_con_bootstrap(emparejamientos, boot) -> pd.DataFrame:
 
 
 # =========================================================================
-# conclusiones.ipynb
+# 10-conclusiones.ipynb
 # =========================================================================
 
 def escalera(boot) -> plt.Figure:
@@ -219,7 +219,7 @@ def evento(emparejamientos) -> plt.Figure:
 
 
 # =========================================================================
-# interpretation.ipynb
+# 08-interpretation.ipynb
 # =========================================================================
 
 if __name__ == "__main__":

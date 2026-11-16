@@ -64,8 +64,8 @@ Alberto
 ## Cómo se atendió
 
 Secciones y cuadros de la versión de 110 páginas (16 de noviembre de 2026). A
-Alberto se le mandó además una nota en Google Docs («cambios tesis 16 nov 2026»)
-con lo que cambió, por qué y en qué página está cada cosa.
+Alberto se le mandó además una nota con lo que cambió, por qué y en qué página está
+cada cosa: [`nota-a-alberto-2026-11-16.md`](nota-a-alberto-2026-11-16.md).
 
 | Punto | Qué se hizo | Dónde quedó |
 | --- | --- | --- |

@@ -4,8 +4,8 @@ Figuras del capítulo 3, con el estilo de la tesis (.claude/skills/figuras-tesis
 1. Componentes traslapadas: las mismas cinco unidades tratadas a 100, 200 y
    300 m. Port de `scripts/analisis/11-auxiliary-figures.ipynb`.
 2. Soporte común a 300 m, antes y después de emparejar. Figura 2 de
-   `propensity-score.ipynb`.
-3. Unidades excluidas contra las 93 analizadas. Port de `conclusiones.ipynb`.
+   `scripts/analisis/05-propensity-score.ipynb`.
+3. Unidades excluidas contra las 93 analizadas. Port de `scripts/analisis/10-conclusiones.ipynb`.
 4. Love plot a 300 m: SMD de cada covariable antes y después de emparejar.
 5. Soporte común a 100, 150, 200 y 250 m, para el apéndice A.
 
