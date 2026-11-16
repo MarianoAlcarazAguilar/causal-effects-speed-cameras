@@ -71,7 +71,7 @@ De estas fuentes sale una sola covariable:
     \item \textbf{Afluencia del Metro} (\texttt{afluencia\_nivel}): promedio mensual de usuarios de las estaciones ubicadas dentro del área, en los tres años previos al programa. Vale cero si el área no contiene ninguna estación.
 \end{itemize}
 
-La afluencia funciona como un indicador de la actividad y del tránsito de personas en la zona. Basta con un solo promedio porque la afluencia de una estación casi no cambia de un año a otro: lo que distingue a las áreas es qué estación tienen. A 300 metros, el 32\% de las áreas tratadas tiene alguna estación del Metro dentro, mientras que solo el 13\% de los controles la tiene. El cero representa una zona sin Metro, no falta de información. Se prefirió esta medida a la distancia a la estación más cercana, que obligaría a suponer que una estación influye en la zona incluso cuando queda fuera del área.
+La afluencia funciona como un indicador de la actividad y del tránsito de personas en la zona. Basta con un solo promedio porque la afluencia de una estación casi no cambia de un año a otro: lo que distingue a las áreas es qué estación tienen. A 300 metros, el 32\% de las áreas tratadas tiene alguna estación del Metro dentro, mientras que solo el 13\% de los controles la tiene. El cero representa una zona sin Metro, no falta de información.
 
 \subsection{Resumen de variables}
 
@@ -122,7 +122,7 @@ La afluencia funciona como un indicador de la actividad y del tránsito de perso
 
 El conjunto de unidades tratadas se construye una sola vez, con el radio de 300 metros, y se mantiene igual en el resto de los radios. Así, siempre se habla de los mismos centros, y lo único que cambia entre estimaciones es el radio.\\
 
-Dos condiciones acotan el umbral del 60\%. Por un lado, con un umbral de 50\% se agruparían dos cámaras separadas por 204 metros, cuyo centro queda a 102 metros de cada una: a 100 metros, esa unidad tratada no contendría ninguna cámara. Con 60\%, la cámara más alejada del centro de su unidad está a 81 metros. Por otro lado, con un umbral de 70\% se agrupan menos cámaras y aparecen círculos traslapados desde los 100 metros, mientras que con 60\% no hay ningún traslape en ese radio.\footnote{Ningún umbral evita todos los casos límite. Las unidades 32 y 77 son dos cámaras sobre el mismo tramo del segundo piso del Periférico, con sus centros a 205 metros, y quedaron separadas por 13 metros. Con un umbral de 50\%, que sí las agrupa, el efecto estimado a 300 metros en la especificación principal, con todos los pares de ese radio y no solo los de la muestra final, cambia a lo más 0.18 errores estándar en los cuatro niveles de gravedad.}\\
+Dos condiciones acotan el umbral del 60\%. Por un lado, con un umbral de 50\% se agruparían dos cámaras separadas por 204 metros, cuyo centro queda a 102 metros de cada una: a 100 metros, esa unidad tratada no contendría ninguna cámara. Con 60\%, la cámara más alejada del centro de su unidad está a 81 metros. Por otro lado, con un umbral de 70\% se agrupan menos cámaras y aparecen círculos traslapados desde los 100 metros, mientras que con 60\% no hay ningún traslape en ese radio.\footnote{Ningún umbral evita todos los casos límite. Las unidades 32 y 77 son dos cámaras sobre el mismo tramo del segundo piso del Periférico, con sus centros a 205 metros, y quedaron separadas por 13 metros. El efecto de usar un umbral de 50\%, que sí las agrupa, se discute en la sección~\ref{sec:robustez}.}\\
 
 \textbf{Traslape entre unidades tratadas}. Con esta regla, los círculos de unidades distintas pueden traslaparse parcialmente en los radios mayores. A 100 metros no hay ningún traslape; a 300 metros, 36 unidades comparten parte de su área con alguna otra, y en esas áreas compartidas cae el 5.5\% de los incidentes. Cada incidente en un área compartida se reparte en partes iguales entre las unidades que lo contienen: cuenta $1/2$ en cada una si cae en dos círculos, $1/3$ si cae en tres, y así sucesivamente. Con este reparto, la suma de los incidentes de todas las unidades coincide con el número real de incidentes, 44,153 a 300 metros, en lugar de los 46,730 que resultarían de contar dos veces los compartidos.\\
 
@@ -145,7 +145,7 @@ El reparto resuelve el conteo de los incidentes, pero implica que los incidentes
 
 Una vez sorteados los puntos, se eliminan los que quedan a menos de 600 metros del centro de alguna unidad tratada, es decir, a menos de dos veces el radio más grande. Con esto, ningún control comparte área con una unidad tratada en ninguno de los cinco radios. Quedan 14,656 posibles controles, alrededor de 148 por cada unidad tratada, y este conjunto también se mantiene fijo para todos los radios.\\
 
-Inicialmente se permite que los candidatos se traslapen entre sí: cada candidato representa el contrafactual de su propia zona, y exigir que no se traslaparan reduciría el conjunto a unos cientos de puntos y empeoraría el emparejamiento. Por la misma razón, los incidentes de los candidatos cuentan completos y no se reparten. La restricción se impone sobre los controles seleccionados: en el emparejamiento, ningún control puede quedar a menos de dos radios de otro control ya elegido, de modo que los controles de la muestra final no se traslapan entre sí y cada uno forma su propia componente.
+Inicialmente se permite que los candidatos se traslapen entre sí, porque exigir que no se traslaparan reduciría el conjunto a unos cientos de puntos y empeoraría el emparejamiento. Como un candidato es solo una posible pareja, y no entra al análisis a menos que se elija, sus incidentes cuentan completos y no se reparten con los candidatos vecinos. La restricción se impone sobre los controles seleccionados: en el emparejamiento, ningún control puede quedar a menos de dos radios de otro control ya elegido, de modo que los controles de la muestra final no se traslapan entre sí y cada uno forma su propia componente.
 
 \subsection{Muestra final}
 
@@ -164,7 +164,7 @@ Cada radio se estima, entonces, sobre 186 áreas observadas en 72 periodos. El e
 
 \subsection{\emph{Propensity score}}
 
-\noindent El \emph{propensity score} se estima con una regresión logística del indicador de tratamiento sobre las doce covariables, con las 99 unidades tratadas y los 14,656 candidatos. La estimación no usa penalización, porque el objetivo no es predecir bien en una muestra que no se observa, sino balancear las covariables en la muestra con la que se trabaja; una regresión penalizada encoge los coeficientes y deja a propósito parte del desbalance que se quiere corregir. Las covariables se estandarizan antes de estimar. La regresión logística no depende de la escala de las variables, pero estandarizarlas hace que los coeficientes sean comparables entre sí y que el algoritmo de estimación converja. El modelo se estima con el método de Newton, que es el procedimiento estándar para la regresión logística, y converge en siete iteraciones. Con el algoritmo por defecto de la biblioteca utilizada, L-BFGS de \emph{scikit-learn}, el modelo no converge si las covariables no se estandarizan y, aun estandarizadas, se detiene antes de llegar al óptimo, con diferencias que alcanzan para cambiar hasta 18 de los 99 pares.
+\noindent El \emph{propensity score} se estima con una regresión logística del indicador de tratamiento sobre las doce covariables, con las 99 unidades tratadas y los 14,656 candidatos. La estimación no usa penalización, porque el objetivo no es predecir bien en una muestra que no se observa, sino balancear las covariables en la muestra con la que se trabaja. La penalización reduce el tamaño de los coeficientes para evitar el sobreajuste, y con ello deja sin corregir parte de las diferencias entre tratadas y controles que el emparejamiento busca eliminar. Las covariables se estandarizan antes de estimar. La regresión logística no depende de la escala de las variables, pero estandarizarlas hace que los coeficientes sean comparables entre sí y que el algoritmo de estimación converja. El modelo se estima con el método de Newton, que es el procedimiento estándar para la regresión logística, y converge en siete iteraciones. Con el algoritmo por defecto de la biblioteca utilizada, L-BFGS de \emph{scikit-learn}, el modelo no converge si las covariables no se estandarizan y, aun estandarizadas, se detiene antes de llegar al óptimo, con diferencias que alcanzan para cambiar hasta 18 de los 99 pares.
 
 \subsection{Reglas del emparejamiento}
 
@@ -201,7 +201,7 @@ El emparejamiento se rehace en cada radio con las covariables medidas a ese radi
 \]
 donde $\bar{X}$ y $s^2$ son la media y la varianza de la covariable en las tratadas ($T$) y en los controles ($C$). A diferencia de una prueba de hipótesis, no depende del tamaño de la muestra. Se considera que una covariable está balanceada cuando el valor absoluto de su SMD es menor a 0.1 (Austin, 2009).\\
 
-El cuadro~\ref{tab:balance} reporta las medias y las SMD a 300 metros. Antes del emparejamiento, las tratadas tienen más incidentes, más incidentes fatales, más carriles y más afluencia del Metro que los candidatos, lo que confirma que las cámaras no se ubicaron al azar: la SMD promedio en valor absoluto es de 0.266, y diez de las doce covariables superan el umbral. Después del emparejamiento, la SMD promedio baja a 0.065 y solo tres covariables lo superan: la longitud vial (0.120), la proporción con lesionados (0.115) y la afluencia del Metro (0.141). En los demás radios, la SMD promedio después del emparejamiento va de 0.045 a 0.055, y entre una y dos covariables superan el umbral; el valor más alto es de 0.268, a 200 metros.
+El cuadro~\ref{tab:balance} y la figura~\ref{fig:love-plot} reportan las medias y las SMD a 300 metros. Antes del emparejamiento, las tratadas tienen más incidentes, más incidentes fatales, más carriles y más afluencia del Metro que los candidatos, lo que confirma que las cámaras no se ubicaron al azar: la SMD promedio en valor absoluto es de 0.266, y diez de las doce covariables superan el umbral. Después del emparejamiento, la SMD promedio baja a 0.065 y solo tres covariables lo superan: la longitud vial (0.120), la proporción con lesionados (0.115) y la afluencia del Metro (0.141). En los demás radios, la SMD promedio después del emparejamiento va de 0.045 a 0.055, y entre una y dos covariables superan el umbral; el valor más alto es de 0.268, a 200 metros. Los cuadros de balance de los demás radios están en el apéndice~\ref{apendice:balance}.
 
 \begin{table}[htbp]
     \centering
@@ -234,6 +234,16 @@ El cuadro~\ref{tab:balance} reporta las medias y las SMD a 300 metros. Antes del
         \footnotesize \textit{Nota:} Las columnas \emph{Tratadas} y \emph{Controles} corresponden a las 93 unidades tratadas de la muestra final y a sus controles emparejados; \emph{Candidatos}, a los 14,656 candidatos a control. La SMD antes del emparejamiento compara las 99 unidades tratadas con los candidatos.
     \end{minipage}
 \end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/love-plot-300.pdf}
+    \caption{Balance de covariables a 300 metros}
+    \label{fig:love-plot}
+    \begin{minipage}{0.95\linewidth}
+        \footnotesize \textit{Nota:} Diferencia de medias estandarizada (SMD) de cada covariable. Los círculos vacíos comparan las 99 unidades tratadas con los 14,656 candidatos a control; los rellenos, las 93 unidades tratadas de la muestra final con sus controles emparejados. Las líneas punteadas marcan el umbral de $\pm 0.1$.
+    \end{minipage}
+\end{figure}
 
 Las diferencias que quedan se atienden de dos formas en la estimación. Los efectos fijos por unidad absorben cualquier diferencia de nivel entre tratadas y controles que no cambie en el tiempo, de modo que una diferencia en la longitud vial o en la afluencia del Metro no sesga el efecto por sí misma. Lo que sí podría sesgarlo es que esas diferencias hicieran evolucionar distinto a ambos grupos después de 2019, y para eso la especificación principal interactúa las covariables de infraestructura vial y la afluencia del Metro con el periodo posterior. La proporción con lesionados no se incluye en esa interacción, por las razones expuestas en la sección~\ref{sec:especificacion}; que su diferencia no se traduzca en trayectorias distintas es lo que evalúa el \emph{event study} del capítulo 4.
 

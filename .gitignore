@@ -74,3 +74,9 @@
 **/venv/
 **/node_modules/
 /.git-backups/
+
+# Apéndice B: hexágonos con y sin vía primaria. El conteo de Google Places
+# (data/raw/businesses-cdmx.json) se queda fuera del repo por los términos de uso de Google.
+!/figures/scripts/apendice_figures.py
+!/data/localidadurbana/
+!/data/localidadurbana/*
