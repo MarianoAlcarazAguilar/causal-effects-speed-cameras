@@ -180,14 +180,20 @@ Hay que actualizar a mano:
 | `data/bootstrap-coeficientes.parquet` | Resultado del *bootstrap* |
 | `data/localidadurbana/` | Contorno de la Ciudad de México, para los hexágonos del apéndice B |
 
-**No versionado**, hay que respaldarlo aparte:
+**No versionado.** El respaldo está en el Google Drive personal, en
+`Computers › My Mac › speed-cameras/datos-no-versionados/` (esa carpeta de Drive se
+sincroniza con la Mac personal; ahí también están `literatura/`, `versiones-enviadas/`
+con los PDF que se le mandaron a Alberto y `archivo/` con todo lo anterior a la
+reconstrucción). Para trabajar en otra máquina, se copian a `data/raw/`:
 
 - `data/raw/businesses-cdmx.json`: los conteos de Google Places del apéndice B. Los
   términos de Google no permiten publicarlos y volver a consultarlos hoy no
   reproduciría los conteos.
 - `data/raw/raw-afluencia-metro.csv`: el CSV crudo del que sale
-  `data/afluencia-metro-diaria.parquet`.
-- La base cruda de incidentes del C5 (`incidentes-viales.parquet`), de la que salen
+  `data/afluencia-metro-diaria.parquet`. Es distinto del `afluencia-metro-cdmx.csv`
+  que está en Drive (una descarga anterior).
+- La base cruda de incidentes del C5 (`inViales_completa.csv` y su versión en
+  `incidentes-viales.parquet`, los dos en Drive), de la que salen
   `data/classified-incidents.parquet` y los datos de la introducción. Se descarga de
   https://datos.cdmx.gob.mx/dataset/incidentes-viales-c5; la limpieza que la convierte
   está en `scripts/historico/2-malla-cuadrada-borrador/2-data-cleaning.ipynb`.
