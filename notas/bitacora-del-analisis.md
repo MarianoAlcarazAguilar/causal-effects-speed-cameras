@@ -1,6 +1,14 @@
-# Pendientes para cerrar la estimación
+# Bitácora de la reconstrucción del análisis
 
-*Lo mínimo indispensable para cumplir lo que pidió Alberto en [`revision-alberto.md`](revision-alberto.md) y que los resultados sean defendibles. Todo lo que no está aquí se decidió dejar fuera, y abajo está por qué.*
+*Septiembre a noviembre de 2026. Empezó como la lista de pendientes para cumplir lo que
+pidió Alberto en [`revision-alberto.md`](revision-alberto.md) y **está cerrada**: todo lo
+de aquí ya se hizo o se decidió no hacer. Sirve para saber por qué el análisis y la tesis
+quedaron como quedaron.*
+
+*Dónde buscar: las corridas y los números están en **Ya está hecho** y **Corridas**; las
+decisiones y su porqué, en **Decisiones tomadas sin esperar a Alberto**, **Fuera de
+alcance, y por qué** y las **Notas** del final. Las referencias a secciones de la tesis
+son a la versión de 110 páginas (16 de noviembre de 2026).*
 
 ---
 
@@ -9,17 +17,17 @@
 - [x] Panel de unidad × periodo, verificado (descuadre 0)
 - [x] Emparejamiento de los cinco radios sobre la muestra común de 93
 - [x] **DiD sin matching** → apéndice de Alberto. −0.525 con 99 tratadas,
-      −0.388 con 93, contra 631 controles disjuntos Interpretado como los pasos 3 a 5 de la escalera en `conclusiones.ipynb` §2
+      −0.388 con 93, contra 631 controles disjuntos Interpretado como los pasos 3 a 5 de la escalera en `scripts/analisis/10-conclusiones.ipynb` §2
 - [x] **Clustering por componente traslapada**: +7% al error estándar a 300 m,
       0% a 100 m 
 - [x] **Robustez X = 50%**: −0.2532 contra −0.2293 del X = 60% libre, en la
       especificación (2). Un octavo del error estándar; el umbral no carga el
       resultado. La versión con la (3), que es la de la tesis, está en el apéndice
-      A4 de `interpretation.ipynb`
+      A4 de `scripts/analisis/08-interpretation.ipynb`
 - [x] **Robustez reparto cercano**: idéntica al reparto por pesos, exactamente.
       Ver la nota al final
 - [x] **Las 60 estimaciones**: 5 radios × 4 niveles × 3 especificaciones, en el
-      notebook y en `pipeline/estimacion.py`, verificadas una contra otra
+      notebook y en `scripts/pipeline/estimacion.py`, verificadas una contra otra
 - [x] **Bootstrap del proceso completo**, 2,000 repeticiones por radio, en los
       cinco radios, los cuatro niveles y las especificaciones (2) y (3). En la
       (3), a 300 m con todos los incidentes, el intervalo es [-6.0%, +2.2%]. El
@@ -32,12 +40,12 @@
 - [x] Caracterización de las 6 unidades que el trimming descarta: 13.5
       incidentes/mes contra 6.22, las seis con al menos un fatal, más carriles,
       más acceso controlado y el triple de afluencia de metro. Con figura, en
-      `conclusiones.ipynb` §1
-- [x] **Interpretación completa**, en `conclusiones.ipynb`: la escalera de siete
+      `scripts/analisis/10-conclusiones.ipynb` §1
+- [x] **Interpretación completa**, en `scripts/analisis/10-conclusiones.ipynb`: la escalera de siete
       pasos, el efecto por nivel, la pandemia (serie mensual, casetas y efecto por
       año) y las limitaciones. Al inicio del notebook hay una tabla con el capítulo
       al que va cada sección
-- [x] **Event study** por años, en los cinco radios, en `conclusiones.ipynb` §6.
+- [x] **Event study** por años, en los cinco radios, en `scripts/analisis/10-conclusiones.ipynb` §6.
       Ningún coeficiente previo se distingue de cero; la prueba conjunta da p
       entre 0.54 y 0.99
 
@@ -127,29 +135,29 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       Es el cuarto punto de la lista de Alberto. No va como principal: son 568
       parámetros contra 165 clusters.
 
-- [x] **4. Bootstrap del proceso completo.** Hecho en `bootstrap.ipynb`, 2,000
+- [x] **4. Bootstrap del proceso completo.** Hecho en `scripts/analisis/07-bootstrap.ipynb`, 2,000
       repeticiones en las 40 combinaciones. Los coeficientes quedan en
       `data/bootstrap-coeficientes.parquet`.
 
 ---
 
-## Falta escribir
+## Redacción
 
 - [x] **10. Reescribir el capítulo 3. Va primero.** Hecho el 2026-11-02 (rama `capitulo-3`). Alberto lo dio casi por bueno,
       pero describe unidades, covariables, modelo y trimming que ya no existen, e
       incluso menciona un radio de 50 m que ya no se analiza. Es el cambio más
       grande que va a encontrar, y sin él los resultados del capítulo 4 no tienen
-      de dónde salir. Por secciones de `Chapters/3.Data.tex`:
+      de dónde salir. Por secciones de `tesis/Chapters/3.Data.tex`:
 
   | Sección | Qué cambia |
   | --- | --- |
-  | Tratamiento | Las 113 cámaras se agrupan en **99 unidades**: dos se fusionan si sus círculos comparten más de 60% del área a 300 m. Los grupos se fijan una vez y se reusan en los cinco radios. Sale de `unit-design.ipynb` |
-  | Atributos físicos de la red vial | Los máximos y binarias (`max_carriles`, `both_directions`, `via_acc_cont`, `max_nivel`) pasan a proporciones ponderadas por metros de vía; `via_primaria` sale porque es 1 menos `% acceso controlado`. Sale de `feature-design.ipynb` |
+  | Tratamiento | Las 113 cámaras se agrupan en **99 unidades**: dos se fusionan si sus círculos comparten más de 60% del área a 300 m. Los grupos se fijan una vez y se reusan en los cinco radios. Sale de `scripts/analisis/02-unit-design.ipynb` |
+  | Atributos físicos de la red vial | Los máximos y binarias (`max_carriles`, `both_directions`, `via_acc_cont`, `max_nivel`) pasan a proporciones ponderadas por metros de vía; `via_primaria` sale porque es 1 menos `% acceso controlado`. Sale de `scripts/analisis/04-feature-design.ipynb` |
   | Proxies de movilidad | La afluencia se mide con las estaciones **dentro** del círculo, no la más cercana, y sin dividir entre el volumen de las casetas. Salen `std_afluencia_mensual` y `distance_to_station` |
   | Construcción de variables para el matching | Las 12 covariables con sus ventanas de tres años contadas desde el 22 de abril |
-  | Estaciones de conteo permanente | El volumen de las casetas ya no se usa, ni como tasa ni como control: es una sola serie para toda la ciudad, y los efectos fijos de tiempo la absorben. La redacción ya está en `conclusiones.ipynb` §5 |
+  | Estaciones de conteo permanente | El volumen de las casetas ya no se usa, ni como tasa ni como control: es una sola serie para toda la ciudad, y los efectos fijos de tiempo la absorben. La redacción ya está en `scripts/analisis/10-conclusiones.ipynb` §5 |
   | Uso de la siniestralidad | Las 8 variables de media y desviación estándar pasan a 4, con la tendencia como variable explícita. Quitar la mención de tasas por cada 1,000 vehículos |
-  | Soporte común y recorte | Los umbrales de score por radio se reemplazan por el caliper de 0.2 sd del logit más la intersección de los cinco radios: **93 de 99**. Las 6 que se caen son 2.2 veces más peligrosas. Texto y figura en `conclusiones.ipynb` §1 |
+  | Soporte común y recorte | Los umbrales de score por radio se reemplazan por el caliper de 0.2 sd del logit más la intersección de los cinco radios: **93 de 99**. Las 6 que se caen son 2.2 veces más peligrosas. Texto y figura en `scripts/analisis/10-conclusiones.ipynb` §1 |
   | Evaluación del balance | Las tablas de SMD nuevas, con las mismas 12 covariables en todos los radios. \|SMD\| medio después entre 0.045 y 0.065 |
 
   Y agregar lo que el capítulo viejo no tenía: el control pool sobre la red vial
@@ -173,7 +181,7 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   **Lo que NO era un problema, y no hay que presentarlo como tal:** elegir un
   subconjunto de covariables por radio según el SMD. El SMD se calculaba sobre las
   18 variables, incluidas las que se quitaban del score (`calculate_smd` en
-  `scripts/ps_matching.py`), así que la tabla no salía bien por construcción.
+  `scripts/historico/ps_matching.py`), así que la tabla no salía bien por construcción.
   Elegir la especificación del score por el balance que produce, revisado sobre
   todas las variables, es práctica estándar. En la versión nueva la lista es fija
   por otras razones —redundancia y ruido medidos—, no porque la anterior estuviera
@@ -182,7 +190,7 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
   **No se cita** la comparación de las 18 covariables originales contra las 12:
   se corrió en un scratchpad, no está en el repo, y se decidió no usarla.
 
-- [ ] **5. Las tablas como las pidió Alberto.** Número de observaciones y R² por
+- [x] **5. Las tablas como las pidió Alberto.** Número de observaciones y R² por
       columna; orden tratamiento → interacción → efectos fijos al final; la suma
       `tratado + tratado:post` con su error estándar y sus estrellitas; el
       *control mean* con su desviación estándar en cada columna; puntos decimales
@@ -190,15 +198,19 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       los coeficientes se interpreten sin volver al texto. La nota incluye una
       frase sobre la suma: es la brecha después del tratamiento, y como el
       emparejamiento iguala los niveles previos, coincide aproximadamente con el
-      efecto. No se interpreta en el texto (`conclusiones.ipynb` §4).
+      efecto. No se interpreta en el texto (`scripts/analisis/10-conclusiones.ipynb` §4).
 
-- [ ] **6. El estimando, dos párrafos.** Entran 99 unidades, se reportan 93. Las
+      **Hecho: cuadros 4.1, 4.2 y 4.3. Las tasas se quitaron (ver *Fuera de alcance*).**
+
+- [x] **6. El estimando, dos párrafos.** Entran 99 unidades, se reportan 93. Las
       6 que se caen no encuentran control dentro del caliper porque no se parecen
       a ningún lugar sin cámara de la ciudad, y son **2.2 veces más peligrosas**
       que las que sí entran. El estimando es el ATT sobre las unidades tratadas
       con soporte común en las cinco escalas, y excluye los cruces más peligrosos.
 
-- [ ] **7. La inferencia, un párrafo.** *El diseño (clusters por componente y
+      **Hecho: secciones 2.3.1, 3.2.3 y 3.3.5, y en las conclusiones.**
+
+- [x] **7. La inferencia, un párrafo.** *El diseño (clusters por componente y
       bootstrap del proceso completo) ya está en la 2.3; la 2.3 promete que las
       limitaciones van en las conclusiones.* Los errores estándar del DiD después de
       matching no son válidos, y el sesgo puede ir en cualquier dirección. Por eso
@@ -208,11 +220,15 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       vecino más cercano (Abadie e Imbens, 2008) y que la intersección de los
       cinco radios no se remuestrea.
 
-- [ ] **8. La discusión.** Magnitud en incidentes por círculo al mes y en
+      **Hecho: sección 2.3.5 y las limitaciones de las conclusiones.**
+
+- [x] **8. La discusión.** Magnitud en incidentes por círculo al mes y en
       porcentaje de la media del grupo de control; comparación contra los niveles
       pre y post del control; comparación contra los estudios mexicanos ya citados.
 
-  Casi todo el texto está en `conclusiones.ipynb` §2, §3 y §5, en tono de
+      **Hecho: sección 4.1 (magnitudes, medias antes y después, escalera) y conclusiones (comparación con Quintero y Madrigal).**
+
+  Casi todo el texto está en `scripts/analisis/10-conclusiones.ipynb` §2, §3 y §5, en tono de
   conclusión; hay que pasarlo a tono de resultados. El event study (§6) va aquí
   como evidencia del supuesto de identificación.
 
@@ -226,17 +242,21 @@ Son **cuatro**, no tres: la tesis ya tiene `tab:results-main-general`,
       study del capítulo 4. Hecho, y el diseño del event study y del efecto por año
       quedó descrito en la 2.3.
 
-- [ ] **8c. Conclusiones e introducción.** Fusionar las limitaciones y la
-      conclusión de `conclusiones.ipynb` (§7 y §8) con el borrador aparte en
-      `Chapters/5.Conc.tex`. El resumen de resultados de la introducción ya se
+- [x] **8c. Conclusiones e introducción.** Fusionar las limitaciones y la
+      conclusión de `scripts/analisis/10-conclusiones.ipynb` (§7 y §8) con el borrador aparte en
+      `tesis/Chapters/5.Conc.tex`. El resumen de resultados de la introducción ya se
       actualizó (PR #16).
 
-- [ ] **9. Media cuartilla para Alberto** con lo que cambió además de lo que pidió:
+      **Hecho: conclusiones reescritas (PR #25) e introducción reescrita (PR #28).**
+
+- [x] **9. Media cuartilla para Alberto** con lo que cambió además de lo que pidió:
       unidades fusionadas por traslape con grupos fijos a 300 m (que es su punto 1),
       covariables de 18 a 12 con la medición que lo respalda, y reparto de
       incidentes compartidos. Sin esto, los puntos 1–8 le llegan sin contexto.
       Incluir también que su 3b (Sant'Anna y Zhao, 2020) se decidió no hacer:
       no se menciona en la tesis, solo en esta nota.
+
+      **Hecho: nota «cambios tesis 16 nov 2026» en Google Docs, con lo que cambió, por qué y en qué página está cada cosa.**
 
 ---
 
@@ -270,7 +290,7 @@ lugar. Va por destino.
   modelo es lineal (la 2.3.4 dice "lineal, por MCO" sin más). Que las covariables
   del DiD se estandarizan y sus coeficientes no se reportan.
 - Por qué no se usan las casetas: la 2.1.3 ya lo dice en corto; aquí va el
-  detalle (`conclusiones.ipynb` §5).
+  detalle (`scripts/analisis/10-conclusiones.ipynb` §5).
 
 *Todo lo de arriba quedó cubierto en la reescritura del 2026-11-02. La 2.2.3 se
 dejó general y la especificación completa (60%, conteos, pool) vive en el 3.*
@@ -280,12 +300,13 @@ dejó general y la especificación completa (60%, conteos, pool) vive en el 3.*
 - Casetas: su fuente (Datos Viales de la SICT) va en el pie de la figura de la
   pandemia del capítulo 4, no en el 3. Las entradas `Ruiz`, `Jiménez`, `Nuño`,
   `Esteva` y `Arganis` de la bibliografía ya solo se citarían ahí.
-- Estilo de las figuras: hay un estilo nuevo tipo artículo (`figures/tesis.mplstyle`,
+- Estilo de las figuras: hay un estilo nuevo tipo artículo (`figures/tesis.mplstyle`, hoy en `.claude/skills/figuras-tesis/assets/`,
   Latin Modern como el texto, grises, sin títulos). Ya lo usan las tres figuras
   del capítulo 3. Si Mariano lo aprueba, rehacer con él las de la introducción,
-  el capítulo 2 y el 4.
+  el capítulo 2 y el 4. *Hecho: todas las figuras usan ese estilo, que hoy vive en la
+  skill `.claude/skills/figuras-tesis`.*
 - La ventana de incidentes termina el 2022-04-21 a las 00:00 (`timestamp <=
-  TO_DATE` en `auxiliar/2-data-cleaning`): el último periodo no trae el día 21.
+  TO_DATE` en `scripts/historico/auxiliar/2-data-cleaning.ipynb`): el último periodo no trae el día 21.
   Un día de 2,191; no se corrigió.
 - latexdiff del visor no compila el capítulo 3 porque se reescribió entero; para
   revisarlo, usar «Lado a lado».
@@ -318,7 +339,7 @@ dejó general y la especificación completa (60%, conteos, pool) vive en el 3.*
 
 **Bibliografía y forma**
 
-- Falta Angrist y Pischke (2009) en `Referencias/hack.tex`; se cita en la 2.2.1.
+- Falta Angrist y Pischke (2009) en `tesis/Referencias/hack.tex`; se cita en la 2.2.1.
 - Comillas rectas `"x"` en el resto de la tesis: arreglo global al final.
 - La sección de aportaciones de la introducción mezcla primera persona e
   impersonal.
@@ -371,7 +392,7 @@ panel sí cambiando. La razón es exacta:
 Comprobado: clusterizando por unidad, que separa a las unidades traslapadas, el
 error estándar sí se mueve (0.18544 → 0.18664).
 
-La línea de `unit-design.ipynb` que decía *"si los resultados aguantan, el
+La línea de `scripts/analisis/02-unit-design.ipynb` que decía *"si los resultados aguantan, el
 reparto no estaba cargando nada"* ya está corregida. No es que aguanten: no
 pueden cambiar. Es una afirmación más fuerte y así hay que escribirla.
 
@@ -427,5 +448,5 @@ así que `EE_suma` (la brecha `tratado + tratado:post` del modelo (1)) salía
 inflada: a 300 m, 0.597 en lugar de 0.357; en FCS, unas 15 veces. Corregido y
 regeneradas `conclusion-brecha` y `brecha-posterior*`. Ninguna brecha posterior
 es significativa antes ni después (|z| < 1.2); las estrellas siempre estuvieron
-bien. Las salidas guardadas de `conclusiones.ipynb`, `interpretation.ipynb` y
-`did-estimation.ipynb` siguen mostrando el valor viejo: no usar `EE_suma` de ahí.
+bien. Las salidas guardadas de `scripts/analisis/10-conclusiones.ipynb`, `scripts/analisis/08-interpretation.ipynb` y
+`scripts/analisis/06-did-estimation.ipynb` siguen mostrando el valor viejo: no usar `EE_suma` de ahí.

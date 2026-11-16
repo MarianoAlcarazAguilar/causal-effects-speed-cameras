@@ -1,9 +1,9 @@
 # Revisión de Alberto (asesor de tesis)
 
-*Correo recibido sobre la versión completa de la tesis. Transcrito literal, para
-tenerlo presente mientras se rehace la estimación. Los capítulos 1, 2 y la mayor
-parte del 3 los da por listos; lo que falta es estimación y discusión de
-resultados.*
+*Correo de Alberto sobre la versión completa de la tesis (septiembre de 2026),
+transcrito literal. Es lo que motivó rehacer el análisis. Al final está cómo se
+atendió cada punto y en qué parte de la tesis quedó; el detalle de cada decisión
+está en [`bitacora-del-analisis.md`](bitacora-del-analisis.md).*
 
 ---
 
@@ -58,3 +58,25 @@ También ampliaría un poco más la discusión de los resultados. ¿Cuál es el 
 
 Saludos,
 Alberto
+
+---
+
+## Cómo se atendió
+
+Secciones y cuadros de la versión de 110 páginas (16 de noviembre de 2026). A
+Alberto se le mandó además una nota en Google Docs («cambios tesis 16 nov 2026»)
+con lo que cambió, por qué y en qué página está cada cosa.
+
+| Punto | Qué se hizo | Dónde quedó |
+| --- | --- | --- |
+| 1. Trimming | Se usa el recorte más estricto para todos los radios. Las unidades tratadas ahora son fijas (cámaras fusionadas por traslape a 300 m) y solo entran las 93 que encuentran pareja en los cinco radios, así que todos los radios estiman sobre las mismas zonas. Se explica qué estima eso y que deja fuera las 6 unidades más peligrosas | 2.3.1, 3.2.3 y 3.3.5 |
+| 2. Tablas | Observaciones, R², orden de las variables, suma de tratamiento más interacción con su error y estrellas, media del control con su desviación, notas que se leen solas y puntos decimales. Se reporta también el efecto en % de la media del control | Cuadros 4.1, 4.2 y 4.3 |
+| 2. Tasas | No se hicieron. El único denominador disponible eran las casetas de peaje en la periferia, que no miden la exposición de cada círculo, y los efectos fijos de tiempo ya absorben el choque común de movilidad | Bitácora, *Fuera de alcance* |
+| 2. Magnitudes | La discusión habla del tamaño del efecto aunque no sea significativo | 4.1 |
+| 3a. Errores estándar | Clusters por unidad (por componente cuando las unidades comparten controles), emparejamiento sin reemplazo, covariables del *propensity score* interactuadas con el periodo posterior (sin las derivadas de la variable de resultado) y *bootstrap* del proceso completo. Las limitaciones de esa inferencia se declaran | 2.3.4, 2.3.5 y conclusiones |
+| 3b. Sant'Anna y Zhao | No se hizo; él lo dejó opcional. Se le explica en la nota, no en la tesis | Bitácora, *Decisiones tomadas sin esperar a Alberto* |
+| 4. *Event study* | Se hizo, por año, para los cinco radios | 2.3.6 y 4.2 |
+| DiD sin matching | Va en la escalera de comparaciones y en el análisis de sensibilidad | 4.1 (figura de la escalera) y 4.5 |
+| Trimming menos estricto | Cada radio con todas las tratadas que encuentran pareja en él (96 a 99) | 4.5 y cuadro 4.3 |
+| Covariables × tiempo | Es la especificación principal | 2.3.4 y cuadro 4.1 |
+| Discusión | Magnitudes en incidentes por círculo al mes y en % de la media del control, niveles antes y después del control y comparación con los estudios de México | 4.1 y conclusiones |

@@ -1,5 +1,5 @@
 """
-Figuras del capítulo 3, con el estilo de la tesis (figures/tesis.mplstyle).
+Figuras del capítulo 3, con el estilo de la tesis (.claude/skills/figuras-tesis).
 
 1. Componentes traslapadas: las mismas cinco unidades tratadas a 100, 200 y
    300 m. Port de `scripts/analisis/11-auxiliary-figures.ipynb`.
@@ -11,7 +11,7 @@ Figuras del capítulo 3, con el estilo de la tesis (figures/tesis.mplstyle).
 
 Todo sale de la muestra que se reporta: los 93 pares de `muestra_comun`.
 
-    python figures/scripts/capitulo3_figures.py
+    python scripts/figuras/capitulo3_figures.py
 
 Los PDF van a tesis/Imagenes/.
 """
@@ -236,4 +236,5 @@ if __name__ == "__main__":
     for nombre, fig in figuras.items():
         fig.savefig(PDF_DIR / f"{nombre}.pdf")
         if vista:  # para revisar sin compilar la tesis
-            fig.savefig(ROOT / "figures" / "png" / f"{nombre}.png", dpi=200)
+            (Path(__file__).resolve().parent / "png").mkdir(exist_ok=True)
+            fig.savefig(Path(__file__).resolve().parent / "png" / f"{nombre}.png", dpi=200)

@@ -1,6 +1,6 @@
 ---
 name: figuras-tesis
-description: Figuras de esta tesis (cámaras de velocidad, ITAM) con su estilo — un artículo de economía en escala de grises con un solo acento, tipografía Latin Modern y matplotlib. Usar cuando pida una figura, gráfica o mapa nuevo para la tesis, o revisar o rehacer una que "no se ve como el resto". Aquí vive el estilo que importan los scripts de figures/scripts/ (mplstyle, fuentes y módulo), las convenciones con su porqué, qué figura usar para qué, cómo insertarla en LaTeX y cinco ejemplos que corren solos.
+description: Figuras de esta tesis (cámaras de velocidad, ITAM) con su estilo — un artículo de economía en escala de grises con un solo acento, tipografía Latin Modern y matplotlib. Usar cuando pida una figura, gráfica o mapa nuevo para la tesis, o revisar o rehacer una que "no se ve como el resto". Aquí vive el estilo que importan los scripts de scripts/figuras/ (mplstyle, fuentes y módulo), las convenciones con su porqué, qué figura usar para qué, cómo insertarla en LaTeX y cinco ejemplos que corren solos.
 ---
 
 # Figuras con el estilo de la tesis
@@ -16,13 +16,13 @@ todo lo necesario para hacer figuras nuevas que se vean igual.
 | --- | --- |
 | `assets/tesis.mplstyle` | El estilo de matplotlib |
 | `assets/fonts/` | Latin Modern Roman (regular, negrita, cursiva) |
-| `scripts/estilo_tesis.py` | Registra las fuentes y aplica el estilo; expone `ANCHO`, `OSCURO`, `CLARO`, `ACENTO`, `ACENTO_CLARO`, `FONDO`, `cero()`, `menos()`, `pct()` y `guardar()`. **Los scripts de `figures/scripts/` lo importan de aquí**: si lo mueves o lo cambias, cambian todas las figuras de la tesis |
+| `scripts/estilo_tesis.py` | Registra las fuentes y aplica el estilo; expone `ANCHO`, `OSCURO`, `CLARO`, `ACENTO`, `ACENTO_CLARO`, `FONDO`, `cero()`, `menos()`, `pct()` y `guardar()`. **Los scripts de `scripts/figuras/` lo importan de aquí**: si lo mueves o lo cambias, cambian todas las figuras de la tesis |
 | `references/convenciones.md` | Las reglas, cada una con su porqué. **Léelo antes de la primera figura** |
 | `references/tipos-de-figura.md` | Qué figura usar para qué y lo que se probó y no funcionó |
 | `references/latex.md` | El bloque `figure`, qué va en la nota y cómo evitar que mueva páginas |
 | `examples/*.py` | Escalera de coeficientes, event study, distribuciones (histograma y acumulada), love plot y mapa resaltado, con datos sintéticos. Cada uno deja su PNG en `examples/png/` |
 
-Las figuras reales de la tesis están en `figures/scripts/` (`intro_figures.py`,
+Las figuras reales de la tesis están en `scripts/figuras/` (`intro_figures.py`,
 `capitulo3_figures.py`, `capitulo4_figures.py`, `apendice_figures.py`) y escriben sus PDF
 en `tesis/Imagenes/`. Son la mejor referencia para una figura que no esté en los ejemplos.
 
@@ -31,13 +31,13 @@ en `tesis/Imagenes/`. Son la mejor referencia para una figura que no esté en lo
 1. **Elige el tipo de figura** en `references/tipos-de-figura.md` y parte del ejemplo
    más cercano.
 2. **Escribe la figura como una función** en el script del capítulo que corresponda en
-   `figures/scripts/`, que devuelva una `Figure`, y agrégala al diccionario que guarda el
+   `scripts/figuras/`, que devuelva una `Figure`, y agrégala al diccionario que guarda el
    `__main__`. El script ya importa el estilo de esta skill:
    ```python
    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / ".claude" / "skills" / "figuras-tesis" / "scripts"))
    from estilo_tesis import ANCHO, OSCURO, CLARO, ACENTO, cero, pct, guardar
    ```
-3. **Córrelo con `--png`** desde la raíz del repo y mira la vista previa en `figures/png/`.
+3. **Córrelo con `--png`** desde la raíz del repo y mira la vista previa en `scripts/figuras/png/`.
 4. **Insértala en LaTeX** con el bloque de `references/latex.md`, con su nota.
 5. **Compila y revisa la página** (el visor: `python3 scripts/visor`): que quepan el
    caption y la nota, que la figura no haya movido páginas y que un número de la figura

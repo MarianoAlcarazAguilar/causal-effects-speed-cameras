@@ -8,7 +8,7 @@
 !/nbsetup.py
 
 # La tesis en LaTeX. Las imágenes de tesis/Imagenes/ no entran: se regeneran con
-# figures/scripts/. Los auxiliares de compilación (.aux, .log, .toc…) tampoco.
+# scripts/figuras/. Los auxiliares de compilación (.aux, .log, .toc…) tampoco.
 !/tesis/
 !/tesis/**/
 !/tesis/**/*.tex
@@ -17,7 +17,9 @@
 !/tesis/**/*.cls
 !/tesis/**/*.bst
 
-# El pipeline, los notebooks del análisis y el visor.
+# Todo el código: el pipeline, los notebooks del análisis, las figuras, el visor y
+# el análisis de septiembre (historico/). Las vistas previas en PNG de las figuras no
+# entran.
 !/scripts/
 !/scripts/**/
 !/scripts/**/*.py
@@ -27,13 +29,8 @@
 !/scripts/visor/static/*.css
 !/scripts/visor/static/*.js
 
-# Los scripts de las figuras, uno por capítulo. Los PDF van a tesis/Imagenes/.
-!/figures/
-!/figures/scripts/
-!/figures/scripts/*.py
-
 # La skill de las figuras: estilo, fuentes, convenciones y ejemplos. Los scripts de
-# figures/scripts/ importan el estilo de aquí.
+# scripts/figuras/ importan el estilo de aquí.
 !/.claude/
 !/.claude/skills/
 !/.claude/skills/figuras-tesis/
@@ -68,13 +65,6 @@
 # (data/raw/businesses-cdmx.json) se queda fuera por los términos de uso de Google.
 !/data/localidadurbana/
 !/data/localidadurbana/*
-
-# El análisis de septiembre, como referencia: ya nada lo usa.
-!/historico/
-!/historico/**/
-!/historico/**/*.py
-!/historico/**/*.ipynb
-!/historico/**/*.md
 
 # Notas de trabajo: revisión del asesor, pendientes y apuntes. Las fotos no entran.
 !/notas/
