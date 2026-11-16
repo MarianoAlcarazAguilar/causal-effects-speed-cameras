@@ -6,9 +6,12 @@
 !/.gitignore
 !/README.md
 !/nbsetup.py
+!/environment.yml
 
 # La tesis en LaTeX. Las imágenes de tesis/Imagenes/ no entran: se regeneran con
-# scripts/figuras/. Los auxiliares de compilación (.aux, .log, .toc…) tampoco.
+# scripts/figuras/. La excepción es el logo del ITAM, que ningún script genera y sin
+# el cual la tesis no compila. Los auxiliares de compilación (.aux, .log, .toc…)
+# tampoco entran.
 !/tesis/
 !/tesis/**/
 !/tesis/**/*.tex
@@ -16,9 +19,10 @@
 !/tesis/**/*.sty
 !/tesis/**/*.cls
 !/tesis/**/*.bst
+!/tesis/Imagenes/itam_logo.png
 
 # Todo el código: el pipeline, los notebooks del análisis, las figuras, el visor y
-# el análisis de septiembre (historico/). Las vistas previas en PNG de las figuras no
+# las versiones anteriores del análisis (historico/). Las vistas previas en PNG de las figuras no
 # entran.
 !/scripts/
 !/scripts/**/

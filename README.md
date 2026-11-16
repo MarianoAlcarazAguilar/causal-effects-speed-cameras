@@ -14,7 +14,21 @@ El análisis y la redacción están completos (110 páginas). Falta la dedicator
 los agradecimientos, el año de la portada y la fecha del colofón. La revisión del
 asesor que motivó la reconstrucción, con cómo se atendió cada punto, está en
 [`notas/revision-alberto.md`](notas/revision-alberto.md); por qué el análisis quedó
-como quedó, en [`notas/bitacora-del-analisis.md`](notas/bitacora-del-analisis.md).
+como quedó, en [`notas/bitacora-del-analisis.md`](notas/bitacora-del-analisis.md);
+y la nota que se le mandó con esta versión, en
+[`notas/nota-a-alberto-2026-11-16.md`](notas/nota-a-alberto-2026-11-16.md).
+
+La versión de 110 páginas se le mandó a Alberto el 16 de noviembre de 2026 tal como
+está. Quedan para una versión siguiente:
+
+- **Condicionar "los datos descartan las reducciones de 10% a 20%"** en el Resumen,
+  el Summary y la introducción (`tesis/main.tex` y `tesis/Chapters/0.Intro.tex`). Esa
+  conclusión vale bajo el supuesto de tendencias paralelas, como ya lo dicen el
+  capítulo 4 y las conclusiones.
+- **Revisar los lesionados de 2022 y 2023** de la figura de la introducción
+  (`scripts/figuras/intro_figures.py`). Los dos valen exactamente 48,429, lo que
+  parece un error al leerlos de la figura vieja. Se verifica con la base cruda del C5
+  (abajo).
 
 El resultado principal es un nulo. A 300 metros, el efecto sobre el total de
 incidentes es de −1.8% de la media previa del control, con un intervalo del
@@ -126,8 +140,9 @@ instalarla en claude.ai).
 
 ## Cómo correrlo
 
-El entorno es el de conda `tesis-cameras`. No hay un archivo de entorno fijado;
-el apéndice B necesita además `h3` (v4).
+El entorno es el de conda `tesis-cameras`, con las versiones fijadas en
+`environment.yml` (`conda env create -f environment.yml`). La tesis y el visor
+necesitan además `tectonic` y `latexdiff` (`brew install tectonic latexdiff`).
 
 - **La tesis:** `python3 scripts/visor` abre el visor en
   http://127.0.0.1:8765, compila al guardar y compara contra cualquier versión de
@@ -138,6 +153,19 @@ el apéndice B necesita además `h3` (v4).
   de trabajo en la raíz del repo y pone `scripts/` en el path. Funciona desde
   cualquier carpeta gracias a un archivo `.pth` en el entorno, que es local a esta
   máquina: en otra, hay que agregar la raíz del repo al `PYTHONPATH`.
+
+### Lo que no se actualiza solo
+
+Si cambia el pipeline, nada falla, pero la tesis se queda con los números viejos.
+Hay que actualizar a mano:
+
+- **Los cuadros 4.1 a 4.3 y las cifras del texto.** Se copiaron de las salidas de
+  `scripts/analisis/08-interpretation.ipynb`; ningún código escribe el `.tex`.
+- **La escalera de comparaciones** (figura `conclusion-escalera`). Sus siete
+  coeficientes están escritos en `escalera()` de `scripts/figuras/capitulo4_figures.py`
+  y se estiman en la Parte I del notebook 08.
+- **Los datos de la introducción.** Están escritos en `scripts/figuras/intro_figures.py`
+  porque vienen de la base cruda del C5, que no está versionada.
 
 ## Insumos versionados
 
@@ -152,9 +180,17 @@ el apéndice B necesita además `h3` (v4).
 | `data/bootstrap-coeficientes.parquet` | Resultado del *bootstrap* |
 | `data/localidadurbana/` | Contorno de la Ciudad de México, para los hexágonos del apéndice B |
 
-**No versionado:** `data/raw/businesses-cdmx.json`, los conteos de Google Places del
-apéndice B. Los términos de Google no permiten publicarlos y volver a consultarlos
-hoy no reproduciría los conteos. Hay que respaldarlo aparte.
+**No versionado**, hay que respaldarlo aparte:
+
+- `data/raw/businesses-cdmx.json`: los conteos de Google Places del apéndice B. Los
+  términos de Google no permiten publicarlos y volver a consultarlos hoy no
+  reproduciría los conteos.
+- `data/raw/raw-afluencia-metro.csv`: el CSV crudo del que sale
+  `data/afluencia-metro-diaria.parquet`.
+- La base cruda de incidentes del C5 (`incidentes-viales.parquet`), de la que salen
+  `data/classified-incidents.parquet` y los datos de la introducción. Se descarga de
+  https://datos.cdmx.gob.mx/dataset/incidentes-viales-c5; la limpieza que la convierte
+  está en `scripts/historico/2-malla-cuadrada-borrador/2-data-cleaning.ipynb`.
 
 ## Git
 
@@ -162,7 +198,7 @@ El remoto es `git@github-personal:MarianoAlcarazAguilar/causal-effects-speed-cam
 con la cuenta personal. El `.gitignore` es una lista de permitidos: un archivo
 nuevo queda fuera hasta que se agrega explícitamente. Las imágenes de
 `tesis/Imagenes/` no están versionadas; se regeneran con los scripts de
-`scripts/figuras/`. La skill `figuras-tesis` sí está versionada (su `.md`, `.py`,
+`scripts/figuras/`. La excepción es `itam_logo.png`, que ningún script genera. La skill `figuras-tesis` sí está versionada (su `.md`, `.py`,
 `.mplstyle`, fuentes y PNG de ejemplo), así que un clon puede regenerar las figuras.
 
 Hasta el 16 de noviembre de 2026 la tesis vivía en `causal-effects-speed-cameras/`.
