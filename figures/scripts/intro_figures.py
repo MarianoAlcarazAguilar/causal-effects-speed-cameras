@@ -5,7 +5,7 @@ año e infracciones por tipo de sanción, con el estilo de la tesis
 
     python figures/scripts/intro_figures.py [--png]
 
-Los PDF van a causal-effects-speed-cameras/Imagenes/; con --png queda además
+Los PDF van a tesis/Imagenes/; con --png queda además
 una vista previa en figures/png/.
 
 Los datos están escritos aquí porque no hay otra copia de ellos en el repo. Los
@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
-PDF_DIR = ROOT / "causal-effects-speed-cameras" / "Imagenes"
+PDF_DIR = ROOT / "tesis" / "Imagenes"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from estilo_tesis import ACENTO, ANCHO, CLARO, OSCURO  # noqa: E402

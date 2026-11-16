@@ -2,7 +2,7 @@
 Construcción de las unidades tratadas a partir de las cámaras.
 
 Un objeto `UnidadesTratadas` que encapsula las decisiones de diseño tomadas en
-`scripts/resume-911/unit-design.ipynb`. Todas son parámetros con default en el
+`scripts/analisis/02-unit-design.ipynb`. Todas son parámetros con default en el
 valor elegido, así que las pruebas de robustez son una instancia distinta y no
 un notebook aparte:
 

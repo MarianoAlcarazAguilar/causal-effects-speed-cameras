@@ -1,6 +1,6 @@
 # Conclusiones
 
-Transcripción de las 6 páginas manuscritas en `notas/fotos/Conclusiones-1.png` a `Conclusiones-6.png`. Se conserva la voz y la secuencia de los apuntes. Las figuras y tablas se enlazan a su foto original; sus rótulos principales también se transcriben. Todas salen de `scripts/resume-911/conclusiones.ipynb`.
+Transcripción de las 6 páginas manuscritas en `notas/fotos/Conclusiones-1.png` a `Conclusiones-6.png`. Se conserva la voz y la secuencia de los apuntes. Las figuras y tablas se enlazan a su foto original; sus rótulos principales también se transcriben. Todas salen de `scripts/analisis/10-conclusiones.ipynb`.
 
 Las correcciones posteriores a las notas se marcan así: el texto original ~~tachado~~ y la corrección **[en negritas y entre corchetes]**.
 

@@ -12,7 +12,7 @@ Requiere `tectonic` y `latexdiff` (brew install tectonic latexdiff).
   tres vistas: PDF con los cambios marcados (latexdiff), los dos PDFs lado a lado y el diff
   del código fuente.
 
-Las imágenes no están en git. Si `causal-effects-speed-cameras/Imagenes/` no existe o le
+Las imágenes no están en git. Si `tesis/Imagenes/` no existe o le
 faltan archivos, se compila con rellenos grises y una nota roja «Imagen pendiente» debajo. Todo lo que
 genera vive en `.visor/` (ignorado por git); nunca escribe en las fuentes.
 """
@@ -40,7 +40,11 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 REPO = Path(__file__).resolve().parent.parent
-SRC_NAME = "causal-effects-speed-cameras"
+SRC_NAME = "tesis"
+# Antes del 16 de noviembre de 2026 la tesis vivía en esta carpeta. Los commits viejos se
+# buscan ahí, para poder seguir comparando contra cualquier versión.
+OLD_SRC_NAMES = ("causal-effects-speed-cameras",)
+SRC_PATHS = (SRC_NAME, *OLD_SRC_NAMES)
 SRC = REPO / SRC_NAME
 MAIN = "main.tex"
 WORK = REPO / ".visor"
@@ -110,6 +114,14 @@ def fill_missing_images(d: Path) -> list[str]:
     return sorted(set(missing))
 
 
+def src_name_at(ref: str) -> str:
+    """La carpeta de la tesis en `ref`: la actual o, en commits viejos, la anterior."""
+    for name in SRC_PATHS:
+        if git("ls-tree", "-d", "--name-only", ref, name).strip():
+            return name
+    return SRC_NAME
+
+
 def materialize(ref: str, dest: Path) -> list[str]:
     """Deja en `dest` las fuentes de la tesis en `ref` (o del disco). Devuelve imágenes faltantes."""
     if dest.exists():
@@ -118,13 +130,14 @@ def materialize(ref: str, dest: Path) -> list[str]:
         shutil.copytree(SRC, dest, ignore=lambda _d, names: [
             n for n in names if any(n.endswith(e) for e in SKIP_COPY) or n in ("main.pdf", "Icon\r")])
     else:
-        data = git("archive", "--format=tar", ref, SRC_NAME, binary=True)
+        name = src_name_at(ref)
+        data = git("archive", "--format=tar", ref, name, binary=True)
         tmp = dest.with_name(dest.name + ".tmp")
         if tmp.exists():
             shutil.rmtree(tmp)
         with tarfile.open(fileobj=io.BytesIO(data)) as tf:
             tf.extractall(tmp)
-        shutil.move(str(tmp / SRC_NAME), dest)
+        shutil.move(str(tmp / name), dest)
         shutil.rmtree(tmp)
         # Las imágenes no están versionadas: se usan las del disco.
         if (SRC / "Imagenes").is_dir():
@@ -350,7 +363,7 @@ def watcher():
 def list_refs() -> dict:
     fmt = "@@%H%x09%h%x09%ad%x09%s"
     log = git("log", f"--format={fmt}", "--date=format:%Y-%m-%dT%H:%M", "--shortstat",
-              "-n", "80", "HEAD", "--", SRC_NAME)
+              "-n", "80", "HEAD", "--", *SRC_PATHS)
     refs = []
     for l in log.splitlines():
         if l.startswith("@@"):
@@ -359,16 +372,16 @@ def list_refs() -> dict:
         elif refs and "changed" in l:
             m = re.search(r"(\d+) files? changed", l)
             refs[-1]["files"] = int(m.group(1)) if m else 0
-    dirty = [l[3:] for l in git("status", "--porcelain", "--", SRC_NAME).splitlines()]
+    dirty = [l[3:] for l in git("status", "--porcelain", "--", *SRC_PATHS).splitlines()]
     branch = git("rev-parse", "--abbrev-ref", "HEAD").strip()
     return {"refs": refs, "dirty": dirty, "branch": branch, "head": resolve("HEAD")}
 
 
 def source_diff(base: str, target: str) -> str:
-    args = ["diff", "--no-color", "--word-diff=porcelain", "-U2", base]
+    args = ["diff", "-M", "--no-color", "--word-diff=porcelain", "-U2", base]
     if target != WORKTREE:
         args.append(target)
-    out = git(*args, "--", SRC_NAME)
+    out = git(*args, "--", *SRC_PATHS)
     if not out.strip():
         return '<p class="empty">Sin diferencias en las fuentes.</p>'
     parts, row, file_open = [], [], False
@@ -383,10 +396,13 @@ def source_diff(base: str, target: str) -> str:
             flush()
             if file_open:
                 parts.append("</section>")
-            name = line.split(" b/", 1)[-1].removeprefix(SRC_NAME + "/")
+            name = line.split(" b/", 1)[-1]
+            for prefix in SRC_PATHS:
+                name = name.removeprefix(prefix + "/")
             parts.append(f'<section class="file"><h3>{html.escape(name)}</h3>')
             file_open = True
-        elif line.startswith(("index ", "--- ", "+++ ", "new file", "deleted file", "similarity")):
+        elif line.startswith(("index ", "--- ", "+++ ", "new file", "deleted file", "similarity",
+                              "rename from", "rename to")):
             continue
         elif line.startswith("@@"):
             flush()
@@ -400,7 +416,7 @@ def source_diff(base: str, target: str) -> str:
     flush()
     if file_open:
         parts.append("</section>")
-    untracked = [l[3:] for l in git("status", "--porcelain", "--", SRC_NAME).splitlines()
+    untracked = [l[3:] for l in git("status", "--porcelain", "--", *SRC_PATHS).splitlines()
                  if l.startswith("??")]
     if untracked and target == WORKTREE:
         parts.insert(0, '<p class="warn">Archivos nuevos sin <code>git add</code> (no salen en este '
@@ -458,8 +474,8 @@ def file_at(ref: str, rel: str) -> list[str]:
 
 
 def changed_sections(base: str, target: str) -> dict:
-    args = ["diff", "-U0", "--no-color", base] + ([target] if target != WORKTREE else [])
-    out = git(*args, "--", SRC_NAME)
+    args = ["diff", "-M", "-U0", "--no-color", base] + ([target] if target != WORKTREE else [])
+    out = git(*args, "--", *SRC_PATHS)
     sections: dict[str, int] = {}
     outside, path, starts = 0, None, {}
     for line in out.splitlines():
@@ -475,7 +491,7 @@ def changed_sections(base: str, target: str) -> dict:
         for start in hunks:
             prev = [k for i, k in heads if i <= start - 1]
             # cambios antes del primer título del archivo (\label, etc.) van a ese primer título
-            key = prev[-1] if prev else (heads[0][1] if heads and rel != f"{SRC_NAME}/{MAIN}" else None)
+            key = prev[-1] if prev else (heads[0][1] if heads and not rel.endswith("/" + MAIN) else None)
             if key:
                 sections[key] = sections.get(key, 0) + 1
             else:

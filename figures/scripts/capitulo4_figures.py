@@ -2,7 +2,7 @@
 Figuras del capítulo 4 (resultados), con el estilo de la tesis
 (figures/tesis.mplstyle).
 
-Port de las figuras de `scripts/resume-911/conclusiones.ipynb`:
+Port de las figuras de `scripts/analisis/10-conclusiones.ipynb`:
 
 1. conclusion-escalera: el efecto a 300 m conforme la comparación se vuelve
    más rigurosa. Los siete pasos se estiman en `interpretation.ipynb` (Parte I)
@@ -18,7 +18,7 @@ no se recalculan.
 
     python figures/scripts/capitulo4_figures.py [--png]
 
-Los PDF van a causal-effects-speed-cameras/Imagenes/; con --png queda además
+Los PDF van a tesis/Imagenes/; con --png queda además
 una vista previa en figures/png/.
 """
 
@@ -33,7 +33,7 @@ from matplotlib.ticker import MaxNLocator
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data"
-PDF_DIR = ROOT / "causal-effects-speed-cameras" / "Imagenes"
+PDF_DIR = ROOT / "tesis" / "Imagenes"
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 

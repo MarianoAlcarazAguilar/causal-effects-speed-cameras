@@ -20,7 +20,7 @@ controlado.
 
     python figures/scripts/apendice_figures.py [--png]
 
-Requiere `h3` (v4). Los PDF van a causal-effects-speed-cameras/Imagenes/.
+Requiere `h3` (v4). Los PDF van a tesis/Imagenes/.
 """
 
 import json
@@ -36,7 +36,7 @@ from shapely.geometry import Polygon
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data"
-PDF_DIR = ROOT / "causal-effects-speed-cameras" / "Imagenes"
+PDF_DIR = ROOT / "tesis" / "Imagenes"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from estilo_tesis import ANCHO, CLARO, OSCURO  # noqa: E402
