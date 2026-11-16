@@ -180,6 +180,7 @@ Cada radio se estima, entonces, sobre 186 áreas observadas en 72 periodos. El e
 El emparejamiento se rehace en cada radio con las covariables medidas a ese radio. Reutilizar en todos los radios los pares formados a 300 metros deteriora el balance, porque un control que se parece a su unidad tratada en un círculo de 300 metros no necesariamente se le parece en uno de 100.
 
 \subsection{Soporte común}
+\label{sec:soporte}
 
 \noindent El emparejamiento solo es defendible donde las distribuciones del \emph{propensity score} de tratadas y controles se traslapan; de hacerlo fuera de esa zona, la comparación sería difícil de sostener. A 300 metros, el \emph{propensity score} de las tratadas va de 0.001 a 0.140, con mediana de 0.011, y el de los candidatos va de casi cero a 0.139, con mediana de 0.004. Solo una unidad tratada queda por encima del candidato más alto. Las tratadas se concentran en valores más altos que los candidatos, como se esperaría si las cámaras se ubicaron en zonas más riesgosas, pero incluso en el quintil más alto de las tratadas hay 740 candidatos en el mismo rango. La figura~\ref{fig:soporte} muestra las dos distribuciones antes y después del emparejamiento.
 
@@ -189,7 +190,7 @@ El emparejamiento se rehace en cada radio con las covariables medidas a ese radi
     \caption{Distribución del \emph{propensity score} a 300 metros}
     \label{fig:soporte}
     \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
-        \footnotesize \textit{Nota:} El panel (a) compara las 99 unidades tratadas con los 14,656 candidatos a control; el panel (b), las 93 unidades tratadas de la muestra final con sus controles emparejados. El eje horizontal está en escala logarítmica porque la mayoría de los valores se concentra cerca de cero.
+        \footnotesize \textit{Nota:} El panel (a) compara las 99 unidades tratadas con los 14,656 candidatos a control; el panel (b), las 93 unidades tratadas de la muestra final con sus controles emparejados. El eje horizontal está en escala logarítmica porque la mayoría de los valores se concentra cerca de cero. El apéndice~\ref{apendice:balance} presenta la misma figura para los demás radios.
     \end{minipage}
 \end{figure}
 
