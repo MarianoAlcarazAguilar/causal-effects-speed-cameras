@@ -1,22 +1,14 @@
-# Ignore everything except thesis sources, analysis scripts, and selected inputs.
+# El repo funciona con una lista de permitidos: se ignora todo y aquí se enumera lo
+# que sí entra. Un archivo nuevo queda fuera hasta que se agrega explícitamente.
 *
-!.gitignore
+
+# Raíz
+!/.gitignore
 !/README.md
 !/nbsetup.py
-!/notas/
-!/notas/Errores Cometidos.md
-!/notas/Conclusiones.md
-!/figures/
-!/figures/componente-tratado-100-200-300.svg
-!/figures/conclusion-*.svg
-# Script de las figuras de la introducción: sus datos no tienen otra copia.
-!/figures/scripts/
-!/figures/scripts/intro_figures.py
-# Figuras del capítulo 3.
-!/figures/scripts/capitulo3_figures.py
-# Figuras del capítulo 4 (resultados).
-!/figures/scripts/capitulo4_figures.py
 
+# La tesis en LaTeX. Las imágenes de tesis/Imagenes/ no entran: se regeneran con
+# figures/scripts/. Los auxiliares de compilación (.aux, .log, .toc…) tampoco.
 !/tesis/
 !/tesis/**/
 !/tesis/**/*.tex
@@ -24,67 +16,24 @@
 !/tesis/**/*.sty
 !/tesis/**/*.cls
 !/tesis/**/*.bst
-!/tesis/**/*.py
 
+# El pipeline, los notebooks del análisis y el visor.
 !/scripts/
 !/scripts/**/
 !/scripts/**/*.py
 !/scripts/**/*.ipynb
 !/scripts/**/*.md
-!/scripts/**/*.R
-!/scripts/**/*.r
-!/scripts/**/*.Rmd
-!/scripts/**/*.do
-!/scripts/**/*.sh
-# La interfaz del visor.
 !/scripts/visor/static/*.html
 !/scripts/visor/static/*.css
 !/scripts/visor/static/*.js
 
-# Análisis de septiembre, como referencia: ya nada lo usa.
-!/historico/
-!/historico/**/
-!/historico/**/*.py
-!/historico/**/*.ipynb
-!/historico/**/*.md
+# Los scripts de las figuras, uno por capítulo. Los PDF van a tesis/Imagenes/.
+!/figures/
+!/figures/scripts/
+!/figures/scripts/*.py
 
-# Clean inputs for rebuilding the analysis without repeating data cleaning.
-!/data/
-!/data/classified-incidents.parquet
-!/data/vialidades.json
-!/data/afluencia-metro-diaria.parquet
-!/data/volumen-total-mensual.parquet
-# Resultado del bootstrap: 75 minutos de cómputo que no hace falta repetir.
-!/data/bootstrap-coeficientes.parquet
-!/data/fotocivicas-ubicacion-puntos/
-!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.dbf
-!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.prj
-!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.shp
-!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.shx
-
-# Metro: estaciones y líneas del STC, cada shapefile con sus archivos hermanos.
-# Sin el .prj se pierde el CRS, y las dos capas vienen en sistemas distintos.
-!/data/stcmetro_shp/
-!/data/stcmetro_shp/estaciones/
-!/data/stcmetro_shp/estaciones/*
-!/data/stcmetro_shp/lineas/
-!/data/stcmetro_shp/lineas/*
-
-# Generated files, notebook checkpoints, and local environments.
-**/.ipynb_checkpoints/
-**/__pycache__/
-**/.venv/
-**/venv/
-**/node_modules/
-/.git-backups/
-
-# Apéndice B: hexágonos con y sin vía primaria. El conteo de Google Places
-# (data/raw/businesses-cdmx.json) se queda fuera del repo por los términos de uso de Google.
-!/figures/scripts/apendice_figures.py
-!/data/localidadurbana/
-!/data/localidadurbana/*
-
-# La skill de las figuras de la tesis: estilo, fuentes, convenciones y ejemplos.
+# La skill de las figuras: estilo, fuentes, convenciones y ejemplos. Los scripts de
+# figures/scripts/ importan el estilo de aquí.
 !/.claude/
 !/.claude/skills/
 !/.claude/skills/figuras-tesis/
@@ -94,3 +43,46 @@
 !/.claude/skills/figuras-tesis/**/*.mplstyle
 !/.claude/skills/figuras-tesis/**/*.otf
 !/.claude/skills/figuras-tesis/**/*.png
+
+# Insumos limpios, para reconstruir el análisis sin repetir la limpieza.
+!/data/
+!/data/classified-incidents.parquet
+!/data/vialidades.json
+!/data/afluencia-metro-diaria.parquet
+!/data/volumen-total-mensual.parquet
+# El resultado del bootstrap: 75 minutos de cómputo que no hace falta repetir.
+!/data/bootstrap-coeficientes.parquet
+!/data/fotocivicas-ubicacion-puntos/
+!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.dbf
+!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.prj
+!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.shp
+!/data/fotocivicas-ubicacion-puntos/fotocivicas-ubicacion-puntos.shx
+# Metro: estaciones y líneas, cada shapefile con sus archivos hermanos. Sin el .prj
+# se pierde el CRS, y las dos capas vienen en sistemas distintos.
+!/data/stcmetro_shp/
+!/data/stcmetro_shp/estaciones/
+!/data/stcmetro_shp/estaciones/*
+!/data/stcmetro_shp/lineas/
+!/data/stcmetro_shp/lineas/*
+# Contorno de la ciudad para los hexágonos del apéndice B. El conteo de Google Places
+# (data/raw/businesses-cdmx.json) se queda fuera por los términos de uso de Google.
+!/data/localidadurbana/
+!/data/localidadurbana/*
+
+# El análisis de septiembre, como referencia: ya nada lo usa.
+!/historico/
+!/historico/**/
+!/historico/**/*.py
+!/historico/**/*.ipynb
+!/historico/**/*.md
+
+# Notas de trabajo: revisión del asesor, pendientes y apuntes. Las fotos no entran.
+!/notas/
+!/notas/*.md
+
+# Lo que se genera dentro de las carpetas permitidas.
+**/.ipynb_checkpoints/
+**/__pycache__/
+**/.venv/
+**/venv/
+**/node_modules/
