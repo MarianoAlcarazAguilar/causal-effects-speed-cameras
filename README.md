@@ -185,9 +185,7 @@ Hay que actualizar a mano:
 sincroniza con la Mac personal; ahí también están `literatura/`, `versiones-enviadas/`
 con los PDF que se le mandaron a Alberto y `archivo/` con lo que no está en git:
 `analisis-anterior/` con los insumos intermedios y las figuras de las versiones de
-`scripts/historico/`, `reconstruccion-2026/` con la guía y los apuntes con los que se
-retomó en septiembre, y `diarizacion-2024/`, una idea de tesis anterior que no
-avanzó). Para trabajar en otra máquina, se copian a `data/raw/`:
+`scripts/historico/`, y `diarizacion/`, una idea de tesis anterior que no avanzó). Para trabajar en otra máquina, se copian a `data/raw/`:
 
 - `data/raw/businesses-cdmx.json`: los conteos de Google Places del apéndice B. Los
   términos de Google no permiten publicarlos y volver a consultarlos hoy no
