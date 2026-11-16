@@ -7,10 +7,6 @@
 !/notas/Errores Cometidos.md
 !/notas/Conclusiones.md
 !/figures/
-!/figures/efecto-por-radio.svg
-!/figures/efecto-por-radio-*.svg
-!/figures/brecha-posterior.svg
-!/figures/brecha-posterior-*.svg
 !/figures/componente-tratado-100-200-300.svg
 !/figures/conclusion-*.svg
 # Script de las figuras de la introducción: sus datos no tienen otra copia.
@@ -22,7 +18,7 @@
 !/figures/tesis.mplstyle
 !/figures/fonts/
 !/figures/fonts/*.otf
-# Figuras del capítulo 4 (resultados), aún sin incluir en 4.Results.tex.
+# Figuras del capítulo 4 (resultados).
 !/figures/scripts/capitulo4_figures.py
 
 !/causal-effects-speed-cameras/
