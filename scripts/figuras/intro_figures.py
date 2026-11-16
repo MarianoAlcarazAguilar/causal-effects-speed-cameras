@@ -1,12 +1,12 @@
 """
 Figuras de la introducción: incidentes por año y nivel, accidentes fatales por
 año e infracciones por tipo de sanción, con el estilo de la tesis
-(figures/tesis.mplstyle).
+(.claude/skills/figuras-tesis).
 
-    python figures/scripts/intro_figures.py [--png]
+    python scripts/figuras/intro_figures.py [--png]
 
 Los PDF van a tesis/Imagenes/; con --png queda además
-una vista previa en figures/png/.
+una vista previa en scripts/figuras/png/.
 
 Los datos están escritos aquí porque no hay otra copia de ellos en el repo. Los
 totales y los fatales salen de la base del C5 2014-2023 (incidentes-viales.parquet),
@@ -153,4 +153,5 @@ if __name__ == "__main__":
     for nombre, fig in figuras.items():
         fig.savefig(PDF_DIR / f"{nombre}.pdf")
         if vista:  # para revisar sin compilar la tesis
-            fig.savefig(ROOT / "figures" / "png" / f"{nombre}.png", dpi=200)
+            (Path(__file__).resolve().parent / "png").mkdir(exist_ok=True)
+            fig.savefig(Path(__file__).resolve().parent / "png" / f"{nombre}.png", dpi=200)

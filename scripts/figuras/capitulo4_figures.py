@@ -1,6 +1,6 @@
 """
 Figuras del capítulo 4 (resultados), con el estilo de la tesis
-(figures/tesis.mplstyle).
+(.claude/skills/figuras-tesis).
 
 Port de las figuras de `scripts/analisis/10-conclusiones.ipynb`:
 
@@ -16,10 +16,10 @@ Port de las figuras de `scripts/analisis/10-conclusiones.ipynb`:
 Los intervalos del bootstrap se leen de data/bootstrap-coeficientes.parquet;
 no se recalculan.
 
-    python figures/scripts/capitulo4_figures.py [--png]
+    python scripts/figuras/capitulo4_figures.py [--png]
 
 Los PDF van a tesis/Imagenes/; con --png queda además
-una vista previa en figures/png/.
+una vista previa en scripts/figuras/png/.
 """
 
 import sys
@@ -240,5 +240,6 @@ if __name__ == "__main__":
     for nombre, fig in figuras.items():
         fig.savefig(PDF_DIR / f"{nombre}.pdf")
         if vista:  # para revisar sin compilar la tesis
-            fig.savefig(ROOT / "figures" / "png" / f"{nombre}.png", dpi=200)
+            (Path(__file__).resolve().parent / "png").mkdir(exist_ok=True)
+            fig.savefig(Path(__file__).resolve().parent / "png" / f"{nombre}.png", dpi=200)
         plt.close(fig)

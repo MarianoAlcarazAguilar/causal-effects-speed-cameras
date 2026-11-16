@@ -27,13 +27,13 @@ tesis/              La tesis en LaTeX: main.tex, Chapters/, Apendices/, Referenc
 scripts/
   pipeline/         El análisis final como código
   analisis/         Los notebooks que justifican cada paso, numerados en orden
-  visor/            Visor local de la tesis (ver abajo)
-figures/            Scripts de las figuras de la tesis, uno por capítulo
-.claude/skills/
-  figuras-tesis/    Estilo, convenciones y ejemplos de las figuras (ver abajo)
+  figuras/          Las figuras de la tesis, un script por capítulo
+  visor/            Visor local de la tesis
+  historico/        El análisis de septiembre de 2026, como referencia. Ya nada lo usa
 data/               Insumos versionados (ver abajo)
 notas/              Revisión del asesor, pendientes y apuntes
-historico/          El análisis de septiembre de 2026, como referencia. Ya nada lo usa
+.claude/skills/
+  figuras-tesis/    Estilo, convenciones y ejemplos de las figuras (ver abajo)
 nbsetup.py          Arranque de los notebooks
 ```
 
@@ -88,10 +88,10 @@ genera vive en `.visor/`, que no está en git.
 | `servidor.py` | Servidor HTTP: la página, los PDF y la API |
 | `static/` | La interfaz: `index.html`, `visor.css` y `visor.js` |
 
-### `figures/scripts/`
+### `scripts/figuras/`
 
 Cada script genera los PDF de un capítulo en `tesis/Imagenes/`. Con `--png` deja
-además una vista previa en `figures/png/`. El estilo lo importan de la skill
+además una vista previa en `scripts/figuras/png/`, que no entra a git. El estilo lo importan de la skill
 `figuras-tesis` (abajo).
 
 | Script | Figuras |
@@ -117,7 +117,7 @@ pide una figura; también se puede leer como documentación.
 | `references/latex.md` | Cómo insertarlas: caption, nota a renglón sencillo y cómo evitar que muevan páginas |
 | `examples/` | Cinco ejemplos que corren solos, con su PNG: escalera de coeficientes, *event study*, distribuciones, *love plot* y mapa resaltado |
 
-**Los scripts de `figures/scripts/` importan el estilo de aquí:** cambiar
+**Los scripts de `scripts/figuras/` importan el estilo de aquí:** cambiar
 `estilo_tesis.py`, `tesis.mplstyle` o las fuentes cambia todas las figuras de la tesis.
 La skill pasa el validador oficial de skills; no hace falta empaquetarla como `.skill`,
 porque Claude Code la lee como carpeta (el `.skill` es solo para compartirla o
@@ -131,7 +131,7 @@ el apéndice B necesita además `h3` (v4).
 - **La tesis:** `python3 scripts/visor` abre el visor en
   http://127.0.0.1:8765, compila al guardar y compara contra cualquier versión de
   git. Para compilar a mano: `tectonic -X compile tesis/main.tex`.
-- **Las figuras:** `python figures/scripts/<script>.py` (con `--png` para la vista
+- **Las figuras:** `python scripts/figuras/<script>.py` (con `--png` para la vista
   previa). Para una figura nueva, partir de `.claude/skills/figuras-tesis/`.
 - **Los notebooks:** empiezan con `from nbsetup import *`, que deja el directorio
   de trabajo en la raíz del repo y pone `scripts/` en el path. Funciona desde
@@ -161,7 +161,7 @@ El remoto es `git@github-personal:MarianoAlcarazAguilar/causal-effects-speed-cam
 con la cuenta personal. El `.gitignore` es una lista de permitidos: un archivo
 nuevo queda fuera hasta que se agrega explícitamente. Las imágenes de
 `tesis/Imagenes/` no están versionadas; se regeneran con los scripts de
-`figures/`. La skill `figuras-tesis` sí está versionada (su `.md`, `.py`,
+`scripts/figuras/`. La skill `figuras-tesis` sí está versionada (su `.md`, `.py`,
 `.mplstyle`, fuentes y PNG de ejemplo), así que un clon puede regenerar las figuras.
 
 Hasta el 16 de noviembre de 2026 la tesis vivía en `causal-effects-speed-cameras/`.

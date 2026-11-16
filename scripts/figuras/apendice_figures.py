@@ -18,7 +18,7 @@ el estilo de la tesis. Los cálculos son los mismos que en esos notebooks:
 Un hexágono "tiene vía primaria" si lo cruza alguna vía primaria o de acceso
 controlado.
 
-    python figures/scripts/apendice_figures.py [--png]
+    python scripts/figuras/apendice_figures.py [--png]
 
 Requiere `h3` (v4). Los PDF van a tesis/Imagenes/.
 """
@@ -190,4 +190,5 @@ if __name__ == "__main__":
     for nombre, fig in figuras.items():
         fig.savefig(PDF_DIR / f"{nombre}.pdf")
         if vista:  # para revisar sin compilar la tesis
-            fig.savefig(ROOT / "figures" / "png" / f"{nombre}.png", dpi=200)
+            (Path(__file__).resolve().parent / "png").mkdir(exist_ok=True)
+            fig.savefig(Path(__file__).resolve().parent / "png" / f"{nombre}.png", dpi=200)
