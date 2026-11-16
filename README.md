@@ -12,8 +12,9 @@ Licenciatura en Ciencia de Datos, ITAM. Asesor: Dr. Alberto Simpser.
 
 El análisis y la redacción están completos (110 páginas). Falta la dedicatoria,
 los agradecimientos, el año de la portada y la fecha del colofón. La revisión del
-asesor que motivó la reconstrucción está en
-[`notas/revision-alberto.md`](notas/revision-alberto.md).
+asesor que motivó la reconstrucción, con cómo se atendió cada punto, está en
+[`notas/revision-alberto.md`](notas/revision-alberto.md); por qué el análisis quedó
+como quedó, en [`notas/bitacora-del-analisis.md`](notas/bitacora-del-analisis.md).
 
 El resultado principal es un nulo. A 300 metros, el efecto sobre el total de
 incidentes es de −1.8% de la media previa del control, con un intervalo del
@@ -31,7 +32,7 @@ scripts/
   visor/            Visor local de la tesis
   historico/        El análisis de septiembre de 2026, como referencia. Ya nada lo usa
 data/               Insumos versionados (ver abajo)
-notas/              Revisión del asesor, pendientes y apuntes
+notas/              Revisión del asesor, bitácora del análisis y apuntes
 .claude/skills/
   figuras-tesis/    Estilo, convenciones y ejemplos de las figuras (ver abajo)
 nbsetup.py          Arranque de los notebooks
