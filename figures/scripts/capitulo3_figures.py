@@ -7,6 +7,7 @@ Figuras del capítulo 3, con el estilo de la tesis (figures/tesis.mplstyle).
    `propensity-score.ipynb`.
 3. Unidades excluidas contra las 93 analizadas. Port de `conclusiones.ipynb`.
 4. Love plot a 300 m: SMD de cada covariable antes y después de emparejar.
+5. Soporte común a 100, 150, 200 y 250 m, para el apéndice A.
 
 Todo sale de la muestra que se reporta: los 93 pares de `muestra_comun`.
 
@@ -96,17 +97,13 @@ def componentes(emparejamientos) -> plt.Figure:
     return fig
 
 
-def soporte_comun(emparejamientos) -> plt.Figure:
-    """Distribución del propensity score a 300 m, antes y después de emparejar."""
-    emp = emparejamientos[RADIO_TESIS]
+def _soporte(emp, axes, titulos) -> None:
+    """Histogramas del propensity score antes y después de emparejar, en dos ejes."""
     logs = np.log10(emp.datos_ps.ps)
     bordes = np.linspace(logs.quantile(.005), logs.max(), 30)
-
-    fig, axes = plt.subplots(1, 2, figsize=(ANCHO, 2.1), sharex=True,
-                             layout="constrained")
     for ax, (muestra, titulo) in zip(axes, [
-        (emp.datos_ps, "(a) Antes del emparejamiento"),
-        (emp.emparejados, "(b) Después del emparejamiento"),
+        (emp.datos_ps, titulos[0]),
+        (emp.emparejados, titulos[1]),
     ]):
         # controles rellenos y tratadas en contorno, para que se vea el traslape
         ax.hist(np.log10(muestra.loc[muestra.tratado == 0, "ps"]), bins=bordes,
@@ -114,9 +111,33 @@ def soporte_comun(emparejamientos) -> plt.Figure:
         ax.hist(np.log10(muestra.loc[muestra.tratado == 1, "ps"]), bins=bordes,
                 density=True, color="black", lw=1, histtype="step", label="Tratadas")
         ax.set_title(titulo)
+
+
+def soporte_comun(emparejamientos) -> plt.Figure:
+    """Distribución del propensity score a 300 m, antes y después de emparejar."""
+    fig, axes = plt.subplots(1, 2, figsize=(ANCHO, 2.1), sharex=True,
+                             layout="constrained")
+    _soporte(emparejamientos[RADIO_TESIS], axes,
+             ("(a) Antes del emparejamiento", "(b) Después del emparejamiento"))
+    for ax in axes:
         ax.set_xlabel(r"$\log_{10}$ del propensity score")
     axes[0].set_ylabel("Densidad")
     axes[0].legend(loc="upper left")
+    return fig
+
+
+def soporte_comun_radios(emparejamientos, radios=(100, 150, 200, 250)) -> plt.Figure:
+    """La misma figura que `soporte_comun`, para los demás radios (apéndice A)."""
+    fig, axes = plt.subplots(len(radios), 2, figsize=(ANCHO, 1.45 * len(radios)),
+                             sharex="row", layout="constrained")
+    for fila, radio in zip(axes, radios):
+        _soporte(emparejamientos[radio], fila,
+                 (f"{radio} m, antes del emparejamiento", f"{radio} m, después"))
+        fila[0].set_ylabel("Densidad")
+    for ax in axes[-1]:
+        ax.set_xlabel(r"$\log_{10}$ del propensity score")
+    handles, labels = axes[0][0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="outside upper center", ncol=2)
     return fig
 
 
@@ -209,6 +230,7 @@ if __name__ == "__main__":
         "soporte-comun-300": soporte_comun(emparejamientos),
         "unidades-excluidas": excluidas(emparejamientos, comunes),
         "love-plot-300": love_plot(emparejamientos),
+        "soporte-comun-radios": soporte_comun_radios(emparejamientos),
     }
     vista = "--png" in sys.argv
     for nombre, fig in figuras.items():

@@ -1,5 +1,46 @@
-\chapter{Balance en los demás radios}
+\chapter{Soporte común y balance en los demás radios}
 \label{apendice:balance}
+
+\section{Soporte común}
+
+\noindent El cuadro~\ref{tab:soporte-radios} reporta, para los cinco radios, las mismas cifras que la sección~\ref{sec:soporte} reporta a 300 metros, y la figura~\ref{fig:soporte-radios} muestra las distribuciones del \emph{propensity score} antes y después del emparejamiento en los demás radios. El patrón es el mismo en todos. Las tratadas se concentran en valores más altos que los candidatos, pero incluso en el quintil más alto de las tratadas hay cientos de candidatos en el mismo rango, y solo entre una y tres unidades tratadas quedan por encima del candidato más alto. Después del emparejamiento, las dos distribuciones prácticamente se superponen.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Soporte común del \emph{propensity score} por radio}
+    \label{tab:soporte-radios}
+    \footnotesize
+    \setlength{\tabcolsep}{3.5pt}
+    \begin{tabular}{l r r r r r r r r}
+        \toprule
+        & \multicolumn{3}{c}{Tratadas} & \multicolumn{2}{c}{Candidatos} & & & \\
+        \cmidrule(lr){2-4} \cmidrule(lr){5-6}
+        Radio & Mín. & Máx. & Mediana & Máx. & Mediana & Arriba & Quintil & Sin pareja \\
+        \midrule
+        100 m & $<0.001$ & 0.557 & 0.013 & 0.192 & 0.004 & 3 & 247 & 3 \\
+        150 m & 0.001 & 0.277 & 0.012 & 0.202 & 0.004 & 2 & 377 & 1 \\
+        200 m & 0.001 & 0.138 & 0.010 & 0.137 & 0.004 & 1 & 260 & 0 \\
+        250 m & 0.001 & 0.277 & 0.010 & 0.121 & 0.004 & 3 & 424 & 2 \\
+        300 m & 0.001 & 0.140 & 0.011 & 0.139 & 0.004 & 1 & 740 & 1 \\
+        \bottomrule
+    \end{tabular}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
+        \vspace{0.4em}
+        \footnotesize \textit{Nota:} \emph{Propensity score} de las 99 unidades tratadas y de los 14,656 candidatos a control en cada radio. \emph{Arriba} es el número de unidades tratadas cuyo \emph{propensity score} supera al del candidato más alto; \emph{Quintil}, el número de candidatos con un \emph{propensity score} dentro del rango del quintil más alto de las tratadas; \emph{Sin pareja}, el número de unidades tratadas que no encuentran un control dentro del caliper. Una unidad tratada por encima del candidato más alto todavía puede encontrar pareja si queda dentro del caliper, por lo que las dos columnas no siempre coinciden.
+    \end{minipage}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/soporte-comun-radios.pdf}
+    \caption{Distribución del \emph{propensity score} en los demás radios}
+    \label{fig:soporte-radios}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
+        \footnotesize \textit{Nota:} En cada fila, el panel izquierdo compara las 99 unidades tratadas con los 14,656 candidatos a control, y el derecho, las 93 unidades tratadas de la muestra final con sus controles emparejados. El eje horizontal está en escala logarítmica, como en la figura~\ref{fig:soporte}.
+    \end{minipage}
+\end{figure}
+
+\section{Balance}
 
 \noindent Los cuadros~\ref{tab:balance-100} a~\ref{tab:balance-250} reportan el balance de covariables a 100, 150, 200 y 250 metros, con el mismo formato que el cuadro~\ref{tab:balance}. Las columnas \emph{Tratadas} y \emph{Controles} corresponden a las 93 unidades tratadas de la muestra final y a sus controles emparejados en cada radio; \emph{Candidatos}, a los 14,656 candidatos a control. La SMD antes del emparejamiento compara las 99 unidades tratadas con los candidatos.
 
