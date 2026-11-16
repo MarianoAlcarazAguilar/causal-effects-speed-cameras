@@ -23,7 +23,7 @@
 
 \let\oldfootnote\footnote % Deja espacio entre el número del pie de página y el inicio del texto
 \renewcommand\footnote[1]{%
-\oldfootnote{\hspace{0.05mm}#1}}
+\oldfootnote{\linespread{1}\selectfont\hspace{0.05mm}#1}}
 
 \renewcommand{\thefootnote} {\textcolor{Black}{\arabic{footnote}}} % Súperindice a color negro
 

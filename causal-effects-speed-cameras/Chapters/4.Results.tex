@@ -43,7 +43,7 @@ El coeficiente de Post en la especificación (1) indica que los controles regist
         $R^2$ & 0.009 & 0.509 & 0.513 \\
         \bottomrule
     \end{tabular}
-    \begin{minipage}{0.95\linewidth}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
         \vspace{0.4em}
         \footnotesize \textit{Nota:} Estimación por mínimos cuadrados ordinarios de las ecuaciones~\eqref{eq:did1}, \eqref{eq:did2} y~\eqref{eq:did} sobre las 93 unidades tratadas de la muestra final y sus controles emparejados, en círculos de 300 metros y en los 72 periodos mensuales de la ventana, del día 22 de un mes al 21 del siguiente. La variable dependiente es el número de incidentes de todos los niveles de gravedad por área y periodo. En las especificaciones (2) y (3), Tratado y Post quedan absorbidos por los efectos fijos. Entre paréntesis, errores estándar agrupados por componente; entre corchetes, el intervalo de confianza al 95\% del \emph{bootstrap} del proceso completo, con 2,000 repeticiones. El efecto en porcentaje divide Tratado $\times$ Post entre la media del control antes del programa, que en la especificación (1) es la constante. Tratado $+$ Tratado $\times$ Post es la diferencia entre tratadas y controles después del programa. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
     \end{minipage}
@@ -58,7 +58,7 @@ Cuando cada zona tratada se compara con una zona sin cámara igual de peligrosa,
     \includegraphics[width=\linewidth]{Imagenes/conclusion-escalera.pdf}
     \caption{Efecto estimado a 300 metros según el grupo de comparación}
     \label{fig:escalera}
-    \begin{minipage}{0.95\linewidth}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
         \footnotesize \textit{Nota:} Cada punto es el efecto estimado con todos los incidentes, como porcentaje del nivel previo del grupo con el que se compara; las líneas son el intervalo de confianza al 95\% con errores estándar agrupados por componente. El primer renglón compara a las 99 unidades tratadas consigo mismas antes y después del programa; el segundo y el tercero comparan a las 99 y a las 93 unidades tratadas con 631 áreas sin cámara que no se traslapan entre sí; los dos últimos, a las 93 con sus controles emparejados. En rojo, el intervalo del \emph{bootstrap} de la especificación principal.
     \end{minipage}
 \end{figure}
@@ -77,7 +77,7 @@ El intervalo también muestra hasta dónde se hubieran podido observar cambios s
     \includegraphics[width=\linewidth]{Imagenes/conclusion-event-study.pdf}
     \caption{\emph{Event study} por radio}
     \label{fig:event-study}
-    \begin{minipage}{0.95\linewidth}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
         \footnotesize \textit{Nota:} Cada punto es el coeficiente de Tratado $\times$ año en la especificación principal con un indicador para cada año, como porcentaje de la media previa del control; las líneas son el intervalo de confianza al 95\% con errores estándar agrupados por componente. El año $-1$ es la referencia y está fijo en cero. La zona sombreada corresponde al periodo posterior al programa.
     \end{minipage}
 \end{figure}
@@ -106,7 +106,7 @@ Los coeficientes posteriores al programa tampoco se distinguen de cero. El prime
     \includegraphics[width=\linewidth]{Imagenes/conclusion-por-nivel.pdf}
     \caption{Efecto estimado por tipo de incidente y por radio}
     \label{fig:por-nivel}
-    \begin{minipage}{0.95\linewidth}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
         \footnotesize \textit{Nota:} Cada punto es el coeficiente de Tratado $\times$ Post en la especificación principal~\eqref{eq:did}, como porcentaje de la media previa del control en ese radio y tipo de incidente; las líneas son el intervalo de confianza al 95\% del \emph{bootstrap} del proceso completo. El panel (d) tiene su propia escala.
     \end{minipage}
 \end{figure}
@@ -160,9 +160,9 @@ Los coeficientes posteriores al programa tampoco se distinguen de cero. El prime
         \emph{Clusters} & 186 & 183 & 179 & 171 & 165 \\
         \bottomrule
     \end{tabular}
-    \begin{minipage}{0.95\linewidth}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
         \vspace{0.4em}
-        \scriptsize \textit{Nota:} Especificación principal~\eqref{eq:did}, estimada por mínimos cuadrados ordinarios con efectos fijos de área y periodo y covariables interactuadas con Post; Tratado y Post quedan absorbidos por los efectos fijos, por lo que no se reportan ni su suma con Tratado $\times$ Post. Muestra: las 93 unidades tratadas y sus controles emparejados en cada radio, en 72 periodos mensuales. Variable dependiente: incidentes del tipo indicado por área y periodo. Entre paréntesis bajo el coeficiente, el error estándar agrupado por componente; entre corchetes, el intervalo de confianza al 95\% del \emph{bootstrap} del proceso completo, como porcentaje de la media previa del control; junto a esa media, su desviación estándar. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
+        \scriptsize \textit{Nota:} Especificación principal~\eqref{eq:did}, estimada por mínimos cuadrados ordinarios con efectos fijos de área y periodo y covariables interactuadas con Post; Tratado, Post y su suma con la interacción no se reportan porque los absorben los efectos fijos. Muestra: las 93 unidades tratadas y sus controles emparejados en cada radio, en 72 periodos mensuales. Variable dependiente: incidentes del tipo indicado por área y periodo. Entre paréntesis, el error estándar agrupado por componente, con el que se calculan las estrellas; entre corchetes, el intervalo de confianza al 95\% del \emph{bootstrap} del proceso completo, como porcentaje de la media previa del control, que incluye el cero en todos los casos. Junto a la media previa, su desviación estándar. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
     \end{minipage}
 \end{table}
 
@@ -178,7 +178,7 @@ Lo relevante es si esos años cargan los resultados estimados. El golpe fue igua
     \includegraphics[width=\linewidth]{Imagenes/conclusion-pandemia.pdf}
     \caption{Incidentes y volumen vehicular durante la ventana de análisis}
     \label{fig:pandemia}
-    \begin{minipage}{0.95\linewidth}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
         \footnotesize \textit{Nota:} El panel (a) muestra el promedio mensual de incidentes por área de las 93 unidades tratadas y de sus controles emparejados, a 300 metros. El panel (b) muestra el volumen vehicular mensual en las estaciones de conteo permanente de las casetas de peaje de acceso a la ciudad, como índice con base 100 en el promedio previo al programa. La línea punteada marca el inicio de las fotocívicas, el 22 de abril de 2019; la zona sombreada, el primer año de la pandemia, a partir del 23 de marzo de 2020. Fuente del panel (b): elaboración propia con los informes anuales de \emph{Datos viales} de la Secretaría de Infraestructura, Comunicaciones y Transportes (Ruiz, 2015, 2016, 2017, 2018, 2019; Jiménez, 2020, 2021; Arganis, 2022; Nuño, 2023, 2024; Esteva, 2025).
     \end{minipage}
 \end{figure}
@@ -239,7 +239,7 @@ Por último, hay otros dos cambios que no tienen impacto en el resultado. Si el 
         Cov. $\times$ Post & Sí & Sí & Sí & Sí & Sí \\
         \bottomrule
     \end{tabular}
-    \begin{minipage}{0.95\linewidth}
+    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
         \vspace{0.4em}
         \scriptsize \textit{Nota:} Estimación por mínimos cuadrados ordinarios con efectos fijos de área y periodo, en 72 periodos mensuales. La variable dependiente es el número de incidentes de todos los niveles de gravedad por área y periodo. Los tres paneles corresponden a la especificación principal~\eqref{eq:did}. El panel A usa las 93 unidades tratadas que encuentran pareja en los cinco radios; el panel B, todos los pares de cada radio, y el panel C no empareja y compara las 99 unidades tratadas con 631 áreas sin cámara que no se traslapan entre sí. Tratado y Post quedan absorbidos por los efectos fijos. Entre paréntesis bajo el coeficiente, el error estándar agrupado por componente; junto a la media del control antes del programa, su desviación estándar. ${}^{***} p<0.01$, ${}^{**} p<0.05$, ${}^{*} p<0.10$.
     \end{minipage}
