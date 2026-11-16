@@ -48,8 +48,9 @@ from estilo_tesis import ACENTO, ANCHO, CLARO, OSCURO  # noqa: E402
 from pipeline import NIVELES_TESIS, Datos, Panel, muestra_comun, tabla_resultados  # noqa: E402
 
 RADIO = 300
+# en el texto la sigla de los fatales es FSC; en los datos sigue siendo FCS
 NOMBRE_NIVEL = {"general": "Todos los incidentes", "MIN": "Sin lesionados (MIN)",
-                "PIC": "Con lesionados (PIC)", "FCS": "Fatales (FCS)"}
+                "PIC": "Con lesionados (PIC)", "FCS": "Fatales (FSC)"}
 ESPEC = {"(1) sin efectos fijos": "(1)", "(2) + EF unidad y tiempo": "(2)",
          "(3) + covariables x post": "(3)"}
 PANDEMIA = pd.Timestamp("2020-03-23")   # Jornada Nacional de Sana Distancia
