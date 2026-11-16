@@ -6,6 +6,7 @@ Figuras del capítulo 3, con el estilo de la tesis (figures/tesis.mplstyle).
 2. Soporte común a 300 m, antes y después de emparejar. Figura 2 de
    `propensity-score.ipynb`.
 3. Unidades excluidas contra las 93 analizadas. Port de `conclusiones.ipynb`.
+4. Love plot a 300 m: SMD de cada covariable antes y después de emparejar.
 
 Todo sale de la muestra que se reporta: los 93 pares de `muestra_comun`.
 
@@ -119,6 +120,38 @@ def soporte_comun(emparejamientos) -> plt.Figure:
     return fig
 
 
+def love_plot(emparejamientos) -> plt.Figure:
+    """SMD de cada covariable a 300 m, antes y después de emparejar.
+
+    Mismo orden que el cuadro de balance, para poder leer uno junto al otro.
+    """
+    balance = emparejamientos[RADIO_TESIS].balance
+    orden = ["nivel_incidentes", "pct_lesionados", "tendencia", "hubo_fcs",
+             "road_length_m", "n_vialidades", "carriles_ponderados",
+             "pct_acceso_controlado", "pct_doble_sentido", "pct_desnivel",
+             "n_niveles", "afluencia_nivel"]
+    variables = orden[::-1]  # el eje y crece hacia arriba
+    y = np.arange(len(variables))
+
+    fig, ax = plt.subplots(figsize=(ANCHO, 3.0), layout="constrained")
+    ax.axvline(0, color="black", lw=.6)
+    for signo in (-1, 1):
+        ax.axvline(signo * .1, color=CLARO, lw=.6, ls="--")
+    ax.hlines(y, balance.loc[variables, "smd_antes"],
+              balance.loc[variables, "smd_despues"], color=CLARO, lw=.6)
+    ax.plot(balance.loc[variables, "smd_antes"], y, "o", mfc="white", mec=OSCURO,
+            ms=4, label="Antes del emparejamiento")
+    ax.plot(balance.loc[variables, "smd_despues"], y, "o", color=OSCURO, ms=4,
+            label="Después del emparejamiento")
+    ax.set_yticks(y, variables,
+                  family="monospace", fontsize=7)
+    ax.tick_params(axis="y", length=0)
+    ax.spines["left"].set_visible(False)
+    ax.set_xlabel("Diferencia de medias estandarizada (SMD)")
+    ax.legend(loc="lower right", bbox_to_anchor=(1, 1), ncol=2)
+    return fig
+
+
 def excluidas(emparejamientos, comunes) -> plt.Figure:
     """Las seis unidades excluidas, como múltiplo de las 93 analizadas."""
     e300 = emparejamientos[RADIO_TESIS]
@@ -174,6 +207,7 @@ if __name__ == "__main__":
         "componente-tratado-100-200-300": componentes(emparejamientos),
         "soporte-comun-300": soporte_comun(emparejamientos),
         "unidades-excluidas": excluidas(emparejamientos, comunes),
+        "love-plot-300": love_plot(emparejamientos),
     }
     vista = "--png" in sys.argv
     for nombre, fig in figuras.items():
