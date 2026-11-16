@@ -29,7 +29,7 @@ from scipy.sparse.csgraph import connected_components
 ROOT = Path(__file__).resolve().parents[2]
 PDF_DIR = ROOT / "tesis" / "Imagenes"
 sys.path.insert(0, str(ROOT / "scripts"))
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / ".claude" / "skills" / "figuras-tesis" / "scripts"))  # el estilo
 
 from estilo_tesis import ACENTO, ANCHO, CLARO, OSCURO  # noqa: E402
 from pipeline import Datos, Panel, muestra_comun  # noqa: E402

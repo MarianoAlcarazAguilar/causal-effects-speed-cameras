@@ -12,12 +12,8 @@
 # Script de las figuras de la introducción: sus datos no tienen otra copia.
 !/figures/scripts/
 !/figures/scripts/intro_figures.py
-# Figuras del capítulo 3 y el estilo común de las figuras de la tesis.
+# Figuras del capítulo 3.
 !/figures/scripts/capitulo3_figures.py
-!/figures/scripts/estilo_tesis.py
-!/figures/tesis.mplstyle
-!/figures/fonts/
-!/figures/fonts/*.otf
 # Figuras del capítulo 4 (resultados).
 !/figures/scripts/capitulo4_figures.py
 
@@ -87,3 +83,14 @@
 !/figures/scripts/apendice_figures.py
 !/data/localidadurbana/
 !/data/localidadurbana/*
+
+# La skill de las figuras de la tesis: estilo, fuentes, convenciones y ejemplos.
+!/.claude/
+!/.claude/skills/
+!/.claude/skills/figuras-tesis/
+!/.claude/skills/figuras-tesis/**/
+!/.claude/skills/figuras-tesis/**/*.md
+!/.claude/skills/figuras-tesis/**/*.py
+!/.claude/skills/figuras-tesis/**/*.mplstyle
+!/.claude/skills/figuras-tesis/**/*.otf
+!/.claude/skills/figuras-tesis/**/*.png

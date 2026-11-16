@@ -1,7 +1,7 @@
 # Estilo de las figuras de la tesis: el de un artículo de economía.
 # La tipografía es la del texto (Latin Modern, 11 pt en el cuerpo), sin títulos
 # dentro de la figura (van en el \caption) y en escala de grises con un solo
-# acento. Las fuentes viven en figures/fonts y se registran en estilo_tesis.py.
+# acento. Las fuentes viven en assets/fonts y se registran en scripts/estilo_tesis.py.
 
 font.family        : serif
 font.serif         : Latin Modern Roman
