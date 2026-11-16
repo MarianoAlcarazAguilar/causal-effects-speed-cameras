@@ -40,6 +40,10 @@
 !/scripts/**/*.Rmd
 !/scripts/**/*.do
 !/scripts/**/*.sh
+# La interfaz del visor.
+!/scripts/visor/static/*.html
+!/scripts/visor/static/*.css
+!/scripts/visor/static/*.js
 
 # Análisis de septiembre, como referencia: ya nada lo usa.
 !/historico/
