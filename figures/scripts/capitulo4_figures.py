@@ -8,17 +8,10 @@ Port de las figuras de `scripts/resume-911/conclusiones.ipynb`:
    más rigurosa. Los siete pasos se estiman en `interpretation.ipynb` (Parte I)
    y aquí, como en el notebook, solo se grafican.
 2. conclusion-por-nivel: la especificación (3) por radio y tipo de incidente.
-3. conclusion-brecha: tratadas menos controles antes y después, modelo (1).
-4. conclusion-pandemia: serie mensual de tratadas y controles y volumen en casetas.
-5. conclusion-por-anio: un coeficiente por año posterior.
-6. conclusion-event-study: años previos y posteriores contra el año -1.
+3. conclusion-pandemia: serie mensual de tratadas y controles y volumen en casetas.
+4. conclusion-event-study: años previos y posteriores contra el año -1.
 
 (conclusion-excluidas ya está en capitulo3_figures.py como unidades-excluidas.)
-
-Y de `scripts/resume-911/interpretation.ipynb`, una por nivel de severidad:
-
-7. efecto-por-radio[-min|-pic|-fcs]: Tratado × Post por radio, (1) y (3).
-8. brecha-posterior[-min|-pic|-fcs]: Tratado + Tratado × Post por radio.
 
 Los intervalos del bootstrap se leen de data/bootstrap-coeficientes.parquet;
 no se recalculan.
@@ -139,24 +132,6 @@ def por_nivel(resultados) -> plt.Figure:
     return fig
 
 
-def brecha(resultados) -> plt.Figure:
-    """Modelo (1): `tratado` es la brecha antes; `tratado + tratado:post`, después."""
-    uno = resultados.query("espec == '(1)' and nivel == 'general'").sort_values("radio")
-    fig, ax = plt.subplots(figsize=(ANCHO, 2.5), layout="constrained")
-    cero(ax)
-    for desplazamiento, columna, ee, estilo, etiqueta in [
-            (-6, "tratado", "EE_tratado", dict(mfc="white", mec=OSCURO), "Antes"),
-            (6, "suma", "EE_suma", dict(color=OSCURO), "Después")]:
-        x = uno.radio + desplazamiento
-        ax.vlines(x, uno[columna] - 1.96 * uno[ee], uno[columna] + 1.96 * uno[ee],
-                  color=OSCURO, lw=1.2)
-        ax.plot(x, uno[columna], "o", ms=4, label=etiqueta, **estilo)
-    ax.set_xticks(uno.radio, [f"{r} m" for r in uno.radio])
-    ax.set_ylabel("Tratadas menos controles\n(incidentes al mes, IC 95%)")
-    ax.legend(loc="lower left", bbox_to_anchor=(0, 1), ncols=2)
-    return fig
-
-
 def pandemia(datos, e300) -> plt.Figure:
     panel = Panel(e300)
     serie = (panel.tabla.groupby(["t", "tratado"]).incidentes.mean().unstack()
@@ -186,46 +161,6 @@ def pandemia(datos, e300) -> plt.Figure:
 
 
 ANIOS = {"año 1": (0, 11), "año 2": (12, 23), "año 3": (24, 35)}
-
-
-def efecto_por_anio(emparejamiento, niveles=None) -> pd.DataFrame:
-    """El DiD de la especificación (3), con un coeficiente por año posterior."""
-    p = Panel(emparejamiento, niveles=niveles)
-    tabla = p.tabla.copy()
-    for k, (desde, hasta) in enumerate(ANIOS.values(), start=1):
-        anio = tabla.t.between(desde, hasta).astype(int)
-        tabla[f"trat_a{k}"] = tabla.tratado * anio
-        for c in p.covariables:
-            tabla[f"{c}_a{k}"] = tabla[f"z_{c}"] * anio
-    formula = ("incidentes ~ trat_a1 + trat_a2 + trat_a3 + "
-               + " + ".join(f"{c}_a{k}" for k in (1, 2, 3) for c in p.covariables)
-               + " + C(uid) + C(t)")
-    r = smf.ols(formula, data=tabla).fit(
-        cov_type="cluster", cov_kwds={"groups": pd.factorize(tabla.cluster)[0]})
-    base = tabla[(tabla.tratado == 0) & (tabla.t < 0)].incidentes.mean()
-    return pd.DataFrame([{
-        "año": anio,
-        "%": 100 * r.params[f"trat_a{k}"] / base,
-        "IC bajo %": 100 * (r.params[f"trat_a{k}"] - 1.96 * r.bse[f"trat_a{k}"]) / base,
-        "IC alto %": 100 * (r.params[f"trat_a{k}"] + 1.96 * r.bse[f"trat_a{k}"]) / base,
-    } for k, anio in enumerate(ANIOS, start=1)])
-
-
-def por_anio(e300) -> plt.Figure:
-    tabla = pd.concat({nivel: efecto_por_anio(e300, niveles)
-                       for nivel, niveles in NIVELES_TESIS.items()}, names=["nivel"])
-    fig, axes = plt.subplots(2, 2, figsize=(ANCHO, 3.9), sharex=True, layout="constrained")
-    for ax, nivel, letra in zip(axes.ravel(), NOMBRE_NIVEL, "abcd"):
-        d = tabla.loc[nivel]
-        x = np.arange(len(d))
-        cero(ax)
-        ax.vlines(x, d["IC bajo %"], d["IC alto %"], color=OSCURO, lw=1.2)
-        ax.plot(x, d["%"], "o", color=OSCURO, ms=4)
-        ax.set_xticks(x, ["abr 2019–\nabr 2020", "abr 2020–\nabr 2021", "abr 2021–\nabr 2022"])
-        ax.set_xlim(-.5, 2.5)
-        ax.set_title(f"({letra}) {NOMBRE_NIVEL[nivel]}")
-    fig.supylabel("Tratado × año, % de la media previa del control\n(IC 95%)", fontsize=9)
-    return fig
 
 
 EVENTO = {-3: (-36, -25), -2: (-24, -13), 1: (0, 11), 2: (12, 23), 3: (24, 35)}
@@ -287,93 +222,6 @@ def evento(emparejamientos) -> plt.Figure:
 # interpretation.ipynb
 # =========================================================================
 
-def datos_para_figuras(resultados, nivel, n_radios):
-    """Las especificaciones (1) y (3) de un nivel. (1) y (2) tienen el mismo
-    coeficiente, así que (1) toma el IC del bootstrap de (2)."""
-    d = resultados[resultados.nivel.eq(nivel)]
-    base_1 = d[d.espec.eq("(1)")].set_index("radio").sort_index()
-    base_2 = d[d.espec.eq("(2)")].set_index("radio").sort_index()
-    assert base_1.index.equals(base_2.index) and len(base_1) == n_radios
-    np.testing.assert_allclose(base_1.coef, base_2.coef, rtol=0, atol=1e-10)
-
-    grafica = (d[d.espec.isin(["(1)", "(3)"])]
-               [["radio", "espec", "coef", "ic_bajo", "ic_alto", "media_control"]]
-               .sort_values(["espec", "radio"]).copy())
-    sin_ef = grafica.espec.eq("(1)")
-    for limite in ("ic_bajo", "ic_alto"):
-        grafica.loc[sin_ef, limite] = grafica.loc[sin_ef, "radio"].map(base_2[limite])
-    grafica["coef_pct"] = 100 * grafica.coef / grafica.media_control
-    grafica["bajo_pct"] = 100 * grafica.ic_bajo / grafica.media_control
-    grafica["alto_pct"] = 100 * grafica.ic_alto / grafica.media_control
-    return base_1, grafica
-
-
-def efecto_por_radio(resultados, nivel, n_radios) -> plt.Figure:
-    base_1, grafica = datos_para_figuras(resultados, nivel, n_radios)
-    radios = base_1.index.to_numpy()
-    dec = 3 if nivel == "FCS" else 2
-    # tres renglones para que la media (DE) del control quepa entre radios
-    etiquetas = [f"{int(r)} m\n{m:.{dec}f}\n({sd:.{dec}f})"
-                 for r, m, sd in zip(radios, base_1.media_control, base_1.sd_control)]
-    series = [("(1)", "Sin EF ni covariables"), ("(3)", "EF + covariables × post")]
-    escalas = [("coef", "ic_bajo", "ic_alto"), ("coef_pct", "bajo_pct", "alto_pct")]
-
-    fig, axes = plt.subplots(2, 2, sharex="col", sharey="row", figsize=(ANCHO, 4.4),
-                             layout="constrained")
-    for columna, (espec, nombre) in enumerate(series):
-        d = grafica[grafica.espec.eq(espec)]
-        x = d.radio.to_numpy()
-        for fila, (valor, bajo, alto) in enumerate(escalas):
-            ax = axes[fila, columna]
-            y, lo, hi = (d[c].to_numpy() for c in (valor, bajo, alto))
-            con_ic = np.isfinite(lo) & np.isfinite(hi)
-            cero(ax)
-            ax.plot(x, y, "o", color=OSCURO, ms=3.5, zorder=3)
-            ax.vlines(x[con_ic], lo[con_ic], hi[con_ic], color=OSCURO, lw=.8, zorder=2)
-            for extremo in (lo, hi):
-                ax.hlines(extremo[con_ic], x[con_ic] - 4, x[con_ic] + 4, color=OSCURO, lw=.8)
-            for radio, estimado in zip(x, y):
-                texto = (f"{estimado:+.{3 if nivel == 'FCS' else 2}f}" if fila == 0
-                         else f"{estimado:+.1f}")   # el eje ya dice que es %
-                # a la derecha del punto, entre su intervalo y el del radio siguiente
-                ax.annotate(texto.replace("-", "−"), (radio, estimado),
-                            xytext=(4, 0), textcoords="offset points",
-                            ha="left", va="center", fontsize=7, zorder=4,
-                            bbox={"facecolor": "white", "edgecolor": "none", "pad": .3})
-            ax.set_xlim(80, 340)
-            ax.margins(y=.12)
-            ax.yaxis.set_major_locator(MaxNLocator(nbins=5))
-            letra = "abcd"[2 * fila + columna]
-            ax.set_title(f"({letra}) {espec} {nombre}"
-                         + (", %" if fila else ""))
-        axes[1, columna].set_xticks(radios, etiquetas, fontsize=7)
-    axes[0, 0].set_ylabel("Incidentes mensuales\npor unidad")
-    axes[1, 0].set_ylabel("% de la media previa\ndel control")
-    fig.supxlabel("Radio; debajo, media (DE) previa del control en incidentes por unidad al mes",
-                  fontsize=8)
-    return fig
-
-
-def brecha_posterior(resultados, nivel, n_radios) -> plt.Figure:
-    base_1, _ = datos_para_figuras(resultados, nivel, n_radios)
-    radios = base_1.index.to_numpy()
-    dec = 4 if nivel == "FCS" else 2
-    fig, ax = plt.subplots(figsize=(ANCHO, 2.5), layout="constrained")
-    cero(ax)
-    ax.errorbar(radios, base_1.suma, yerr=base_1.EE_suma, fmt="o", color=OSCURO,
-                lw=.8, capsize=2.5, ms=3.5)
-    for radio, valor, sig in zip(radios, base_1.suma, base_1.sig_suma):
-        ax.annotate(f"{valor:+.{dec}f}{sig}".replace("-", "−"), (radio, valor),
-                    xytext=(5, 0), textcoords="offset points", va="center", fontsize=7,
-                    bbox={"facecolor": "white", "edgecolor": "none", "pad": .5})
-    ax.set_xlim(80, 335)
-    ax.set_xticks(radios)
-    ax.set_xlabel("Radio (m)")
-    ax.set_ylabel("Tratado + Tratado × Post\n(incidentes al mes, ±1 EE)")
-    ax.margins(y=.15)
-    return fig
-
-
 if __name__ == "__main__":
     datos = Datos()
     emparejamientos, comunes = muestra_comun(datos)
@@ -384,16 +232,9 @@ if __name__ == "__main__":
     figuras = {
         "conclusion-escalera": escalera(boot),
         "conclusion-por-nivel": por_nivel(resultados),
-        "conclusion-brecha": brecha(resultados),
         "conclusion-pandemia": pandemia(datos, e300),
-        "conclusion-por-anio": por_anio(e300),
         "conclusion-event-study": evento(emparejamientos),
     }
-    for nivel in NOMBRE_NIVEL:
-        sufijo = "" if nivel == "general" else f"-{nivel.lower()}"
-        n = len(emparejamientos)
-        figuras[f"efecto-por-radio{sufijo}"] = efecto_por_radio(resultados, nivel, n)
-        figuras[f"brecha-posterior{sufijo}"] = brecha_posterior(resultados, nivel, n)
 
     vista = "--png" in sys.argv
     for nombre, fig in figuras.items():
