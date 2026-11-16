@@ -143,7 +143,8 @@ def love_plot(emparejamientos) -> plt.Figure:
             ms=4, label="Antes del emparejamiento")
     ax.plot(balance.loc[variables, "smd_despues"], y, "o", color=OSCURO, ms=4,
             label="Después del emparejamiento")
-    ax.set_yticks(y, variables,
+    # en la tesis la sigla es FSC (la de la literatura); en los datos sigue siendo fcs
+    ax.set_yticks(y, [v.replace("hubo_fcs", "hubo_fsc") for v in variables],
                   family="monospace", fontsize=7)
     ax.tick_params(axis="y", length=0)
     ax.spines["left"].set_visible(False)
