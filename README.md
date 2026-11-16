@@ -28,11 +28,12 @@ scripts/
   pipeline/         El análisis final como código
   analisis/         Los notebooks que justifican cada paso, numerados en orden
   visor/            Visor local de la tesis (ver abajo)
-figures/            Scripts, estilo y fuentes de las figuras de la tesis
+figures/            Scripts de las figuras de la tesis, uno por capítulo
 data/               Insumos versionados (ver abajo)
 notas/              Revisión del asesor, pendientes y apuntes
 historico/          El análisis de septiembre de 2026, como referencia. Ya nada lo usa
 nbsetup.py          Arranque de los notebooks
+.claude/skills/figuras-tesis/   Estilo, fuentes y convenciones de las figuras (lo importan los scripts de figures/)
 ```
 
 ### `scripts/pipeline/`
