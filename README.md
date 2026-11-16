@@ -27,7 +27,7 @@ tesis/              La tesis en LaTeX: main.tex, Chapters/, Apendices/, Referenc
 scripts/
   pipeline/         El análisis final como código
   analisis/         Los notebooks que justifican cada paso, numerados en orden
-  visor_tesis.py    Visor local de la tesis
+  visor/            Visor local de la tesis (ver abajo)
 figures/            Scripts, estilo y fuentes de las figuras de la tesis
 data/               Insumos versionados (ver abajo)
 notas/              Revisión del asesor, pendientes y apuntes
@@ -67,6 +67,25 @@ Lo que el pipeline ejecuta, aquí se justifica. Se leen en orden.
 | `10-conclusiones` | Las figuras de los resultados y las conclusiones |
 | `11-auxiliary-figures` | Figuras auxiliares |
 
+### `scripts/visor/`
+
+Compila la tesis al guardar, la compara contra cualquier versión de git y guarda
+los comentarios que se hacen sobre el PDF como bloques de comentario en los `.tex`.
+Necesita `tectonic` y `latexdiff` (`brew install tectonic latexdiff`). Todo lo que
+genera vive en `.visor/`, que no está en git.
+
+| Módulo | Qué hace |
+| --- | --- |
+| `__main__.py` | Arranque: `python3 scripts/visor [--port 9000] [--no-browser]` |
+| `config.py` | Rutas y constantes |
+| `git_utils.py` | Versiones de la tesis, diff de las fuentes y archivos en un commit |
+| `latex.py` | Prepara las fuentes de una versión y compila con tectonic |
+| `trabajos.py` | Cola de compilaciones, estado compartido y vigilancia de cambios en disco |
+| `secciones.py` | Qué secciones del índice cambiaron entre dos versiones |
+| `comentarios.py` | Comentarios guardados en las fuentes |
+| `servidor.py` | Servidor HTTP: la página, los PDF y la API |
+| `static/` | La interfaz: `index.html`, `visor.css` y `visor.js` |
+
 ### `figures/scripts/`
 
 Cada script genera los PDF de un capítulo en `tesis/Imagenes/`. Con `--png` deja
@@ -84,7 +103,7 @@ además una vista previa en `figures/png/`.
 El entorno es el de conda `tesis-cameras`. No hay un archivo de entorno fijado;
 el apéndice B necesita además `h3` (v4).
 
-- **La tesis:** `python3 scripts/visor_tesis.py` abre el visor en
+- **La tesis:** `python3 scripts/visor` abre el visor en
   http://127.0.0.1:8765, compila al guardar y compara contra cualquier versión de
   git. Para compilar a mano: `tectonic -X compile tesis/main.tex`.
 - **Las figuras:** `python figures/scripts/<script>.py`.
