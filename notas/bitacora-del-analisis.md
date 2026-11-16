@@ -306,7 +306,7 @@ dejó general y la especificación completa (60%, conteos, pool) vive en el 3.*
   el capítulo 2 y el 4. *Hecho: todas las figuras usan ese estilo, que hoy vive en la
   skill `.claude/skills/figuras-tesis`.*
 - La ventana de incidentes termina el 2022-04-21 a las 00:00 (`timestamp <=
-  TO_DATE` en `scripts/historico/auxiliar/2-data-cleaning.ipynb`): el último periodo no trae el día 21.
+  TO_DATE` en `scripts/historico/2-malla-cuadrada-borrador/2-data-cleaning.ipynb`): el último periodo no trae el día 21.
   Un día de 2,191; no se corrigió.
 - latexdiff del visor no compila el capítulo 3 porque se reescribió entero; para
   revisarlo, usar «Lado a lado».

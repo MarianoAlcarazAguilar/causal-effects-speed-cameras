@@ -30,7 +30,7 @@ scripts/
   analisis/         Los notebooks que justifican cada paso, numerados en orden
   figuras/          Las figuras de la tesis, un script por capítulo
   visor/            Visor local de la tesis
-  historico/        El análisis de septiembre de 2026, como referencia. Ya nada lo usa
+  historico/        Las cuatro versiones anteriores del análisis, una carpeta por versión. Ya nada lo usa
 data/               Insumos versionados (ver abajo)
 notas/              Revisión del asesor, bitácora del análisis y apuntes
 .claude/skills/
