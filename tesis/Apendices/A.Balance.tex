@@ -155,32 +155,3 @@
         \bottomrule
     \end{tabular}
 \end{table}
-
-\chapter{Vías primarias y vías secundarias}
-\label{apendice:vias}
-
-\noindent Este apéndice presenta evidencia descriptiva de que las zonas con y sin vías primarias son distintas, lo que, junto con el reglamento de tránsito, apoya la decisión de buscar los controles solo sobre vías primarias y de acceso controlado (capítulo~2).\\
-
-Utilizando una agregación espacial en hexágonos de aproximadamente 428 metros de largo (considerando la diagonal mayor), el promedio mensual de accidentes en el periodo previo al tratamiento (2016--2019) es de $2.37$ siniestros (desviación estándar de $1.42$) en hexágonos que contienen alguna vía primaria, frente a $1.34$ siniestros mensuales (desviación estándar de $0.37$) en aquellos que no cuentan con vías primarias (figura~\ref{fig:vias-mapas}, panel a). Las distribuciones de accidentes (figura~\ref{fig:vias-distribuciones}, panel a) muestran, además, que los hexágonos con vías primarias tienen más incidentes en toda la distribución, mientras que los que no las tienen se concentran en valores bajos.\\
-
-Por último, las zonas con vías primarias tienden a presentar un perfil de uso de suelo distinto. Para aproximar la intensidad de actividad comercial y de servicios, se utilizó la API de \emph{Places Aggregate} de Google para obtener el número de establecimientos por hexágono (de la misma dimensión que el análisis de accidentes). Se diseñó una lista de categorías de lugares que ayudaran a tener una representación general de cada área \footnote{Lista de categorías utilizadas en la llamada a la API de Google Places Aggregate: \texttt{restaurant}, \texttt{cafe}, \texttt{shopping\_mall}, \texttt{supermarket}, \texttt{convenience\_store}, \texttt{grocery\_store}, \texttt{store}, \texttt{gas\_station}, \texttt{bank}, \texttt{atm}, \texttt{hospital}, \texttt{pharmacy}, \texttt{school}, \texttt{gym}, \texttt{night\_club}, \texttt{transit\_station}, \texttt{bus\_station}, \texttt{subway\_station}.}. En promedio, los hexágonos con vías primarias concentran $77.79$ establecimientos (desviación estándar $69.10$), mientras que los hexágonos sin vías primarias tienen en promedio $56.86$ establecimientos (desviación estándar $63.37$). Si bien la variabilidad es alta y la mayor concentración de negocios se observa en torno al centro de la ciudad, existe una diferencia promedio consistente entre ambos tipos de zonas (figuras~\ref{fig:vias-mapas} y~\ref{fig:vias-distribuciones}, panel b).
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\linewidth]{Imagenes/vias-primarias-mapas.pdf}
-    \caption{Hexágonos con más incidentes y más establecimientos}
-    \label{fig:vias-mapas}
-    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
-        \footnotesize \textit{Nota:} Hexágonos de aproximadamente 428 metros de diagonal mayor con al menos un incidente. En negro, el 20\% de los hexágonos con el valor más alto de cada variable. En el panel (a), la variable es el promedio de incidentes por mes antes del 22 de abril de 2019, calculado sobre los meses con al menos un incidente; en el panel (b), el número de establecimientos de Google Places en un círculo de 214 metros alrededor del centro de cada hexágono.
-    \end{minipage}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\linewidth]{Imagenes/vias-primarias-distribuciones.pdf}
-    \caption{Distribución acumulada, con y sin vía primaria}
-    \label{fig:vias-distribuciones}
-    \begin{minipage}{0.95\linewidth}\linespread{1}\selectfont
-        \footnotesize \textit{Nota:} Mismos hexágonos y variables que la figura~\ref{fig:vias-mapas}. Cada curva indica qué proporción de los hexágonos de su grupo tiene un valor menor o igual al del eje horizontal; mientras más a la derecha está la curva, más altos son los valores del grupo. Un hexágono tiene vía primaria si lo cruza alguna vía primaria o de acceso controlado. El eje horizontal se corta en 8 incidentes y en 400 establecimientos; las proporciones se calculan con todos los hexágonos.
-    \end{minipage}
-\end{figure}
