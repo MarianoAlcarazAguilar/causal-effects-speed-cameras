@@ -1,8 +1,8 @@
 """
 Figuras del apéndice B: zonas con y sin vías primarias, en hexágonos H3.
 
-Port de `scripts/writing/vias-primarias-vs-secundarias.ipynb` (accidentes) y
-`scripts/writing/mexico-city-business-density.ipynb` (establecimientos), con
+Port de `scripts/historico/4-circulos/vias-primarias-vs-secundarias.ipynb` (accidentes) y
+`scripts/historico/4-circulos/mexico-city-business-density.ipynb` (establecimientos), con
 el estilo de la tesis. Los cálculos son los mismos que en esos notebooks:
 
 - Accidentes: hexágonos de resolución 9 (~428 m de diagonal mayor) dentro de la

@@ -10,7 +10,7 @@ una vista previa en scripts/figuras/png/.
 
 Los datos están escritos aquí porque no hay otra copia de ellos en el repo. Los
 totales y los fatales salen de la base del C5 2014-2023 (incidentes-viales.parquet),
-que no está versionada; son los valores que anotaba scripts/auxiliar/5-other-stuff.ipynb
+que no está versionada; son los valores que anotaba scripts/historico/2-malla-cuadrada-borrador/5-other-stuff.ipynb
 y sus promedios anuales reproducen los de ese notebook (85,150 y 383). Los
 lesionados se leyeron de los marcadores de la figura vieja, calibrando el eje
 con los totales: el error es de unos cien incidentes y su suma cae a 42 de la
